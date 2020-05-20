@@ -11,16 +11,22 @@ const buildMap = (mapWidth, mapHeight) => {
   let thisX = 0;
   let thisY = 0;
   for (let i=0; i<mapHeight; i++) {
-    thisY = i;
+    thisY = 32 + (32 * i);
     let thisRow = [];
     for (let j=0; j<mapWidth; j++) {
-      thisX = j;
-      let tile = [{
+      thisX = 64 * j;
+      let iso = twoDToIso(thisX, thisY)
+      let tile = {
         tile: 0,
         walkable: 1,
         x: thisX,
         y: thisY,
-      }];
+        xIso: iso.x,
+        yIso: iso.y,
+      };
+      console.log(`tile:`)
+      console.log(tile);
+
       thisRow.push(tile);
     };
     mapArray.push(thisRow);
@@ -52,29 +58,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="test-sprite">
-          Width in Tiles: {Math.floor(window.innerWidth / 64)}
-          <hr></hr>
-          Tiles Height: {Math.floor(window.innerHeight / 32)}
-        </div>
-        <p>iso x {twoDToIso(10,5).x}</p>
-        <p>iso y {twoDToIso(10,5).y}</p>
-
-        <Map mapArray={mapArray} />
-
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+          {/* Width in Tiles: {Math.floor(window.innerWidth / 64)} */}
+          {/* Tiles Height: {Math.floor(window.innerHeight / 32)} */}
       </header>
+
+      <Map mapArray={mapArray} />
+
     </div>
   );
 }
