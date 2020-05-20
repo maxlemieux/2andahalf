@@ -1,11 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+// const ige = require('./ige/server/ige');
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <div>
+          {/* {ige.addGraph('IgeBaseScene')} */}
+        </div>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
