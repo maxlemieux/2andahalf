@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.test-sprite {
+  width: 64px;
+  height: 32px;
+  /* background-color: black; */
+  background-image: url('/img/environment/32_flagstone_tiles.png');
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
