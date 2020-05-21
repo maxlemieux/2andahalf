@@ -12,6 +12,7 @@ const buildMap = (mapWidth, mapHeight) => {
       const thisX = 32 * j + (window.innerWidth / 2);
       const iso = twoDToIso(thisX, thisY);
       const tile = {
+        empty: true,
         backgroundImage: "url('/img/environment/32_flagstone_tiles.png')",
         tile: 0,
         walkable: 0,
@@ -30,7 +31,6 @@ const buildMap = (mapWidth, mapHeight) => {
 const mapArray = buildMap(16, 16);
 
 const newRoom = (mapArray) => {
-  const roomArray = [];
   // get size of array to determine potential size of room
   const mapWidth = mapArray[0].length;
   const mapHeight = mapArray.length;
@@ -44,15 +44,51 @@ const newRoom = (mapArray) => {
     if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
       console.log(`room fits`);
       roomFound = true;
+      /* Tile type 0 is a floor tile */
+      const floorSprite = 'url("/img/environment/32_flagstone_tiles.png")';
+      const floorTiles = {
+        0: [0,0],
+      };
+      /* Tile types 1 through 8 are walls, North through Northwest counterclockwise. */
+      const dungeonSprite = 'url("/img/environment/iso_dungeon_walls_by_pfunked.png")';
+      const dungeonTiles = {
+        1: [1 * 64, 0],
+        2: [6 * 64, 64],
+        3: [2 * 64, 0],
+        4: [7 * 64, 64],
+        5: [3 * 64, 0],
+        6: [4 * 64, 64],
+        7: [0 * 64, 0],
+        8: [5 * 64, 64],
+      }
+      console.log(`${mapArray[topLeftY][topLeftX].empty}`);
+      for (let i=0; i<roomWidth; i++) {
+        mapArray[topLeftY][topLeftX].occupied = true;
+        if (i===0) {
+          // northwest corner of room
+          mapArray[topLeftY][topLeftX].walkable = false;
+          mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
+          mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles[8];
+        } else if (i===(roomWidth - 1)) {
+          // northeast corner of room
+          mapArray[topLeftY][topLeftX].walkable = false;
+          mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
+          mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles[2];
+        } else {
+          // north wall center
+          mapArray[topLeftY][topLeftX].walkable = true;
+          mapArray[topLeftY][topLeftX].backgroundImage = floorSprite;
+          mapArray[topLeftY][topLeftX].spriteOffset = floorTiles[0];
+        }
+      }
+      mapArray[topLeftY][topLeftX].empty = false;
     } else {
       console.log(`room doesn't fit, trying again`);
     }
     console.log(`Adding a room with size ${roomWidth} wide and ${roomHeight} tall with top left at ${topLeftX}, ${topLeftY}`);
   }
-  
+  return mapArray;
 }
-
-newRoom(mapArray);
 
 function isoToTwoD(x, y) {
   const twoD = {};
@@ -86,6 +122,9 @@ function App() {
       window.removeEventListener('resize', handleResize)
     };
   });
+
+  const roomArray = newRoom(mapArray);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -94,7 +133,9 @@ function App() {
           <div className="item">2andahalf</div>
       </header>
 
-      <Map mapArray={mapArray} />
+      <Map mapArray={roomArray} />
+      {/* <Map mapArray={mapArray} /> */}
+
 
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>
