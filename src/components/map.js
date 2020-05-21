@@ -33,8 +33,15 @@ const dungeonTiles = {
 
 const floorSprite = '/img/environment/tiles_0.png';
 const floorTiles = {
-  // 0: [-32,-32],
-  0: [0, 0],
+  tiles: [[0, 0],
+          [64, 0],
+          [2 * 64, 0],
+          [3 * 64, 0],
+          [4 * 64, 0],
+          [0, 64],
+          [1 * 64, 0],
+          [2 * 64, 0],
+         ],
 };
 
 function Map(props) {
@@ -155,7 +162,7 @@ function Map(props) {
               mapArray[topLeftY + i][topLeftX + j].type = 'ground';
               mapArray[topLeftY + i][topLeftX + j].z = 0;
               mapArray[topLeftY + i][topLeftX + j].backgroundImage = floorSprite;
-              mapArray[topLeftY + i][topLeftX + j].spriteOffset = floorTiles[0];
+              mapArray[topLeftY + i][topLeftX + j].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
               continue;
             } else if (existingTileType === 'empty') {
               if (i===0) {
@@ -210,7 +217,7 @@ function Map(props) {
                   mapArray[topLeftY + i][topLeftX + j].type = 'ground';
                   mapArray[topLeftY + i][topLeftX + j].z = 0;
                   mapArray[topLeftY + i][topLeftX + j].backgroundImage = floorSprite;
-                  mapArray[topLeftY + i][topLeftX + j].spriteOffset = floorTiles[0];
+                  mapArray[topLeftY + i][topLeftX + j].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
                 }
               }
             }
