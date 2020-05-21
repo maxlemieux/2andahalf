@@ -7,11 +7,10 @@ function MapTile(props) {
   const style = {
     left: props.tile.xIso + 'px',
     top: props.tile.yIso + 'px',
+    position: 'absolute',
     width: 64,
     height: 32,
-    backgroundImage: props.tile.backgroundImage,
-    backgroundPosition: 'left ' + offsetX + 'px top ' + offsetY + 'px',
-    position: 'absolute',
+    background: `url("${props.tile.backgroundImage}") -${offsetX}px -${offsetY}px`,
   };
   
   return (
