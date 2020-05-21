@@ -1,6 +1,27 @@
 import React from "react";
 import MapRow from "./mapRow";
 
+const dungeonSprite = '/img/environment/iso_dungeon_walls_by_pfunked.png';
+const dungeonTiles = {
+  n: [32 + 128, 0],
+  ne: [32 + 6 * 128, 128],
+  e: [32 + 2 * 128, 0],
+  se: [32 + 7 * 128, 128],
+  s: [32 + 3 * 128, 0],
+  sw: [32 + 4 * 128, 128],
+  w: [32,0],
+  nw: [32 + 5 * 128, 128],
+  neo: [0,0],
+  seo: [32 + 128, 128],
+  swo: [0,0],
+  nwo: [0,0],
+}
+
+const floorSprite = '/img/environment/tiles_0.png';
+const floorTiles = {
+  0: [-32,-32],
+};
+
 function Map(props) {
   const style = {
     top: '0px',
@@ -28,7 +49,6 @@ function Map(props) {
           empty: true,
           // backgroundImage: '/img/environment/tiles_0.png',
           spriteOffset: [0,0],
-          tile: 0,
           walkable: false,
           x: j,
           y: i,
@@ -44,7 +64,7 @@ function Map(props) {
     return mapArray;  
   }
   
-  const mapArray = buildMap(8, 8);
+  const mapArray = buildMap(20, 20);
   
   const newRoom = (mapArray) => {
     // get size of array to determine potential size of room
@@ -61,31 +81,34 @@ function Map(props) {
         roomFound = true;
         console.log(`Room fits! Adding a room with size ${roomWidth} wide and ${roomHeight} tall with top left at ${topLeftX}, ${topLeftY}`);
   
-        /* Tile type 0 is a floor tile */
-        const floorSprite = '/img/environment/tiles_0.png';
-        const floorTiles = {
-          0: [0,0],
-        };
-
-        /* Tile types 1 through 8 are walls, North through Northwest counterclockwise. */
-        const dungeonSprite = '/img/environment/iso_dungeon_walls_by_pfunked.png';
-
-        /* Values for sprite shifting */
-        const dungeonTiles = {
-          n: [32 + 128, 192],
-          ne: [800, 160],
-          e: [32 + 2 * 128, 0],
-          se: [32 + 7 * 128, 128],
-          s: [32 + 3 * 128, 0],
-          sw: [544, 160],
-          w: [32, 128],
-          nw: [672, 160],
-        }
-  
         for (let i=0; i<roomHeight; i++) {
           console.log(`Now building row ${i}`);
           for (let j=0; j<roomWidth; j++) {
             console.log(`Now building tile ${j} of row ${i}`);
+            const existingTileType = mapArray[topLeftY + i][topLeftX + j].type;
+            if (existingTileType === 'ground') {
+              /* This is an existing room, leave the floor tiles alone */
+              continue;
+            } else if (existingTileType === 'wall') {
+              /* This is an old wall from another room, make it into a floor to create a big room*/
+              /* First let's check if we should make an outside corner */
+              const tileToWest = mapArray[topLeftY + i][topLeftX + j - 1];
+              const tileToNorth = mapArray[topLeftY + i - 1][topLeftX + j];
+              if (tileToWest.type === 'wall' && tileToNorth.type === 'wall') {
+                console.log('Outside southeast corner!');
+                mapArray[topLeftY + i][topLeftX + j].walkable = false;
+                mapArray[topLeftY + i][topLeftX + j].type = 'wall';
+                mapArray[topLeftY + i][topLeftX + j].backgroundImage = dungeonSprite;
+                mapArray[topLeftY + i][topLeftX + j].spriteOffset = dungeonTiles.seo;
+                continue;  
+              }
+              /* Okay, it should be a floor */
+              mapArray[topLeftY + i][topLeftX + j].walkable = true;
+              mapArray[topLeftY + i][topLeftX + j].type = 'ground';
+              mapArray[topLeftY + i][topLeftX + j].backgroundImage = floorSprite;
+              mapArray[topLeftY + i][topLeftX + j].spriteOffset = floorTiles[0];
+              continue;
+            }
             if (i===0) {
               console.log('We are on the north wall');
               /* NORTH WALL */
@@ -93,18 +116,21 @@ function Map(props) {
                 // northwest corner of room
                 console.log('nw corner');
                 mapArray[topLeftY][topLeftX].walkable = false;
+                mapArray[topLeftY][topLeftX].type = 'wall';
                 mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
                 mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles.nw;
               } else if (j===(roomWidth - 1)) {
                 // northeast corner of room
                 console.log('ne corner');
-                mapArray[topLeftY][topLeftX + roomWidth-1].walkable = false;
-                mapArray[topLeftY][topLeftX + roomWidth-1].backgroundImage = dungeonSprite;
-                mapArray[topLeftY][topLeftX + roomWidth-1].spriteOffset = dungeonTiles.ne;
+                mapArray[topLeftY][topLeftX + roomWidth - 1].walkable = false;
+                mapArray[topLeftY][topLeftX + roomWidth - 1].type = 'wall';
+                mapArray[topLeftY][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.ne;
               } else {
                 // north wall center
                 console.log(`n center - X=${topLeftX + j}`);
                 mapArray[topLeftY][topLeftX + j].walkable = false;
+                mapArray[topLeftY][topLeftX + j].type = 'wall';
                 mapArray[topLeftY][topLeftX + j].backgroundImage = dungeonSprite;
                 mapArray[topLeftY][topLeftX + j].spriteOffset = dungeonTiles.n;
               }
@@ -113,16 +139,19 @@ function Map(props) {
               if (j===0) {
                 // southwest corner of room
                 mapArray[topLeftY + roomHeight - 1][topLeftX].walkable = false;
+                mapArray[topLeftY + roomHeight - 1][topLeftX].type = 'wall';
                 mapArray[topLeftY + roomHeight - 1][topLeftX].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + roomHeight - 1][topLeftX].spriteOffset = dungeonTiles.sw;
               } else if (j===(roomWidth - 1)) {
                 // southeast corner of room
                 mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].walkable = false;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].type = 'wall';
                 mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.se;
               } else {
                 // south wall center
                 mapArray[topLeftY + roomHeight - 1][topLeftX + j].walkable = false;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + j].type = 'wall';
                 mapArray[topLeftY + roomHeight - 1][topLeftX + j].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + roomHeight - 1][topLeftX + j].spriteOffset = dungeonTiles.s;
               }
@@ -132,16 +161,19 @@ function Map(props) {
               if (j===0) {
                 // west side of room
                 mapArray[topLeftY + i][topLeftX].walkable = false;
+                mapArray[topLeftY + i][topLeftX].type = 'wall';
                 mapArray[topLeftY + i][topLeftX].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + i][topLeftX].spriteOffset = dungeonTiles.w;
               } else if (j===(roomWidth - 1)) {
                 // east side of room
-                mapArray[topLeftY + i][topLeftX + roomWidth-1].walkable = false;
-                mapArray[topLeftY + i][topLeftX + roomWidth-1].backgroundImage = dungeonSprite;
-                mapArray[topLeftY + i][topLeftX + roomWidth-1].spriteOffset = dungeonTiles.e;
+                mapArray[topLeftY + i][topLeftX + roomWidth - 1].walkable = false;
+                mapArray[topLeftY + i][topLeftX + roomWidth - 1].type = 'wall';
+                mapArray[topLeftY + i][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
+                mapArray[topLeftY + i][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.e;
               } else {
                 // floor tile in center of room
-                mapArray[topLeftY + i][topLeftX + j].walkable = false;
+                mapArray[topLeftY + i][topLeftX + j].walkable = true;
+                mapArray[topLeftY + i][topLeftX + j].type = 'ground';
                 mapArray[topLeftY + i][topLeftX + j].backgroundImage = floorSprite;
                 mapArray[topLeftY + i][topLeftX + j].spriteOffset = floorTiles[0];
               }
@@ -169,7 +201,10 @@ function Map(props) {
     return iso;
   };
 
-  const roomArray = newRoom(mapArray);
+  let roomArray = newRoom(mapArray);
+   roomArray = newRoom(mapArray);
+   roomArray = newRoom(mapArray);
+   roomArray = newRoom(mapArray);
 
   /* Display map */
   return (
