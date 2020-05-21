@@ -14,11 +14,11 @@ function Map(props) {
     const mapArray = [];
     /* X: j, Y: i */
     for (let i=0; i<mapHeight; i++) {
-      const thisY = 32 + (32 * i);
+      const thisY = 32 + (32 * i) - (window.innerHeight / 4);
       const thisRow = [];
       for (let j=0; j<mapWidth; j++) {
         /* Move the map to the right by 1/2 the inner window width to center on screen */
-        const thisX = 32 * j + (window.innerWidth / 2);
+        const thisX = 32 * j + (window.innerWidth / 4);
 
         /* Get isometric coordinates for this tile */
         const iso = twoDToIso(thisX, thisY);
@@ -77,7 +77,7 @@ function Map(props) {
           e: [32 + 2 * 128, 0],
           se: [32 + 7 * 128, 128],
           s: [32 + 3 * 128, 0],
-          sw: [544, 128],
+          sw: [544, 160],
           w: [32, 128],
           nw: [672, 160],
         }
@@ -112,19 +112,19 @@ function Map(props) {
               /* SOUTH WALL */
               if (j===0) {
                 // southwest corner of room
-                mapArray[topLeftY][topLeftX].walkable = false;
-                mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
-                mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles.sw;
+                mapArray[topLeftY + roomHeight - 1][topLeftX].walkable = false;
+                mapArray[topLeftY + roomHeight - 1][topLeftX].backgroundImage = dungeonSprite;
+                mapArray[topLeftY + roomHeight - 1][topLeftX].spriteOffset = dungeonTiles.sw;
               } else if (j===(roomWidth - 1)) {
                 // southeast corner of room
-                mapArray[topLeftY][topLeftX + roomWidth-1].walkable = false;
-                mapArray[topLeftY][topLeftX + roomWidth-1].backgroundImage = dungeonSprite;
-                mapArray[topLeftY][topLeftX + roomWidth-1].spriteOffset = dungeonTiles.se;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].walkable = false;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.se;
               } else {
                 // south wall center
-                mapArray[topLeftY][topLeftX + j].walkable = false;
-                mapArray[topLeftY][topLeftX + j].backgroundImage = dungeonSprite;
-                mapArray[topLeftY][topLeftX + j].spriteOffset = dungeonTiles.s;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + j].walkable = false;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + j].backgroundImage = dungeonSprite;
+                mapArray[topLeftY + roomHeight - 1][topLeftX + j].spriteOffset = dungeonTiles.s;
               }
             } else {
               /* CENTER OF ROOM */

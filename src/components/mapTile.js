@@ -10,6 +10,9 @@ function MapTile(props) {
     position: 'absolute',
     width: 64,
     height: 32,
+    paddingTop: 96 + 'px',
+    marginTop: 96 + 'px',
+    zIndex: props.tile.y,
     background: `url("${props.tile.backgroundImage}") -${offsetX}px -${offsetY}px`,
   };
   
