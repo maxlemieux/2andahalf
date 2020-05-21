@@ -13,7 +13,7 @@ const dungeonTiles = {
   nw: [32 + 5 * 128, 128],
   neo: [0,0],
   seo: [32 + 128, 128],
-  swo: [0,0],
+  swo: [32 + 2 * 128, 128],
   nwo: [0,0],
 }
 
@@ -96,7 +96,6 @@ function Map(props) {
               const tileToNorth = mapArray[topLeftY + i - 1][topLeftX + j];
               if (tileToWest.type === 'wall' && tileToNorth.type === 'wall') {
                 console.log('Outside southeast corner!');
-                mapArray[topLeftY + i][topLeftX + j].walkable = false;
                 mapArray[topLeftY + i][topLeftX + j].type = 'wall';
                 mapArray[topLeftY + i][topLeftX + j].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + i][topLeftX + j].spriteOffset = dungeonTiles.seo;
@@ -115,21 +114,18 @@ function Map(props) {
               if (j===0) {
                 // northwest corner of room
                 console.log('nw corner');
-                mapArray[topLeftY][topLeftX].walkable = false;
                 mapArray[topLeftY][topLeftX].type = 'wall';
                 mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
                 mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles.nw;
               } else if (j===(roomWidth - 1)) {
                 // northeast corner of room
                 console.log('ne corner');
-                mapArray[topLeftY][topLeftX + roomWidth - 1].walkable = false;
                 mapArray[topLeftY][topLeftX + roomWidth - 1].type = 'wall';
                 mapArray[topLeftY][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
                 mapArray[topLeftY][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.ne;
               } else {
                 // north wall center
                 console.log(`n center - X=${topLeftX + j}`);
-                mapArray[topLeftY][topLeftX + j].walkable = false;
                 mapArray[topLeftY][topLeftX + j].type = 'wall';
                 mapArray[topLeftY][topLeftX + j].backgroundImage = dungeonSprite;
                 mapArray[topLeftY][topLeftX + j].spriteOffset = dungeonTiles.n;
@@ -138,19 +134,16 @@ function Map(props) {
               /* SOUTH WALL */
               if (j===0) {
                 // southwest corner of room
-                mapArray[topLeftY + roomHeight - 1][topLeftX].walkable = false;
                 mapArray[topLeftY + roomHeight - 1][topLeftX].type = 'wall';
                 mapArray[topLeftY + roomHeight - 1][topLeftX].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + roomHeight - 1][topLeftX].spriteOffset = dungeonTiles.sw;
               } else if (j===(roomWidth - 1)) {
                 // southeast corner of room
-                mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].walkable = false;
                 mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].type = 'wall';
                 mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + roomHeight - 1][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.se;
               } else {
                 // south wall center
-                mapArray[topLeftY + roomHeight - 1][topLeftX + j].walkable = false;
                 mapArray[topLeftY + roomHeight - 1][topLeftX + j].type = 'wall';
                 mapArray[topLeftY + roomHeight - 1][topLeftX + j].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + roomHeight - 1][topLeftX + j].spriteOffset = dungeonTiles.s;
@@ -160,13 +153,11 @@ function Map(props) {
               /* Place a wall on either end and floor tiles in the center. */
               if (j===0) {
                 // west side of room
-                mapArray[topLeftY + i][topLeftX].walkable = false;
                 mapArray[topLeftY + i][topLeftX].type = 'wall';
                 mapArray[topLeftY + i][topLeftX].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + i][topLeftX].spriteOffset = dungeonTiles.w;
               } else if (j===(roomWidth - 1)) {
                 // east side of room
-                mapArray[topLeftY + i][topLeftX + roomWidth - 1].walkable = false;
                 mapArray[topLeftY + i][topLeftX + roomWidth - 1].type = 'wall';
                 mapArray[topLeftY + i][topLeftX + roomWidth - 1].backgroundImage = dungeonSprite;
                 mapArray[topLeftY + i][topLeftX + roomWidth - 1].spriteOffset = dungeonTiles.e;
