@@ -24,15 +24,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-          {/* Width in Tiles: {Math.floor(window.innerWidth / 128)} */}
+          {/* Width in Tiles: {Math.floor(window.innerWidth / 64)} */}
           {/* Tiles Height: {Math.floor(window.innerHeight / 32)} */}
           <div className="item">2andahalf</div>
       </header>
 
       <Map />
-      {/* <Map mapArray={roomArray} /> */}
-      {/* <Map mapArray={mapArray} /> */}
-
 
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>
