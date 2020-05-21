@@ -12,21 +12,28 @@ function Map(props) {
 
   const buildMap = (mapWidth, mapHeight) => {
     const mapArray = [];
+    /* X: j, Y: i */
     for (let i=0; i<mapHeight; i++) {
       const thisY = 32 + (32 * i);
       const thisRow = [];
       for (let j=0; j<mapWidth; j++) {
         /* Move the map to the right by 1/2 the inner window width to center on screen */
         const thisX = 32 * j + (window.innerWidth / 2);
+
+        /* Get isometric coordinates for this tile */
         const iso = twoDToIso(thisX, thisY);
+
+        /* Create the tile with some defaults */
         const tile = {
           empty: true,
           backgroundImage: "url('/img/environment/tiles_0.png')",
           spriteOffset: [0,0],
           tile: 0,
-          walkable: 0,
-          x: thisX,
-          y: thisY,
+          walkable: false,
+          // x: thisX,
+          // y: thisY,
+          x: j,
+          y: i,
           xIso: iso.x,
           yIso: iso.y,
         };
@@ -60,8 +67,11 @@ function Map(props) {
         // const floorTiles = {
         //   0: [0,0],
         // };
+
         /* Tile types 1 through 8 are walls, North through Northwest counterclockwise. */
         const dungeonSprite = 'url("/img/environment/iso_dungeon_walls_by_pfunked.png")';
+
+        /* Values for sprite shifting */
         const dungeonTiles = {
           1: [1 * 128, 0],
           2: [6 * 128, 128],
@@ -78,20 +88,40 @@ function Map(props) {
             mapArray[topLeftY][topLeftX].empty = false;
             if (i===0) {
               /* NORTH WALL */
-              // northwest corner of room
-              mapArray[topLeftY][topLeftX].walkable = false;
-              mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
-              mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles[8];
-            } else if (j===(roomWidth - 1)) {
-              // northeast corner of room
-              mapArray[topLeftY][topLeftX + roomWidth-1].walkable = false;
-              mapArray[topLeftY][topLeftX + roomWidth-1].backgroundImage = dungeonSprite;
-              mapArray[topLeftY][topLeftX + roomWidth-1].spriteOffset = dungeonTiles[2];
-            } else {
-              // north wall center
-              mapArray[topLeftY][topLeftX + j].walkable = false;
-              mapArray[topLeftY][topLeftX + j].backgroundImage = dungeonSprite;
-              mapArray[topLeftY][topLeftX + j].spriteOffset = dungeonTiles[7];
+              if (j===0) {   
+                // northwest corner of room
+                mapArray[topLeftY][topLeftX].walkable = false;
+                mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles[8];
+              } else if (j===(roomWidth - 1)) {
+                // northeast corner of room
+                mapArray[topLeftY][topLeftX + roomWidth-1].walkable = false;
+                mapArray[topLeftY][topLeftX + roomWidth-1].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX + roomWidth-1].spriteOffset = dungeonTiles[2];
+              } else {
+                // north wall center
+                mapArray[topLeftY][topLeftX + j].walkable = false;
+                mapArray[topLeftY][topLeftX + j].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX + j].spriteOffset = dungeonTiles[7];
+              }
+            } else if (i===roomHeight.length-1) {
+              /* SOUTH WALL */
+              if (j===0) {
+                // southwest corner of room
+                mapArray[topLeftY][topLeftX].walkable = false;
+                mapArray[topLeftY][topLeftX].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX].spriteOffset = dungeonTiles[8];
+              } else if (j===(roomWidth - 1)) {
+                // southeast corner of room
+                mapArray[topLeftY][topLeftX + roomWidth-1].walkable = false;
+                mapArray[topLeftY][topLeftX + roomWidth-1].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX + roomWidth-1].spriteOffset = dungeonTiles[2];
+              } else {
+                // south wall center
+                mapArray[topLeftY][topLeftX + j].walkable = false;
+                mapArray[topLeftY][topLeftX + j].backgroundImage = dungeonSprite;
+                mapArray[topLeftY][topLeftX + j].spriteOffset = dungeonTiles[7];
+              }
             }
           }
         }
@@ -123,12 +153,6 @@ function Map(props) {
     <div style={style} className="App-map">
     {roomArray.map(function(object, i){
       return <MapRow row={object} key={i} />;
-      /* Doesn't work right, no tiles appear - need this if we want to lose MapRow component */
-      //  object.map(function(tile, i) {
-      //   <div className="map-row">
-      //   <MapTile tile={tile} key={i} />;
-      //   </div>
-      // });
     })}
     </div>
   );
