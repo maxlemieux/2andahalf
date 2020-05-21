@@ -2,3 +2,6 @@ node_modules
 *.html
 ige/
 src/components
+App.js
+App.test.js
+index.js

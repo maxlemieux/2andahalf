@@ -13,14 +13,30 @@
   }
 }
 
+.App-footer {
+  min-height: 20vh;
+  background-color: #282c34;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.App-log {
+  min-width: 25vw;
+  min-height: 100%;
+  position: absolute;
+  bottom: 10px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 5vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+  font-size: calc(6px + 2vmin);
   color: white;
 }
 
@@ -35,14 +51,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.test-sprite {
-  width: 64px;
-  height: 32px;
-  /* background-color: black; */
-  background-image: url('/img/environment/32_flagstone_tiles.png');
-  position: absolute;
-  left: 0px;
-  top: 0px;
 }

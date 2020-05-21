@@ -6,8 +6,8 @@ function Map(props) {
     top: '0px',
     left: '0px',
     width: '100%',
-    minHeight: '80vh',
-    backgroundColor: 'green',
+    minHeight: '75vh',
+    backgroundColor: 'gray',
   };
 
   return (
