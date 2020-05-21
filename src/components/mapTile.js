@@ -19,7 +19,7 @@ function MapTile(props) {
   return (
     <div className="map-tile App-map-tile"
          style={style}>
-           <small>x{props.tile.x} y{props.tile.y}</small>
+           {/* <small>x{props.tile.x} y{props.tile.y}</small> */}
     </div>
   );
 }
