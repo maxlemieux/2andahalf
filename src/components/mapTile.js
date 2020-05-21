@@ -10,14 +10,14 @@ function MapTile(props) {
     width: 64,
     height: 32,
     backgroundImage: props.tile.backgroundImage,
-    backgroundPosition: offsetX + 'px 0px ' + offsetY + 'px 0px',
+    backgroundPosition: 'left ' + offsetX + 'px top ' + offsetY + 'px',
     position: 'absolute',
   };
   
   return (
     <div className="map-tile App-map-tile"
          style={style}>
-           <small>x{Math.floor(props.tile.x / 128)} y{Math.floor(props.tile.y / 128)}</small>
+           <small>x{props.tile.x} y{props.tile.y}</small>
     </div>
   );
 }
