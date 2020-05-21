@@ -11,7 +11,7 @@ function Map(props) {
   };
 
   return (
-    <div style={style} className="map">
+    <div style={style} className="App-map">
     {props.mapArray.map(function(object, i){
       return <MapRow row={object} key={i} />;
     })}

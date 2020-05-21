@@ -20,6 +20,7 @@ const buildMap = (mapWidth, mapHeight) => {
         y: thisY,
         xIso: iso.x,
         yIso: iso.y,
+        spriteOffset: [0,0],
       };
       thisRow.push(tile);
     };
@@ -139,33 +140,33 @@ function App() {
 
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>
-         <div className='logEntry'>
+         <div className='App-LogEntry'>
             Welcome to 2andahalf.
           </div>
         </div>
         <div className='App-log' data-logtype='combat'>
-        <div className='logEntry'>
+        <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
-          <div className='logEntry'>
+          <div className='App-LogEntry'>
             You land on your feet.
           </div>
         </div>
