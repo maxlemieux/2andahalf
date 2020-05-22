@@ -7,26 +7,27 @@ const RANDOM_KEY = 'fdsafdsfaoo';
 const dungeonSprite = '/img/environment/iso_dungeon_walls_by_pfunked.png';
 const dungeonTiles = {
   n: [/* The same two plain ones repeated */
-      [32 + 128, 0],
-      [32 + 5 * 128, 0],
-      [32 + 128, 0],
-      [32 + 5 * 128, 0],
-      [32 + 128, 0],
-      [32 + 5 * 128, 0],
-      [32 + 128, 0],
-      [32 + 5 * 128, 0],
-      /* Fancy ones */
-      [32 + 5 * 128, 256],
-      [32 + 3 * 128, 256],
-      [32 + 1 * 128, 256],
-      [32 + 1 * 128, 384],
-      [32 + 7 * 128, 256]],
+        [32 + 128, 0],
+        [32 + 5 * 128, 0],
+        [32 + 128, 0],
+        [32 + 5 * 128, 0],
+        [32 + 128, 0],
+        [32 + 5 * 128, 0],
+        [32 + 128, 0],
+        [32 + 5 * 128, 0],
+        /* Fancy ones */
+        [32 + 5 * 128, 256],
+        [32 + 3 * 128, 256],
+        [32 + 1 * 128, 256],
+        [32 + 1 * 128, 384],
+        [32 + 7 * 128, 256]
+      ],
   ne: [32 + 6 * 128, 128],
   e: [32 + 2 * 128, 0],
   se: [32 + 7 * 128, 128],
   s: [32 + 3 * 128, 0],
   sw: [32 + 4 * 128, 128],
-  w: [32,0],
+  w: [32, 0],
   nw: [32 + 5 * 128, 128],
   neo: [32, 128],
   seo: [32 + 128, 128],
@@ -101,99 +102,106 @@ function Map(props) {
     while (roomFound === false) {
       const roomWidth = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth / 2) + 4;
       const roomHeight = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight / 2) + 4;
-      /* For some reason using seedrandom on the topLeftX and topLeftY breaks everything */
+
+      /* For some reason, using seedrandom on the topLeftX and topLeftY breaks everything */
       // const topLeftX = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth);
       // const topLeftY = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight);
+
       const topLeftX = Math.floor(Math.random() * mapWidth);
       const topLeftY = Math.floor(Math.random() * mapHeight);
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
         roomFound = true;
         // console.log(`${topLeftX}, ${topLeftY}`)
-        /* Every row */
+
+        /* For each row */
         for (let i=0; i<roomHeight; i++) {
           const y = topLeftY + i;
-          /* Every tile in that row */
+          /* For each tile in that row */
           for (let j=0; j<roomWidth; j++) {
             const x = topLeftX + j;
-            
             const existingTileType = worldData[y][x].type;
 
             if (existingTileType === 'wall') {
-              /* This is an old wall from another room, make it into a floor to create a big room*/
-              /* Set floor tile for now, then check if it needs to be an outside corner after drawing the new room */
-              worldData[y][x].walkable = true;
-              worldData[y][x].type = 'ground';
-              worldData[y][x].z = 0;
+              /* This is an old wall from another room, make it into a floor to create a big room.
+                 Set floor tile for now.
+                 Check if it needs to be an outside corner AFTER drawing the rest of the new room. */
               worldData[y][x].backgroundImage = floorSprite;
-              worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
               worldData[y][x].facing = false;
+              worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+              worldData[y][x].type = 'ground';
+              worldData[y][x].walkable = true;
+              worldData[y][x].z = 0;
             } else if (existingTileType === 'ground') {
-              // do diddly
+              /* This is a floor tile from an old room, we want to keep it. */
             } else if (existingTileType === 'empty') {
-              /* build stuff */
+              /* This tile is empty, let's build stuff */
               worldData[y][x].empty = false;
+
+              /* Dungeon walls */
+              worldData[y][x].backgroundImage = dungeonSprite;
+
+              /* Is this the north wall? */
               if (i===0) {
                 /* NORTH WALL */
                 worldData[y][x].type = 'wall';
-                worldData[y][x].backgroundImage = dungeonSprite;
                 if (j===0) {
                   // northwest corner of room
-                  worldData[y][x].spriteOffset = dungeonTiles.nw;
                   worldData[y][x].facing = 'se';
+                  worldData[y][x].spriteOffset = dungeonTiles.nw;
                 } else if (j===(roomWidth - 1)) {
                   // northeast corner of room
-                  worldData[y][x].spriteOffset = dungeonTiles.ne;
                   worldData[y][x].facing = 'sw';
+                  worldData[y][x].spriteOffset = dungeonTiles.ne;
                 } else {
                   // north wall center
-                  worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
                   worldData[y][x].facing = 's';
+                  worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
                 }
               } else if (i===roomHeight-1) {
                 /* SOUTH WALL */
                 worldData[y][x].type = 'wall';
-                worldData[y][x].backgroundImage = dungeonSprite;
+
                 if (j===0) {
                   // southwest corner of room
-                  worldData[y][x].spriteOffset = dungeonTiles.sw;
                   worldData[y][x].facing = 'ne';
+                  worldData[y][x].spriteOffset = dungeonTiles.sw;
                 } else if (j===(roomWidth - 1)) {
                   // southeast corner of room
+                  worldData[y][x].facing = 'nw';
                   worldData[y][x].spriteOffset = dungeonTiles.se;         
-                 worldData[y][x].facing = 'nw';
                 } else {
                   // south wall center
-                  worldData[y][x].spriteOffset = dungeonTiles.s;
                   worldData[y][x].facing = 'n';
+                  worldData[y][x].spriteOffset = dungeonTiles.s;
                 }
               } else {
                 /* CENTER OF ROOM */
                 /* Place a wall on either end and floor tiles in the center. */
                 worldData[y][x].type = 'wall';
-                worldData[y][x].backgroundImage = dungeonSprite;
 
                 if (j===0) {
                   // west wall of room
-                  worldData[y][x].spriteOffset = dungeonTiles.w;
                   worldData[y][x].facing = 'e';
+                  worldData[y][x].spriteOffset = dungeonTiles.w;
                 } else if (j===(roomWidth - 1)) {
                   // east wall of room
-                  worldData[y][x].spriteOffset = dungeonTiles.e;
                   worldData[y][x].facing = 'w';
+                  worldData[y][x].spriteOffset = dungeonTiles.e;
                 } else {
                   // floor tile in center of room
-                  worldData[y][x].walkable = true;
-                  worldData[y][x].type = 'ground';
-                  worldData[y][x].z = 0;
                   worldData[y][x].backgroundImage = floorSprite;
-                  worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
                   worldData[y][x].facing = false;
-                }
-              }
-            }
-          }
-        }
-        /* After adding the new room, check worldData for floors to replace with outside corners */
+                  worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+                  worldData[y][x].type = 'ground';
+                  worldData[y][x].walkable = true;
+                  worldData[y][x].z = 0;
+                }; // filling tile, check new type for each tile of new room
+              }; // filling tile, check new type for each row of new room
+            }; // if empty
+          }; // check tile
+        }; // check row to see what to do
+
+        /* After adding the new room, check all of worldData for floors to replace with outside corners */
         // for (let i=0; i<mapHeight; i++) {
         //   const y = i;
         //   /* Every tile in that row */
@@ -281,15 +289,15 @@ function Map(props) {
     return iso;
   };
 
-  let roomArray = newRoom(worldData);
-   roomArray = newRoom(worldData);
+  let worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
   //  roomArray = newRoom(worldData);
   //  roomArray = newRoom(worldData);
 
   /* Display map */
   return (
     <div style={style} className="App-map">
-    {roomArray.map(function(object, i){
+    {worldArray.map(function(object, i){
       return <MapRow row={object} key={i} />;
     })}
     </div>
