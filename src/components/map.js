@@ -126,7 +126,7 @@ function Map(props) {
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
           worldData[y][x].wallType = 'wall_n';
-          worldData[y][x].spriteOffset = dungeonTiles.n;
+          worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
           worldData[y][x].z = 1;
         }
 
@@ -136,7 +136,7 @@ function Map(props) {
             tileToW.type === 'wall' && 
            (tileToW.wallType === 'wall_s' || tileToW.wallType === 'corner_sw_inner' || tileToW.wallType === 'corner_nw_outer')
             ) {
-          console.log('we need to fill in a gap in a south wall')
+          console.log(`we need to fill in a gap in a south wall at x: ${x}, y: ${y}`)
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
           worldData[y][x].wallType = 'wall_s';
@@ -272,14 +272,16 @@ function Map(props) {
               } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
                 /* If we are on the southeast corner of the room and corners match */
                 console.log(`Found matching existing inner southeast corner at x: ${x}, y: ${y}`)
-              } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0) {
+              } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0 && j !== 0 && j !== (roomWidth - 1)) {
                 /* If we are on the northwest corner of the old room and corners do not match */
                 console.log(`Found old inner northwest corner at x: ${x}, y: ${y} - replacing with north wall`)
                 worldData[y][x].wallType = 'wall_n';
-                worldData[y][x].spriteOffset = dungeonTiles.n;      
-              } else if (worldData[y][x].wallType === 'corner_ne_inner' && i === 0 && j === (roomWidth - 1)) {
+                worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];      
+              } else if (worldData[y][x].wallType === 'corner_ne_inner' && i === 0 && j !== 0 && j !== (roomWidth - 1)) {
                 /* If we are on the northeast corner of the old room and corners do not match*/
-                console.log(`Found old inner northeast corner at x: ${x}, y: ${y}`)
+                console.log(`Found old inner northeast corner at x: ${x}, y: ${y} - replacing with north wall`)
+                worldData[y][x].wallType = 'wall_n';
+                worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
               } else if (worldData[y][x].wallType === 'corner_sw_inner' && i === (roomHeight - 1) && j === 0) {
                 /* If we are on the southwest corner of the old room and corners do not match */
                 console.log(`Found old inner southwest corner at x: ${x}, y: ${y}`)
