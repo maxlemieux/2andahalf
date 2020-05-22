@@ -122,8 +122,8 @@ function Map(props) {
         }
 
         if (worldData[y][x].type === 'ground' && 
-            tileToN.type === 'wall' && tileToN.wallType === 'wall_w' && 
-            tileToS.type === 'wall' && tileToS.wallType === 'wall_w'
+            tileToN.type === 'wall' && (tileToN.wallType === 'wall_w' || tileToN.wallType === 'corner_nw_inner' ) && 
+            tileToS.type === 'wall' && (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_se_outer' )
             ) {
           console.log('we need to fill in a gap in a west wall')
           worldData[y][x].backgroundImage = dungeonSprite;
@@ -257,10 +257,7 @@ function Map(props) {
               /* This is an old wall from another room, make it into a floor to create a big room.
                  Check if it needs to end up as an outside wall:
                  If the new wall and the old wall are the same, just keep it. */
-              // console.log(`Found old wall at x: ${x}, y: ${y}, facing: ${worldData[y][x].facing}, 
-              //   roomHeight: ${roomHeight}, roomWidth: ${roomWidth} and i = ${i}`)
 
-              /* Need to also check for inside corners that need to remain */
               if (worldData[y][x].wallType === 'wall_n' && i === 0) {
                 /* If we are on the north side of the room */
                 console.log(`Found an existing north wall at x: ${x}, y: ${y}`)
@@ -286,8 +283,6 @@ function Map(props) {
                 /* If we are on the southeast corner of the room */
                 console.log(`Found an existing inner southeast corner at x: ${x}, y: ${y}`)
               } else {
-                // console.log(`j=${j} did not match (roomWidth - 1) = ${roomWidth - 1}`)
-                // console.log(`i=${i} did not match (roomHeight - 1) = ${roomHeight - 1}`)
                  /*   Set floor tile for now. */
                  worldData[y][x].backgroundImage = floorSprite;
                  worldData[y][x].facing = false;
@@ -295,7 +290,6 @@ function Map(props) {
                  worldData[y][x].type = 'ground';
                  worldData[y][x].walkable = true;
                  worldData[y][x].z = 0;
-                 /* Check if it needs to be an outside corner AFTER drawing the rest of the new room. */
               }
               
             } else if (existingTileType === 'ground') {
@@ -308,7 +302,6 @@ function Map(props) {
               worldData[y][x].backgroundImage = dungeonSprite;
               worldData[y][x].type = 'wall';
 
-              /* Is this the north wall? */
               if (i===0) {
                 /* NORTH WALL */
                 if (j===0) {
