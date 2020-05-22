@@ -121,16 +121,59 @@ function Map(props) {
             const x = topLeftX + j;
             const existingTileType = worldData[y][x].type;
 
+            let tileToN = false;
+            let tileToS = false;
+            let tileToE = false;
+            let tileToW = false;
+            if (y > 0) {
+              tileToN = worldData[y - 1][x];  
+            }
+            if (worldData[y + 1]) {
+              tileToS = worldData[y + 1][x]
+            }
+            if (worldData[y][x + 1]) {
+              tileToE = worldData[y][x + 1];
+            }
+            if (worldData[y][x - 1]) {
+              tileToW = worldData[y][x - 1];
+            }
+
             if (existingTileType === 'wall') {
               /* This is an old wall from another room, make it into a floor to create a big room.
-                 Set floor tile for now.
-                 Check if it needs to be an outside corner AFTER drawing the rest of the new room. */
-              worldData[y][x].backgroundImage = floorSprite;
-              worldData[y][x].facing = false;
-              worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              worldData[y][x].type = 'ground';
-              worldData[y][x].walkable = true;
-              worldData[y][x].z = 0;
+                 Check if it needs to end up as an outside wall:
+                 If the new wall and the old wall are the same, just keep it. */
+              console.log(`Found old wall at x: ${x}, y: ${y}, facing: ${worldData[y][x].facing}, 
+                roomHeight: ${roomHeight}, roomWidth: ${roomWidth} and i = ${i}`)
+
+                if (worldData[y][x].facing === 's' && i === 0) {
+                /* If we are on the north side of the room and the current tile is facing south */
+                console.log(`Found an existing north wall at x: ${x}, y: ${y}`)
+                break;
+              } else if (worldData[y][x].facing === 'n' && i === (roomHeight - 1)) {
+                /* If we are on the south side of hte room and the current tile is facing north */
+                console.log(`Found an existing south wall at x: ${x}, y: ${y}`)
+                break;
+              } else if (worldData[y][x].facing === 'e' && j === 0) {
+                /* If we are on the west side of the room and the current tile is facing east */
+                console.log(`Found an existing west wall at x: ${x}, y: ${y}`)
+                break;
+              } else if (worldData[y][x].facing === 'w' && j === (roomWidth - 1)) {
+                /* If we are on the east side of the room and the current tile is facing west */
+                console.log(`Found an existing east wall at x: ${x}, y: ${y}`)
+                break;
+              } else {
+                console.log(`j=${j} did not match (roomWidth - 1) = ${roomWidth - 1}`)
+                console.log(`i=${i} did not match (roomHeight - 1) = ${roomHeight - 1}`)
+                 /*   Set floor tile for now. */
+                 worldData[y][x].backgroundImage = floorSprite;
+                 worldData[y][x].facing = false;
+                 worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+                 worldData[y][x].type = 'ground';
+                 worldData[y][x].walkable = true;
+                 worldData[y][x].z = 0;
+                 /* Check if it needs to be an outside corner AFTER drawing the rest of the new room. */
+              }
+              
             } else if (existingTileType === 'ground') {
               /* This is a floor tile from an old room, we want to keep it. */
             } else if (existingTileType === 'empty') {
@@ -139,11 +182,11 @@ function Map(props) {
 
               /* Dungeon walls */
               worldData[y][x].backgroundImage = dungeonSprite;
+              worldData[y][x].type = 'wall';
 
               /* Is this the north wall? */
               if (i===0) {
                 /* NORTH WALL */
-                worldData[y][x].type = 'wall';
                 if (j===0) {
                   // northwest corner of room
                   worldData[y][x].facing = 'se';
@@ -157,15 +200,13 @@ function Map(props) {
                   worldData[y][x].facing = 's';
                   worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
                 }
-              } else if (i===roomHeight-1) {
+              } else if (i === (roomHeight - 1)) {
                 /* SOUTH WALL */
-                worldData[y][x].type = 'wall';
-
                 if (j===0) {
                   // southwest corner of room
                   worldData[y][x].facing = 'ne';
                   worldData[y][x].spriteOffset = dungeonTiles.sw;
-                } else if (j===(roomWidth - 1)) {
+                } else if (j === (roomWidth - 1)) {
                   // southeast corner of room
                   worldData[y][x].facing = 'nw';
                   worldData[y][x].spriteOffset = dungeonTiles.se;         
@@ -177,8 +218,6 @@ function Map(props) {
               } else {
                 /* CENTER OF ROOM */
                 /* Place a wall on either end and floor tiles in the center. */
-                worldData[y][x].type = 'wall';
-
                 if (j===0) {
                   // west wall of room
                   worldData[y][x].facing = 'e';
@@ -207,22 +246,7 @@ function Map(props) {
         //   /* Every tile in that row */
         //   for (let j=0; j<mapWidth; j++) {
         //     const x = j;
-        //     let tileToN = false;
-        //     let tileToS = false;
-        //     let tileToE = false;
-        //     let tileToW = false;
-        //     if (y > 0) {
-        //       tileToN = worldData[y - 1][x + 0];  
-        //     }
-        //     if (worldData[y + 1]) {
-        //       tileToS = worldData[y + 1][x + 0]
-        //     }
-        //     if (worldData[y][x + 1]) {
-        //       tileToE = worldData[y + 0][x + 1];
-        //     }
-        //     if (worldData[y][x - 1]) {
-        //       tileToW = worldData[y + 0][x - 1];
-        //     }
+
 
         //     const thisTile = worldData[y][x];
             
