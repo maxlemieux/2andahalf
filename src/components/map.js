@@ -1,5 +1,8 @@
 import React from "react";
 import MapRow from "./mapRow";
+const seedrandom = require('seedrandom');
+
+const RANDOM_KEY = 'fdsafdsfaoo';
 
 const dungeonSprite = '/img/environment/iso_dungeon_walls_by_pfunked.png';
 const dungeonTiles = {
@@ -54,7 +57,7 @@ function Map(props) {
   };
 
   const buildMap = (mapWidth, mapHeight) => {
-    const mapArray = [];
+    const worldData = [];
     /* X: j, Y: i */
     for (let i=0; i<mapHeight; i++) {
       const thisY = 32 + (32 * i) - (window.innerHeight / 4);
@@ -82,22 +85,25 @@ function Map(props) {
         };
         thisRow.push(tile);
       };
-      mapArray.push(thisRow);
+      worldData.push(thisRow);
     };
-    return mapArray;  
+    return worldData;  
   }
   
-  const mapArray = buildMap(20, 20);
+  const worldData = buildMap(20, 20);
   
-  const newRoom = (mapArray) => {
+  const newRoom = (worldData) => {
     // get size of array to determine potential size of room
-    const mapWidth = mapArray[0].length;
-    const mapHeight = mapArray.length;
+    const mapWidth = worldData[0].length;
+    const mapHeight = worldData.length;
     // check random position and room size, see if it fits
     let roomFound = false;
     while (roomFound === false) {
-      const roomWidth = Math.floor(Math.random() * mapWidth / 2) + 4;
-      const roomHeight = Math.floor(Math.random() * mapHeight / 2) + 4;
+      const roomWidth = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth / 2) + 4;
+      const roomHeight = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight / 2) + 4;
+      /* For some reason using seedrandom on the topLeftX and topLeftY breaks everything */
+      // const topLeftX = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth);
+      // const topLeftY = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight);
       const topLeftX = Math.floor(Math.random() * mapWidth);
       const topLeftY = Math.floor(Math.random() * mapHeight);
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
@@ -110,155 +116,155 @@ function Map(props) {
           for (let j=0; j<roomWidth; j++) {
             const x = topLeftX + j;
             
-            const existingTileType = mapArray[y][x].type;
+            const existingTileType = worldData[y][x].type;
 
             if (existingTileType === 'wall') {
               /* This is an old wall from another room, make it into a floor to create a big room*/
               /* Set floor tile for now, then check if it needs to be an outside corner after drawing the new room */
-              mapArray[y][x].walkable = true;
-              mapArray[y][x].type = 'ground';
-              mapArray[y][x].z = 0;
-              mapArray[y][x].backgroundImage = floorSprite;
-              mapArray[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              mapArray[y][x].facing = false;
+              worldData[y][x].walkable = true;
+              worldData[y][x].type = 'ground';
+              worldData[y][x].z = 0;
+              worldData[y][x].backgroundImage = floorSprite;
+              worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+              worldData[y][x].facing = false;
             } else if (existingTileType === 'ground') {
               // do diddly
             } else if (existingTileType === 'empty') {
               /* build stuff */
-              mapArray[y][x].empty = false;
+              worldData[y][x].empty = false;
               if (i===0) {
                 /* NORTH WALL */
-                mapArray[y][x].type = 'wall';
-                mapArray[y][x].backgroundImage = dungeonSprite;
+                worldData[y][x].type = 'wall';
+                worldData[y][x].backgroundImage = dungeonSprite;
                 if (j===0) {
                   // northwest corner of room
-                  mapArray[y][x].spriteOffset = dungeonTiles.nw;
-                  mapArray[y][x].facing = 'se';
+                  worldData[y][x].spriteOffset = dungeonTiles.nw;
+                  worldData[y][x].facing = 'se';
                 } else if (j===(roomWidth - 1)) {
                   // northeast corner of room
-                  mapArray[y][x].spriteOffset = dungeonTiles.ne;
-                  mapArray[y][x].facing = 'sw';
+                  worldData[y][x].spriteOffset = dungeonTiles.ne;
+                  worldData[y][x].facing = 'sw';
                 } else {
                   // north wall center
-                  mapArray[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
-                  mapArray[y][x].facing = 's';
+                  worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+                  worldData[y][x].facing = 's';
                 }
               } else if (i===roomHeight-1) {
                 /* SOUTH WALL */
-                mapArray[y][x].type = 'wall';
-                mapArray[y][x].backgroundImage = dungeonSprite;
+                worldData[y][x].type = 'wall';
+                worldData[y][x].backgroundImage = dungeonSprite;
                 if (j===0) {
                   // southwest corner of room
-                  mapArray[y][x].spriteOffset = dungeonTiles.sw;
-                  mapArray[y][x].facing = 'ne';
+                  worldData[y][x].spriteOffset = dungeonTiles.sw;
+                  worldData[y][x].facing = 'ne';
                 } else if (j===(roomWidth - 1)) {
                   // southeast corner of room
-                  mapArray[y][x].spriteOffset = dungeonTiles.se;         
-                 mapArray[y][x].facing = 'nw';
+                  worldData[y][x].spriteOffset = dungeonTiles.se;         
+                 worldData[y][x].facing = 'nw';
                 } else {
                   // south wall center
-                  mapArray[y][x].spriteOffset = dungeonTiles.s;
-                  mapArray[y][x].facing = 'n';
+                  worldData[y][x].spriteOffset = dungeonTiles.s;
+                  worldData[y][x].facing = 'n';
                 }
               } else {
                 /* CENTER OF ROOM */
                 /* Place a wall on either end and floor tiles in the center. */
-                mapArray[y][x].type = 'wall';
-                mapArray[y][x].backgroundImage = dungeonSprite;
+                worldData[y][x].type = 'wall';
+                worldData[y][x].backgroundImage = dungeonSprite;
 
                 if (j===0) {
                   // west wall of room
-                  mapArray[y][x].spriteOffset = dungeonTiles.w;
-                  mapArray[y][x].facing = 'e';
+                  worldData[y][x].spriteOffset = dungeonTiles.w;
+                  worldData[y][x].facing = 'e';
                 } else if (j===(roomWidth - 1)) {
                   // east wall of room
-                  mapArray[y][x].spriteOffset = dungeonTiles.e;
-                  mapArray[y][x].facing = 'w';
+                  worldData[y][x].spriteOffset = dungeonTiles.e;
+                  worldData[y][x].facing = 'w';
                 } else {
                   // floor tile in center of room
-                  mapArray[y][x].walkable = true;
-                  mapArray[y][x].type = 'ground';
-                  mapArray[y][x].z = 0;
-                  mapArray[y][x].backgroundImage = floorSprite;
-                  mapArray[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-                  mapArray[y][x].facing = false;
+                  worldData[y][x].walkable = true;
+                  worldData[y][x].type = 'ground';
+                  worldData[y][x].z = 0;
+                  worldData[y][x].backgroundImage = floorSprite;
+                  worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+                  worldData[y][x].facing = false;
                 }
               }
             }
           }
         }
-        /* After adding the new room, check mapArray for floors to replace with outside corners */
-        for (let i=0; i<mapHeight; i++) {
-          const y = i;
-          /* Every tile in that row */
-          for (let j=0; j<mapWidth; j++) {
-            const x = j;
-            let tileToN = false;
-            let tileToS = false;
-            let tileToE = false;
-            let tileToW = false;
-            if (y > 0) {
-              tileToN = mapArray[y - 1][x + 0];  
-            }
-            if (mapArray[y + 1]) {
-              tileToS = mapArray[y + 1][x + 0]
-            }
-            if (mapArray[y][x + 1]) {
-              tileToE = mapArray[y + 0][x + 1];
-            }
-            if (mapArray[y][x - 1]) {
-              tileToW = mapArray[y + 0][x - 1];
-            }
+        /* After adding the new room, check worldData for floors to replace with outside corners */
+        // for (let i=0; i<mapHeight; i++) {
+        //   const y = i;
+        //   /* Every tile in that row */
+        //   for (let j=0; j<mapWidth; j++) {
+        //     const x = j;
+        //     let tileToN = false;
+        //     let tileToS = false;
+        //     let tileToE = false;
+        //     let tileToW = false;
+        //     if (y > 0) {
+        //       tileToN = worldData[y - 1][x + 0];  
+        //     }
+        //     if (worldData[y + 1]) {
+        //       tileToS = worldData[y + 1][x + 0]
+        //     }
+        //     if (worldData[y][x + 1]) {
+        //       tileToE = worldData[y + 0][x + 1];
+        //     }
+        //     if (worldData[y][x - 1]) {
+        //       tileToW = worldData[y + 0][x - 1];
+        //     }
 
-            const thisTile = mapArray[y][x];
+        //     const thisTile = worldData[y][x];
             
-            // const existingTileType = mapArray[y][x].type;
-            if (thisTile.type === 'ground') {
-              // console.log(tileToN);
-              if (tileToN.type === 'wall' && tileToN.facing === 'e' &&
-                  tileToW.type === 'wall' && tileToW.facing === 's' &&
-                  tileToS.type === 'ground' &&
-                  tileToE.type === 'ground') {
-                console.log(`Outside southeast corner at X: ${x}, Y: ${y}!`);
-                mapArray[y][x].type = 'wall';
-                mapArray[y][x].facing = 'nw';
-                mapArray[y][x].walkable = 'false';
-                mapArray[y][x].backgroundImage = dungeonSprite;
-                mapArray[y][x].spriteOffset = dungeonTiles.seo;
-              }
-        //       } else if (tileToN && tileToN.type === 'wall' && tileToN.facing === 'west' &&
-        //                   tileToE && tileToE.type === 'wall' && tileToE.facing === 'south' &&
-        //                   tileToS && tileToS.type === 'ground' &&
-        //                   tileToW && tileToW.type === 'ground') {
-        //         console.log('Outside southwest corner!');
-        //         mapArray[y][x].type = 'wall';
-        //         mapArray[y][x].backgroundImage = dungeonSprite;
-        //         mapArray[y][x].spriteOffset = dungeonTiles.swo;
-        //       } else if (tileToW && tileToW.type === 'wall' && 
-        //                   tileToS && tileToS.type === 'wall' &&
-        //                   tileToE && tileToE.type === 'ground' && 
-        //                   tileToN && tileToN.type === 'ground') {
-        //         console.log('Outside Northeast corner!');
-        //         mapArray[y][x].type = 'wall';
-        //         mapArray[y][x].backgroundImage = dungeonSprite;
-        //         mapArray[y][x].spriteOffset = dungeonTiles.neo;
-        //       } else if (tileToE && tileToE.type === 'wall' &&
-        //                   tileToS && tileToS.type === 'wall' &&
-        //                   tileToW && tileToW.type === 'ground' &&
-        //                   tileToN && tileToN.type === 'ground') {
-        //         console.log('Outside Northwest corner!');
-        //         mapArray[y][x].type = 'wall';
-        //         mapArray[y][x].backgroundImage = dungeonSprite;
-        //         mapArray[y][x].spriteOffset = dungeonTiles.nwo;
+        //     // const existingTileType = worldData[y][x].type;
+        //     if (thisTile.type === 'ground') {
+        //       // console.log(tileToN);
+        //       if (tileToN.type === 'wall' && tileToN.facing === 'e' &&
+        //           tileToW.type === 'wall' && tileToW.facing === 's' &&
+        //           tileToS.type === 'ground' &&
+        //           tileToE.type === 'ground') {
+        //         console.log(`Outside southeast corner at X: ${x}, Y: ${y}!`);
+        //         worldData[y][x].type = 'wall';
+        //         worldData[y][x].facing = 'nw';
+        //         worldData[y][x].walkable = 'false';
+        //         worldData[y][x].backgroundImage = dungeonSprite;
+        //         worldData[y][x].spriteOffset = dungeonTiles.seo;
         //       }
-            }
-          }
-        }
+        // //       } else if (tileToN && tileToN.type === 'wall' && tileToN.facing === 'west' &&
+        // //                   tileToE && tileToE.type === 'wall' && tileToE.facing === 'south' &&
+        // //                   tileToS && tileToS.type === 'ground' &&
+        // //                   tileToW && tileToW.type === 'ground') {
+        // //         console.log('Outside southwest corner!');
+        // //         worldData[y][x].type = 'wall';
+        // //         worldData[y][x].backgroundImage = dungeonSprite;
+        // //         worldData[y][x].spriteOffset = dungeonTiles.swo;
+        // //       } else if (tileToW && tileToW.type === 'wall' && 
+        // //                   tileToS && tileToS.type === 'wall' &&
+        // //                   tileToE && tileToE.type === 'ground' && 
+        // //                   tileToN && tileToN.type === 'ground') {
+        // //         console.log('Outside Northeast corner!');
+        // //         worldData[y][x].type = 'wall';
+        // //         worldData[y][x].backgroundImage = dungeonSprite;
+        // //         worldData[y][x].spriteOffset = dungeonTiles.neo;
+        // //       } else if (tileToE && tileToE.type === 'wall' &&
+        // //                   tileToS && tileToS.type === 'wall' &&
+        // //                   tileToW && tileToW.type === 'ground' &&
+        // //                   tileToN && tileToN.type === 'ground') {
+        // //         console.log('Outside Northwest corner!');
+        // //         worldData[y][x].type = 'wall';
+        // //         worldData[y][x].backgroundImage = dungeonSprite;
+        // //         worldData[y][x].spriteOffset = dungeonTiles.nwo;
+        // //       }
+        //     }
+        //   }
+        // }
       } else {
         console.log(`room doesn't fit, trying again`);
       }
     }
-    return mapArray;
+    return worldData;
   }
 
   // function isoToTwoD(x, y) {
@@ -275,10 +281,10 @@ function Map(props) {
     return iso;
   };
 
-  let roomArray = newRoom(mapArray);
-   roomArray = newRoom(mapArray);
-  //  roomArray = newRoom(mapArray);
-  //  roomArray = newRoom(mapArray);
+  let roomArray = newRoom(worldData);
+   roomArray = newRoom(worldData);
+  //  roomArray = newRoom(worldData);
+  //  roomArray = newRoom(worldData);
 
   /* Display map */
   return (
