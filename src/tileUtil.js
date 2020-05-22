@@ -37,4 +37,4 @@ const getNearbyTiles = (x, y, worldData) => {
   return nearbyTiles;
 };
 
-module.export = getNearbyTiles;
+module.exports = getNearbyTiles;

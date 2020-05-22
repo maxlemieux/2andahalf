@@ -1,6 +1,7 @@
 import React from "react";
 import MapRow from "./mapRow";
 import getNearbyTiles from "../tileUtil.js";
+
 import spriteInfo from "../spriteInfo.js";
 const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
@@ -19,7 +20,6 @@ function Map(props) {
     minHeight: '75vh',
     backgroundColor: 'gray',
   };
-
 
   const buildMap = (mapWidth, mapHeight) => {
     const worldData = [];
@@ -248,6 +248,7 @@ function Map(props) {
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
         roomFound = true;
         console.log(`New room with top left x: ${topLeftX}, y: ${topLeftY}, width ${roomWidth}, height ${mapHeight}`);
+
         /* For each row in the new room */
         for (let i=0; i<roomHeight; i++) {
           const y = topLeftY + i;
@@ -258,6 +259,7 @@ function Map(props) {
             /* Type will be either 'empty', 'wall' or 'ground' */
             const existingTileType = worldData[y][x].type;
 
+            /* Object containing information about nearby tiles in 8 directions */
             const nearbyTiles = getNearbyTiles(x, y, worldData);
     
             /* Check the existing tile on the map to see what is there and what to do */
@@ -271,8 +273,7 @@ function Map(props) {
                         (j !== 0 && j !== roomWidth - 1)) {
                 /* If the old wall is a north wall
                    and we are not on the north side of the new room or the south side of the new room
-                   and we are in the floor of the new room,
-                   replace it with the appropriate outside corner */
+                   and we are in the floor of the new room */
                 if (nearbyTiles.n.type === 'wall' &&
                     nearbyTiles.n.wallType === 'wall_w') {
                     /* outside sw corner */
@@ -289,49 +290,56 @@ function Map(props) {
                     worldData[y][x].wallType = 'corner_se_outer';
                     worldData[y][x].spriteOffset = dungeonTiles.seo;
                     worldData[y][x].z = 1;
+                } else { /* floor it */
+                  console.log(`Setting floor tile at x: ${x}, y: ${y}`)
+                  worldData[y][x].backgroundImage = floorSprite;
+                  worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+                  worldData[y][x].type = 'ground';
+                  worldData[y][x].walkable = true;
+                  worldData[y][x].z = 0; 
                 }
 
               } else if (worldData[y][x].wallType === 'wall_s' && i === (roomHeight - 1)) {
                 /* If we are on the south side of the new room  */
-                console.log(`Found an existing south wall at x: ${x}, y: ${y}`)
+                // console.log(`Found an existing south wall at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'wall_w' && j === 0) {
                 /* If we are on the west side of the new room  */
-                console.log(`Found an existing west wall at x: ${x}, y: ${y}`)
+                // console.log(`Found an existing west wall at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'wall_e' && j === (roomWidth - 1)) {
                 /* If we are on the east side of the room  */
-                console.log(`Found an existing east wall at x: ${x}, y: ${y}`)
+                // console.log(`Found an existing east wall at x: ${x}, y: ${y}`)
 
               } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0 && j === 0) {
                 /* If we are on the northwest corner of the room and corners match */
-                console.log(`Found matching inner northwest corner at x: ${x}, y: ${y}`)
+                // console.log(`Found matching inner northwest corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_ne_inner' && i === 0 && j === (roomWidth - 1)) {
                 /* If we are on the northeast corner of the room and corners match*/
-                console.log(`Found matching inner northeast corner at x: ${x}, y: ${y}`)
+                // console.log(`Found matching inner northeast corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_sw_inner' && i === (roomHeight - 1) && j === 0) {
                 /* If we are on the southwest corner of the room and corners match */
-                console.log(`Found matching inner southwest corner at x: ${x}, y: ${y}`)
+                // console.log(`Found matching inner southwest corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
                 /* If we are on the southeast corner of the room and corners match */
-                console.log(`Found matching existing inner southeast corner at x: ${x}, y: ${y}`)
+                // console.log(`Found matching existing inner southeast corner at x: ${x}, y: ${y}`)
 
               } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0 && j !== 0 && j !== (roomWidth - 1)) {
                 /* If we are on the northwest corner of the old room and corners do not match */
-                console.log(`Found old inner northwest corner at x: ${x}, y: ${y} - replacing with north wall`)
+                // console.log(`Found old inner northwest corner at x: ${x}, y: ${y} - replacing with north wall`)
 
                 worldData[y][x].wallType = 'wall_n';
                 worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];  
               } else if (worldData[y][x].wallType === 'corner_ne_inner' && i === 0 && j !== 0 && j !== (roomWidth - 1)) {
                 /* If we are on the northeast corner of the old room and corners do not match*/
-                console.log(`Found old inner northeast corner at x: ${x}, y: ${y} - replacing with north wall`)
+                // console.log(`Found old inner northeast corner at x: ${x}, y: ${y} - replacing with north wall`)
 
                 worldData[y][x].wallType = 'wall_n';
                 worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
               } else if (worldData[y][x].wallType === 'corner_sw_inner' && i === (roomHeight - 1) && j === 0) {
                 /* If we are on the southwest corner of the old room and corners do not match */
-                console.log(`Found old inner southwest corner at x: ${x}, y: ${y}`)
+                // console.log(`Found old inner southwest corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
                 /* If we are on the southeast corner of the old room and corners do not match */
-                console.log(`Found old inner southeast corner at x: ${x}, y: ${y}`)
+                // console.log(`Found old inner southeast corner at x: ${x}, y: ${y}`)
 
               } else {
                  /*   Set floor tile for now. */
