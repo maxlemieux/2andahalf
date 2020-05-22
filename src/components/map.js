@@ -50,7 +50,7 @@ function Map(props) {
     return worldData;  
   }
   
-  const worldData = buildMap(20, 20);
+  const worldData = buildMap(30, 30);
   
   const cleanData = (worldData) => {
     const mapWidth = worldData[0].length;
@@ -145,8 +145,10 @@ function Map(props) {
         }
         
         if (worldData[y][x].type === 'ground' && 
-            tileToW.type === 'wall' && (tileToW.wallType === 'wall_n' || tileToW.wallType === 'corner_nw_inner') && 
-            tileToN.type === 'wall' && (tileToN.wallType === 'wall_w' || tileToN.wallType === 'corner_nw_inner')
+            tileToW.type === 'wall' &&
+           (tileToW.wallType === 'wall_n' || tileToW.wallType === 'corner_nw_inner' || tileToW.wallType === 'corner_sw_outer') && 
+            tileToN.type === 'wall' && 
+           (tileToN.wallType === 'wall_w' || tileToN.wallType === 'corner_nw_inner' || tileToW.wallType === 'corner_ne_outer')
             ) {
           console.log(`we need to fill in a gap in an outer southeast corner at x: ${x}, y: ${y}`)
           /*
@@ -161,8 +163,10 @@ function Map(props) {
           worldData[y][x].z = 1;
         } 
         if (worldData[y][x].type === 'ground' && 
-            tileToE.type === 'wall' && (tileToE.wallType === 'wall_n' || tileToE.wallType === 'corner_ne_inner') && 
-            tileToN.type === 'wall' && (tileToN.wallType === 'wall_e' || tileToN.wallType === 'corner_ne_inner')
+            tileToE.type === 'wall' &&
+           (tileToE.wallType === 'wall_n' || tileToE.wallType === 'corner_ne_inner' || tileToE.wallType === 'corner_se_outer') && 
+            tileToN.type === 'wall' &&
+           (tileToN.wallType === 'wall_e' || tileToN.wallType === 'corner_ne_inner' || tileToN.wallType === 'corner_nw_outer')
             ) {
           console.log(`we need to fill in a gap in an outer southwest corner at x: ${x}, y: ${y}`)
           /*
@@ -178,8 +182,10 @@ function Map(props) {
         } 
 
         if (worldData[y][x].type === 'ground' && 
-            tileToW.type === 'wall' && (tileToW.wallType === 'wall_s' || tileToW.wallType === 'corner_sw_inner') && 
-            tileToS.type === 'wall' && (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_sw_inner')
+            tileToW.type === 'wall' && 
+           (tileToW.wallType === 'wall_s' || tileToW.wallType === 'corner_sw_inner' || tileToW.wallType === 'corner_nw_outer') && 
+            tileToS.type === 'wall' && 
+           (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_sw_inner' || tileToS.wallType === 'corner_se_outer')
             ) {
           console.log(`we need to fill in a gap in an outer northeast corner at x: ${x}, y: ${y}`)
           /* 
@@ -223,8 +229,8 @@ function Map(props) {
     // check random position and room size, see if it fits
     let roomFound = false;
     while (roomFound === false) {
-      const roomWidth = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth / 2) + 4;
-      const roomHeight = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight / 2) + 4;
+      const roomWidth = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth / 4) + 4;
+      const roomHeight = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight / 4) + 4;
 
       /* For some reason, using seedrandom on the topLeftX and topLeftY breaks everything */
       // const topLeftX = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth);
@@ -260,6 +266,7 @@ function Map(props) {
               } else if (worldData[y][x].wallType === 'wall_e' && j === (roomWidth - 1)) {
                 /* If we are on the east side of the room  */
                 console.log(`Found an existing east wall at x: ${x}, y: ${y}`)
+
               } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0 && j === 0) {
                 /* If we are on the northwest corner of the room and corners match */
                 console.log(`Found matching inner northwest corner at x: ${x}, y: ${y}`)
@@ -272,6 +279,7 @@ function Map(props) {
               } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
                 /* If we are on the southeast corner of the room and corners match */
                 console.log(`Found matching existing inner southeast corner at x: ${x}, y: ${y}`)
+
               } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0 && j !== 0 && j !== (roomWidth - 1)) {
                 /* If we are on the northwest corner of the old room and corners do not match */
                 console.log(`Found old inner northwest corner at x: ${x}, y: ${y} - replacing with north wall`)
@@ -288,6 +296,7 @@ function Map(props) {
               } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
                 /* If we are on the southeast corner of the old room and corners do not match */
                 console.log(`Found old inner southeast corner at x: ${x}, y: ${y}`)
+
               } else {
                  /*   Set floor tile for now. */
                  console.log(`Setting floor tile at x: ${x}, y: ${y}`)
@@ -366,7 +375,7 @@ function Map(props) {
         // console.log(`room doesn't fit, trying again`);
       }
     }
-    return worldData;
+    return cleanData(worldData);
   }
 
   // function isoToTwoD(x, y) {
@@ -385,11 +394,10 @@ function Map(props) {
 
   let worldArray = newRoom(worldData);
   worldArray = newRoom(worldData);
-  worldArray = cleanData(worldArray)
-  // worldArray = cleanData(worldArray)
-  // worldArray = cleanData(worldArray)
-  //  roomArray = newRoom(worldData);
-  //  roomArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
 
   /* Display map */
   return (
