@@ -94,7 +94,6 @@ function Map(props) {
           */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'e';
           worldData[y][x].wallType = 'wall_w';
           worldData[y][x].spriteOffset = dungeonTiles.w;
           worldData[y][x].z = 1;
@@ -109,7 +108,6 @@ function Map(props) {
           console.log('we need to fill in a gap in a east wall')
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'w';
           worldData[y][x].wallType = 'wall_e';
           worldData[y][x].spriteOffset = dungeonTiles.e;
           worldData[y][x].z = 1;
@@ -121,13 +119,12 @@ function Map(props) {
             tileToW.type === 'wall' && 
            (tileToW.wallType === 'wall_n' || tileToW.wallType === 'corner_nw_inner' || tileToW.wallType === 'corner_sw_outer')
             ) {
-          console.log('we need to fill in a gap in a north wall')
+          console.log(`we need to fill in a gap in a north wall at x: ${x}, y: ${y}`)
           /*         
           
           */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 's';
           worldData[y][x].wallType = 'wall_n';
           worldData[y][x].spriteOffset = dungeonTiles.n;
           worldData[y][x].z = 1;
@@ -142,7 +139,6 @@ function Map(props) {
           console.log('we need to fill in a gap in a south wall')
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'n';
           worldData[y][x].wallType = 'wall_s';
           worldData[y][x].spriteOffset = dungeonTiles.s;
           worldData[y][x].z = 1;
@@ -160,7 +156,6 @@ function Map(props) {
           */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'nw';
           worldData[y][x].wallType = 'corner_se_outer';
           worldData[y][x].spriteOffset = dungeonTiles.seo;
           worldData[y][x].z = 1;
@@ -175,10 +170,8 @@ function Map(props) {
           |_
 
           */
-
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'ne';
           worldData[y][x].wallType = 'corner_sw_outer';
           worldData[y][x].spriteOffset = dungeonTiles.swo;
           worldData[y][x].z = 1;
@@ -197,7 +190,6 @@ function Map(props) {
           */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'sw';
           worldData[y][x].wallType = 'corner_ne_outer';
           worldData[y][x].spriteOffset = dungeonTiles.neo;
           worldData[y][x].z = 1;
@@ -215,7 +207,6 @@ function Map(props) {
           */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
-          worldData[y][x].facing = 'se';
           worldData[y][x].wallType = 'corner_nw_outer';
           worldData[y][x].spriteOffset = dungeonTiles.nwo;
           worldData[y][x].z = 1;
@@ -270,21 +261,35 @@ function Map(props) {
                 /* If we are on the east side of the room  */
                 console.log(`Found an existing east wall at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0 && j === 0) {
-                /* If we are on the northwest corner of the room */
-                console.log(`Found an existing inner northwest corner at x: ${x}, y: ${y}`)
+                /* If we are on the northwest corner of the room and corners match */
+                console.log(`Found matching inner northwest corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_ne_inner' && i === 0 && j === (roomWidth - 1)) {
-                /* If we are on the northeast corner of the room */
-                console.log(`Found an existing inner northeast corner at x: ${x}, y: ${y}`)
+                /* If we are on the northeast corner of the room and corners match*/
+                console.log(`Found matching inner northeast corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_sw_inner' && i === (roomHeight - 1) && j === 0) {
-                /* If we are on the southwest corner of the room */
-                console.log(`Found an existing inner southwest corner at x: ${x}, y: ${y}`)
+                /* If we are on the southwest corner of the room and corners match */
+                console.log(`Found matching inner southwest corner at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
-                /* If we are on the southeast corner of the room */
-                console.log(`Found an existing inner southeast corner at x: ${x}, y: ${y}`)
+                /* If we are on the southeast corner of the room and corners match */
+                console.log(`Found matching existing inner southeast corner at x: ${x}, y: ${y}`)
+              } else if (worldData[y][x].wallType === 'corner_nw_inner' && i === 0) {
+                /* If we are on the northwest corner of the old room and corners do not match */
+                console.log(`Found old inner northwest corner at x: ${x}, y: ${y} - replacing with north wall`)
+                worldData[y][x].wallType = 'wall_n';
+                worldData[y][x].spriteOffset = dungeonTiles.n;      
+              } else if (worldData[y][x].wallType === 'corner_ne_inner' && i === 0 && j === (roomWidth - 1)) {
+                /* If we are on the northeast corner of the old room and corners do not match*/
+                console.log(`Found old inner northeast corner at x: ${x}, y: ${y}`)
+              } else if (worldData[y][x].wallType === 'corner_sw_inner' && i === (roomHeight - 1) && j === 0) {
+                /* If we are on the southwest corner of the old room and corners do not match */
+                console.log(`Found old inner southwest corner at x: ${x}, y: ${y}`)
+              } else if (worldData[y][x].wallType === 'corner_se_inner' && i === (roomHeight - 1) && j === (roomWidth - 1)) {
+                /* If we are on the southeast corner of the old room and corners do not match */
+                console.log(`Found old inner southeast corner at x: ${x}, y: ${y}`)
               } else {
                  /*   Set floor tile for now. */
+                 console.log(`Setting floor tile at x: ${x}, y: ${y}`)
                  worldData[y][x].backgroundImage = floorSprite;
-                 worldData[y][x].facing = false;
                  worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
                  worldData[y][x].type = 'ground';
                  worldData[y][x].walkable = true;
@@ -305,17 +310,14 @@ function Map(props) {
                 /* NORTH WALL */
                 if (j===0) {
                   // northwest corner of room
-                  worldData[y][x].facing = 'se';
                   worldData[y][x].wallType = 'corner_nw_inner';
                   worldData[y][x].spriteOffset = dungeonTiles.nw;
                 } else if (j===(roomWidth - 1)) {
                   // northeast corner of room
-                  worldData[y][x].facing = 'sw';
                   worldData[y][x].wallType = 'corner_ne_inner';
                   worldData[y][x].spriteOffset = dungeonTiles.ne;
                 } else {
                   // north wall center
-                  worldData[y][x].facing = 's';
                   worldData[y][x].wallType = 'wall_n';
                   worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
                 }
@@ -323,17 +325,14 @@ function Map(props) {
                 /* SOUTH WALL */
                 if (j===0) {
                   // southwest corner of room
-                  worldData[y][x].facing = 'ne';
                   worldData[y][x].wallType = 'corner_sw_inner';
                   worldData[y][x].spriteOffset = dungeonTiles.sw;
                 } else if (j === (roomWidth - 1)) {
                   // southeast corner of room
-                  worldData[y][x].facing = 'nw';
                   worldData[y][x].wallType = 'corner_se_inner';
                   worldData[y][x].spriteOffset = dungeonTiles.se;         
                 } else {
                   // south wall center
-                  worldData[y][x].facing = 'n';
                   worldData[y][x].wallType = 'wall_s';
                   worldData[y][x].spriteOffset = dungeonTiles.s;
                 }
@@ -342,18 +341,15 @@ function Map(props) {
                 /* Place a wall on either end and floor tiles in the center. */
                 if (j===0) {
                   // west wall of room
-                  worldData[y][x].facing = 'e';
                   worldData[y][x].wallType = 'wall_w';
                   worldData[y][x].spriteOffset = dungeonTiles.w;
                 } else if (j===(roomWidth - 1)) {
                   // east wall of room
-                  worldData[y][x].facing = 'w';
                   worldData[y][x].wallType = 'wall_e';
                   worldData[y][x].spriteOffset = dungeonTiles.e;
                 } else {
                   // floor tile in center of room
                   worldData[y][x].backgroundImage = floorSprite;
-                  worldData[y][x].facing = false;
                   worldData[y][x].wallType = undefined;
                   worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
                   worldData[y][x].type = 'ground';
@@ -388,6 +384,7 @@ function Map(props) {
   let worldArray = newRoom(worldData);
   worldArray = newRoom(worldData);
   worldArray = cleanData(worldArray)
+  // worldArray = cleanData(worldArray)
   // worldArray = cleanData(worldArray)
   //  roomArray = newRoom(worldData);
   //  roomArray = newRoom(worldData);
