@@ -138,7 +138,6 @@ function Map(props) {
                   // northeast corner of room
                   mapArray[y][x].spriteOffset = dungeonTiles.ne;
                   mapArray[y][x].facing = 'sw';
-
                 } else {
                   // north wall center
                   mapArray[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
@@ -198,22 +197,23 @@ function Map(props) {
             let tileToS = false;
             let tileToE = false;
             let tileToW = false;
-            if (mapArray[y - 1]) {
+            if (y > 0) {
               tileToN = mapArray[y - 1][x + 0];  
             }
             if (mapArray[y + 1]) {
               tileToS = mapArray[y + 1][x + 0]
             }
-            if (mapArray[y][x+1]) {
+            if (mapArray[y][x + 1]) {
               tileToE = mapArray[y + 0][x + 1];
             }
-            if (mapArray[y][x-1]) {
+            if (mapArray[y][x - 1]) {
               tileToW = mapArray[y + 0][x - 1];
             }
-            
+
+            const thisTile = mapArray[y][x];
             
             // const existingTileType = mapArray[y][x].type;
-            if (mapArray[y][x].type === 'ground') {
+            if (thisTile.type === 'ground') {
               // console.log(tileToN);
               if (tileToN.type === 'wall' && tileToN.facing === 'e' &&
                   tileToW.type === 'wall' && tileToW.facing === 's' &&
