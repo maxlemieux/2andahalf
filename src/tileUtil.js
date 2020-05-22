@@ -34,6 +34,8 @@ const getNearbyTiles = (x, y, worldData) => {
     nearbyTiles.ne = worldData[y - 1][x + 1];
   }
 
+  nearbyTiles.this = worldData[y][x];
+
   return nearbyTiles;
 };
 
