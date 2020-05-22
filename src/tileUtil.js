@@ -8,6 +8,7 @@ const getNearbyTiles = (x, y, worldData) => {
     sw: null,
     s: null,
     se: null,
+    this: null,
   };
   if (x > 0) {
     nearbyTiles.w = worldData[y][x - 1];

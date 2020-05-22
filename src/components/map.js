@@ -9,8 +9,8 @@ const seedrandom = require('seedrandom');
 const RANDOM_KEY = 'fdsafdsfaoo';
 const worldSeed = new seedrandom(RANDOM_KEY)();
 
-const MAP_WIDTH = 12;
-const MAP_HEIGHT = 12;
+const MAP_WIDTH = 16;
+const MAP_HEIGHT = 16;
 
 function Map(props) {
   const style = {
@@ -263,15 +263,13 @@ function Map(props) {
             /* Type will be either 'empty', 'wall' or 'ground' */
 
             if (nearbyTiles.this.type === 'ground') {
-              continue;
               /* This is a floor tile from an old room, we want to keep it. */
+              continue;
             } else {
               /* Build new stuff */
               worldData[y][x].empty = false;
 
-              /* Dungeon walls */
-              worldData[y][x].backgroundImage = dungeonSprite;
-              worldData[y][x].type = 'wall';
+
 
               /* NORTH WALL */
               if ((i === 0) &&  (j === 0)) {
@@ -286,10 +284,19 @@ function Map(props) {
               }
               if ((i === 0) && ((j !== 0) && (j !== roomWidth -1))) {
                 // north wall center
-                worldData[y][x].wallType = 'wall_n';
-                worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+                if (nearbyTiles.this.type === 'empty') {
+                  worldData[y][x].wallType = 'wall_n';
+                  worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_w') {
+                  worldData[y][x].wallType = 'corner_se_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.seo;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_e') {
+                  worldData[y][x].wallType = 'corner_sw_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.swo;
+                }
               }
-
               /* SOUTH WALL */
               if ((i === (roomHeight - 1)) && j===0) {
                 // southwest corner of room
@@ -303,22 +310,70 @@ function Map(props) {
               } 
               if (i === (roomHeight - 1) && (j !== 0) && (j !== (roomWidth - 1))) {
                 // south wall center
-                worldData[y][x].wallType = 'wall_s';
-                worldData[y][x].spriteOffset = dungeonTiles.s;
+                if (nearbyTiles.this.type === 'empty') {
+                  worldData[y][x].wallType = 'wall_s';
+                  worldData[y][x].spriteOffset = dungeonTiles.s;
+                }
+                // console.log(nearbyTiles.this.type)
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_w') {
+                  worldData[y][x].wallType = 'corner_ne_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.neo;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_e') {
+                  worldData[y][x].wallType = 'corner_nw_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.nwo;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
+                  /* make a floor */
+                  worldData[y][x].backgroundImage = floorSprite;
+                  worldData[y][x].wallType = undefined;
+                  worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+                  worldData[y][x].type = 'ground';
+                  worldData[y][x].walkable = true;
+                  worldData[y][x].z = 0;  
+                }
               }
 
-              /* CENTER OF ROOM */
-              /* Place a wall on either end and floor tiles in the center. */
+              /* WEST WALL */
               if ((i !== 0 && i !== roomHeight -1) && (j === 0)) {
                 // west wall of room
-                worldData[y][x].wallType = 'wall_w';
-                worldData[y][x].spriteOffset = dungeonTiles.w;
+                if (nearbyTiles.this.type === 'empty') {
+                  worldData[y][x].wallType = 'wall_w';
+                  worldData[y][x].spriteOffset = dungeonTiles.w;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
+                  worldData[y][x].wallType = 'corner_se_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.seo;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
+                  worldData[y][x].wallType = 'corner_ne_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.neo;
+                }
               }
+
+              /* EAST WALL */
               if ((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) {
                 // east wall of room
-                worldData[y][x].wallType = 'wall_e';
-                worldData[y][x].spriteOffset = dungeonTiles.e;
+                if (nearbyTiles.this.type === 'empty') {
+                  worldData[y][x].wallType = 'wall_e';
+                  worldData[y][x].spriteOffset = dungeonTiles.e;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
+                  worldData[y][x].wallType = 'corner_sw_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.swo;
+                }
+                if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
+                  worldData[y][x].wallType = 'corner_nw_outer';
+                  worldData[y][x].spriteOffset = dungeonTiles.nwo;
+                }
               }
+
+              /* ALL WALLS */
+              /* Use dungeon wall sprites and set tile type to 'wall' */
+              worldData[y][x].backgroundImage = dungeonSprite;
+              worldData[y][x].type = 'wall';
+
+              /* FLOORS */
               if (i !== 0 && i !== roomHeight -1 && (j !== 0 && j !== (roomWidth -1))) {
                 // floor tile in center of room
                 worldData[y][x].backgroundImage = floorSprite;
@@ -328,9 +383,9 @@ function Map(props) {
                 worldData[y][x].walkable = true;
                 worldData[y][x].z = 0;
               };
-            }; // if not an old floor
-          }; // check tile
-        }; // check row to see what to do
+            };
+          }; // for tile
+        }; // for row to see what to do
       } else {
         // console.log(`room doesn't fit, trying again`);
       }
