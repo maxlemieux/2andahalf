@@ -144,18 +144,35 @@ function Map(props) {
 
             /* Old tile was empty */
             if (nearbyTiles.this.type === 'empty' &&
-                (i === 0) && ((j !== 0) && (j !== roomWidth -1))) {
+                (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            {
               worldData[y][x].wallType = 'wall_n';
               worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
             }
+
+            /* Old tile was northeast or northwest inner corner */
             if (nearbyTiles.this.type === 'wall' && 
-                (nearbyTiles.this.wallType === 'wall_w' || nearbyTiles.this.wallType === 'corner_se_inner') && 
-                (i === 0) && ((j !== 0) && (j !== roomWidth -1))) {
+               (nearbyTiles.wallType === 'corner_nw_inner' || nearbyTiles.wallType === 'corner_ne_inner') &&
+               (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            {
+              worldData[y][x].wallType = 'wall_n';
+              worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+            }
+
+            /* Old tile was west wall or southeast inner corner */
+            if (nearbyTiles.this.type === 'wall' && 
+               (nearbyTiles.this.wallType === 'wall_w' || nearbyTiles.this.wallType === 'corner_se_inner') && 
+               (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            {
               worldData[y][x].wallType = 'corner_se_outer';
               worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
-            if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_e' &&
-                (i === 0) && ((j !== 0) && (j !== roomWidth -1))) {
+
+            /* Old tile was east wall or southwest inner corner */
+            if (nearbyTiles.this.type === 'wall' && 
+               (nearbyTiles.this.wallType === 'wall_e' || nearbyTiles.this.wallType === 'corner_sw_inner') &&
+               (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            {
               worldData[y][x].wallType = 'corner_sw_outer';
               worldData[y][x].spriteOffset = dungeonTiles.swo;
             }
@@ -165,12 +182,6 @@ function Map(props) {
               worldData[y][x].wallType = 'corner_se_outer';
               worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
-            // if ((i === 0) && (j === 0) && 
-            //      nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_se_inner') 
-            // {
-            //   worldData[y][x].wallType = 'corner_sw_outer';
-            //   worldData[y][x].spriteOffset = dungeonTiles.swo;
-            // }
             
             /* SOUTH WALL */
             if ((i === (roomHeight - 1)) && j===0) {
@@ -189,7 +200,6 @@ function Map(props) {
               worldData[y][x].wallType = 'wall_s';
               worldData[y][x].spriteOffset = dungeonTiles.s;
             }
-            // console.log(nearbyTiles.this.type)
             if ((i === (roomHeight - 1) && (j !== 0) && (j !== (roomWidth - 1))) &&
                 (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_w')) {
               worldData[y][x].wallType = 'corner_ne_outer';
@@ -212,62 +222,82 @@ function Map(props) {
             }
 
             /* WEST WALL */
-            if ((i !== 0 && i !== roomHeight -1) && (j === 0)) {
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_e') {
-                /* A west wall and an east wall are overlapping, make a floor */
-                worldData[y][x].backgroundImage = floorSprite;
-                worldData[y][x].wallType = undefined;
-                worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-                worldData[y][x].type = 'ground';
-                worldData[y][x].walkable = true;
-                worldData[y][x].z = 0;  
-              }
+            /* Old tile was north wall */
+            if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
+              worldData[y][x].wallType = 'corner_se_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.seo;
+            }
+            /* Old tile was south wall */
+            if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
+              worldData[y][x].wallType = 'corner_ne_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.neo;
+            }
 
-              // west wall of room
-              if (nearbyTiles.this.type === 'empty') {
-                worldData[y][x].wallType = 'wall_w';
-                worldData[y][x].spriteOffset = dungeonTiles.w;
-              }
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
-                worldData[y][x].wallType = 'corner_se_outer';
-                worldData[y][x].spriteOffset = dungeonTiles.seo;
-              }
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
-                worldData[y][x].wallType = 'corner_ne_outer';
-                worldData[y][x].spriteOffset = dungeonTiles.neo;
-              }               
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_inner_ne' &&
-                  nearbyTiles.w.type === 'wall' && nearbyTiles.w.wallType === 'wall_n') {
-                worldData[y][x].wallType = 'corner_se_outer';
-                worldData[y][x].spriteOffset = dungeonTiles.seo;
-              }
+            /* Old tile was east wall */
+            if (((i !== 0 && i !== roomHeight -1) && (j === 0)) && 
+                 (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_e')) {
+              /* A west wall and an east wall are overlapping, make a floor */
+              worldData[y][x].backgroundImage = floorSprite;
+              worldData[y][x].wallType = undefined;
+              worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+              worldData[y][x].type = 'ground';
+              worldData[y][x].walkable = true;
+              worldData[y][x].z = 0;  
+            }
+
+            /* Old tile was empty */
+            if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
+                  nearbyTiles.this.type === 'empty') {
+              worldData[y][x].wallType = 'wall_w';
+              worldData[y][x].spriteOffset = dungeonTiles.w;
+            }
+
+            /* Old tile was inner northeast corner and the tile to the west is a north wall */
+            if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_inner_ne' &&
+                nearbyTiles.w.type === 'wall' && nearbyTiles.w.wallType === 'wall_n') {
+              worldData[y][x].wallType = 'corner_se_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
 
             /* EAST WALL */
-            if ((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) {
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_w') {
-                /* A west wall and an east wall are overlapping, make a floor */
-                worldData[y][x].backgroundImage = floorSprite;
-                worldData[y][x].wallType = undefined;
-                worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-                worldData[y][x].type = 'ground';
-                worldData[y][x].walkable = true;
-                worldData[y][x].z = 0;  
-              }
+            if (((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) && 
+                  (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_w')) {
+              /* A west wall and an east wall are overlapping, make a floor */
+              worldData[y][x].backgroundImage = floorSprite;
+              worldData[y][x].wallType = undefined;
+              worldData[y][x].spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+              worldData[y][x].type = 'ground';
+              worldData[y][x].walkable = true;
+              worldData[y][x].z = 0;  
+            }
 
-              // east wall of room
-              if (nearbyTiles.this.type === 'empty') {
-                worldData[y][x].wallType = 'wall_e';
-                worldData[y][x].spriteOffset = dungeonTiles.e;
-              }
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
-                worldData[y][x].wallType = 'corner_sw_outer';
-                worldData[y][x].spriteOffset = dungeonTiles.swo;
-              }
-              if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
-                worldData[y][x].wallType = 'corner_nw_outer';
-                worldData[y][x].spriteOffset = dungeonTiles.nwo;
-              }
+            // east wall of room
+            if (((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) &&
+                  nearbyTiles.this.type === 'empty') {
+              worldData[y][x].wallType = 'wall_e';
+              worldData[y][x].spriteOffset = dungeonTiles.e;
+            }
+            if (((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) &&
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
+              worldData[y][x].wallType = 'corner_sw_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.swo;
+            }
+            if (((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) && 
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
+              worldData[y][x].wallType = 'corner_nw_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.nwo;
+            }
+            
+            /* Old tile was inner northwest corner and the tile to the east is a north wall */
+            if (((i !== 0 && i !== roomHeight -1) && j===(roomWidth - 1)) &&
+                ((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_inner_nw' &&
+                nearbyTiles.e.type === 'wall' && nearbyTiles.e.wallType === 'wall_n') {
+              worldData[y][x].wallType = 'corner_sw_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
 
             /* ALL WALLS */
