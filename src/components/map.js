@@ -1,12 +1,11 @@
 import React from "react";
 import MapRow from "./mapRow";
+
 import spriteInfo from "../spriteInfo.js";
+const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
 const seedrandom = require('seedrandom');
-
 const RANDOM_KEY = 'fdsafdsfaoo';
-
-const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
 function Map(props) {
   const style = {
@@ -57,7 +56,7 @@ function Map(props) {
     const mapWidth = worldData[0].length;
     const mapHeight = worldData.length;
 
-    /* Check all of worldData for floors to replace with outside corners */
+    /* Check all of worldData for floors to fill in with walls */
     for (let i=0; i<mapHeight; i++) {
       const y = i;
       /* Every tile in that row */
@@ -71,21 +70,28 @@ function Map(props) {
         if (y > 0) {
           tileToN = worldData[y - 1][x];  
         }
-        if (worldData[y + 1]) {
+        if (worldData.length > y + 1) {
           tileToS = worldData[y + 1][x]
         }
         if (worldData[y][x + 1]) {
           tileToE = worldData[y][x + 1];
         }
-        if (worldData[y][x - 1]) {
+        if (x > 0) {
           tileToW = worldData[y][x - 1];
         }
 
         if (worldData[y][x].type === 'ground' && 
-            tileToN.type === 'wall' && (tileToN.wallType === 'wall_w' || tileToN.wallType === 'corner_nw_inner' ) && 
-            tileToS.type === 'wall' && (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_se_outer' )
+            tileToN.type === 'wall' && 
+           (tileToN.wallType === 'wall_w' || tileToN.wallType === 'corner_ne_outer' || tileToN.wallType === 'corner_nw_inner') && 
+            tileToS.type === 'wall' && 
+           (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_sw_inner' || tileToS.wallType === 'corner_nw_outer')
             ) {
           console.log('we need to fill in a gap in a west wall')
+          /*                         __               __  
+          |     |                   | nw inner corner   |  ne outer corner    | 
+
+          |     |_  sw inner corner |                   |                   __| nw outer corner
+          */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
           worldData[y][x].facing = 'e';
@@ -95,8 +101,10 @@ function Map(props) {
         }
 
         if (worldData[y][x].type === 'ground' && 
-            tileToN.type === 'wall' && (tileToN.wallType === 'wall_e' || tileToN.wallType === 'corner_nw_outer' ) && 
-            tileToS.type === 'wall' && (tileToS.wallType === 'wall_e' || tileToN.wallType === 'corner_se_inner' )
+            tileToN.type === 'wall' && 
+           (tileToN.wallType === 'wall_e' || tileToN.wallType === 'corner_nw_outer' || tileToN.wallType === 'corner_ne_inner') && 
+            tileToS.type === 'wall' && 
+           (tileToS.wallType === 'wall_e' || tileToS.wallType === 'corner_se_inner' || tileToS.wallType === 'corner_ne_outer')
             ) {
           console.log('we need to fill in a gap in a east wall')
           worldData[y][x].backgroundImage = dungeonSprite;
@@ -108,10 +116,15 @@ function Map(props) {
         }
 
         if (worldData[y][x].type === 'ground' && 
-            tileToN.type === 'wall' && tileToN.wallType === 'wall_n' && 
-            tileToS.type === 'wall' && tileToS.wallType === 'wall_n'
+            tileToE.type === 'wall' && 
+           (tileToE.wallType === 'wall_n' || tileToE.wallType === 'corner_se_outer' || tileToE.wallType === 'corner_ne_inner') && 
+            tileToW.type === 'wall' && 
+           (tileToW.wallType === 'wall_n' || tileToW.wallType === 'corner_nw_inner' || tileToW.wallType === 'corner_sw_outer')
             ) {
           console.log('we need to fill in a gap in a north wall')
+          /*         
+          
+          */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
           worldData[y][x].facing = 's';
@@ -121,8 +134,10 @@ function Map(props) {
         }
 
         if (worldData[y][x].type === 'ground' && 
-            tileToN.type === 'wall' && tileToN.wallType === 'wall_s' && 
-            tileToS.type === 'wall' && tileToS.wallType === 'wall_s'
+            tileToE.type === 'wall' && 
+           (tileToE.wallType === 'wall_s' || tileToE.wallType === 'corner_ne_outer' || tileToE.wallType === 'corner_se_inner') && 
+            tileToW.type === 'wall' && 
+           (tileToW.wallType === 'wall_s' || tileToW.wallType === 'corner_sw_inner' || tileToW.wallType === 'corner_nw_outer')
             ) {
           console.log('we need to fill in a gap in a south wall')
           worldData[y][x].backgroundImage = dungeonSprite;
@@ -151,8 +166,8 @@ function Map(props) {
           worldData[y][x].z = 1;
         } 
         if (worldData[y][x].type === 'ground' && 
-            tileToW.type === 'wall' && (tileToW.wallType === 'wall_s' || tileToW.wallType === 'corner_sw_inner') && 
-            tileToS.type === 'wall' && (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_sw_inner')
+            tileToE.type === 'wall' && (tileToE.wallType === 'wall_n' || tileToE.wallType === 'corner_ne_inner') && 
+            tileToN.type === 'wall' && (tileToN.wallType === 'wall_e' || tileToN.wallType === 'corner_ne_inner')
             ) {
           console.log(`we need to fill in a gap in an outer southwest corner at x: ${x}, y: ${y}`)
           /*
@@ -170,8 +185,8 @@ function Map(props) {
         } 
 
         if (worldData[y][x].type === 'ground' && 
-            tileToE.type === 'wall' && (tileToE.wallType === 'wall_n' || tileToE.wallType === 'corner_ne_inner') && 
-            tileToN.type === 'wall' && (tileToN.wallType === 'wall_e' || tileToN.wallType === 'corner_ne_inner')
+            tileToW.type === 'wall' && (tileToW.wallType === 'wall_s' || tileToW.wallType === 'corner_sw_inner') && 
+            tileToS.type === 'wall' && (tileToS.wallType === 'wall_w' || tileToS.wallType === 'corner_sw_inner')
             ) {
           console.log(`we need to fill in a gap in an outer northeast corner at x: ${x}, y: ${y}`)
           /* 
@@ -188,10 +203,16 @@ function Map(props) {
           worldData[y][x].z = 1;
         } 
         if (worldData[y][x].type === 'ground' && 
-            tileToW.type === 'wall' && (tileToW.wallType === 'wall_n' || tileToW.wallType === 'corner_nw_inner') && 
-            tileToN.type === 'wall' && (tileToN.wallType === 'wall_w' || tileToN.wallType === 'corner_nw_inner')
+            tileToE.type === 'wall' && (tileToE.wallType === 'wall_s' || tileToE.wallType === 'corner_se_inner') && 
+            tileToS.type === 'wall' && (tileToS.wallType === 'wall_e' || tileToS.wallType === 'corner_se_inner')
             ) {
           console.log(`we need to fill in a gap in a outside northwest corner at x: ${x}, y: ${y}`)
+          /*
+
+          ___
+          |
+
+          */
           worldData[y][x].backgroundImage = dungeonSprite;
           worldData[y][x].type = 'wall';
           worldData[y][x].facing = 'se';
@@ -223,17 +244,17 @@ function Map(props) {
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
         roomFound = true;
         console.log(`New room with top left x: ${topLeftX}, y: ${topLeftY}, width ${roomWidth}, height ${mapHeight}`);
-        /* For each row */
+        /* For each row in the new room */
         for (let i=0; i<roomHeight; i++) {
           const y = topLeftY + i;
-          /* For each tile in that row */
+          /* For each tile in that row of the new room */
           for (let j=0; j<roomWidth; j++) {
             const x = topLeftX + j;
             const existingTileType = worldData[y][x].type;
 
             if (existingTileType === 'wall') {
               /* This is an old wall from another room, make it into a floor to create a big room.
-                 Check if it needs to end up as an outside wall:
+                 First, Check if it needs to end up as an outside wall:
                  If the new wall and the old wall are the same, just keep it. */
 
               if (worldData[y][x].wallType === 'wall_n' && i === 0) {
@@ -295,7 +316,7 @@ function Map(props) {
                 } else {
                   // north wall center
                   worldData[y][x].facing = 's';
-                  worldData[y][x].wallType = 'wall_n_various';
+                  worldData[y][x].wallType = 'wall_n';
                   worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
                 }
               } else if (i === (roomHeight - 1)) {
