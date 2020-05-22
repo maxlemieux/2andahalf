@@ -6,6 +6,10 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
 const seedrandom = require('seedrandom');
 const RANDOM_KEY = 'fdsafdsfaoo';
+const worldSeed = new seedrandom(RANDOM_KEY)();
+
+const MAP_WIDTH = 12;
+const MAP_HEIGHT = 12;
 
 function Map(props) {
   const style = {
@@ -20,10 +24,10 @@ function Map(props) {
     const worldData = [];
     /* X: j, Y: i */
     for (let i=0; i<mapHeight; i++) {
-      const thisY = 32 + (32 * i) - (window.innerHeight / 4);
+      const thisY = 32 + (32 * i) - (window.innerHeight / 2);
       const thisRow = [];
       for (let j=0; j<mapWidth; j++) {
-        /* Move the map to the right by 1/2 the inner window width to center on screen */
+        /* Move the map to the right by 1/4 the inner window width to center on screen */
         const thisX = 32 * j + (window.innerWidth / 4);
 
         /* Get isometric coordinates for this tile */
@@ -50,7 +54,7 @@ function Map(props) {
     return worldData;  
   }
   
-  const worldData = buildMap(30, 30);
+  const worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
   const cleanData = (worldData) => {
     const mapWidth = worldData[0].length;
@@ -189,7 +193,6 @@ function Map(props) {
             ) {
           console.log(`we need to fill in a gap in an outer northeast corner at x: ${x}, y: ${y}`)
           /* 
-
           ___
             |
 
@@ -201,12 +204,13 @@ function Map(props) {
           worldData[y][x].z = 1;
         } 
         if (worldData[y][x].type === 'ground' && 
-            tileToE.type === 'wall' && (tileToE.wallType === 'wall_s' || tileToE.wallType === 'corner_se_inner') && 
-            tileToS.type === 'wall' && (tileToS.wallType === 'wall_e' || tileToS.wallType === 'corner_se_inner')
+            tileToE.type === 'wall' && 
+           (tileToE.wallType === 'wall_s' || tileToE.wallType === 'corner_se_inner' || tileToE.wallType === 'corner_ne_outer') && 
+            tileToS.type === 'wall' &&
+           (tileToS.wallType === 'wall_e' || tileToS.wallType === 'corner_se_inner' || tileToS.wallType === 'corner_sw_outer')
             ) {
-          console.log(`we need to fill in a gap in a outside northwest corner at x: ${x}, y: ${y}`)
+          console.log(`we need to fill in a gap in an outer northwest corner at x: ${x}, y: ${y}`)
           /*
-
           ___
           |
 
@@ -229,8 +233,8 @@ function Map(props) {
     // check random position and room size, see if it fits
     let roomFound = false;
     while (roomFound === false) {
-      const roomWidth = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth / 4) + 4;
-      const roomHeight = Math.floor(seedrandom(RANDOM_KEY)() * mapHeight / 4) + 4;
+      const roomWidth = Math.floor(worldSeed * mapWidth / 4) + 4;
+      const roomHeight = Math.floor(worldSeed * mapHeight / 4) + 4;
 
       /* For some reason, using seedrandom on the topLeftX and topLeftY breaks everything */
       // const topLeftX = Math.floor(seedrandom(RANDOM_KEY)() * mapWidth);
@@ -249,13 +253,13 @@ function Map(props) {
             const x = topLeftX + j;
             const existingTileType = worldData[y][x].type;
 
+            /* Check the existing tile on the map to see what is there and what to do */
             if (existingTileType === 'wall') {
               /* This is an old wall from another room, make it into a floor to create a big room.
                  First, Check if it needs to end up as an outside wall:
                  If the new wall and the old wall are the same, just keep it. */
-
-              if (worldData[y][x].wallType === 'wall_n' && i === 0) {
-                /* If we are on the north side of the room */
+              if (worldData[y][x].wallType === 'wall_n' && i === 0 && (j !== 0 && j !== roomWidth - 1)) {
+                /* If we are on the north side of the room  and the old wall is a north wall*/
                 console.log(`Found an existing north wall at x: ${x}, y: ${y}`)
               } else if (worldData[y][x].wallType === 'wall_s' && i === (roomHeight - 1)) {
                 /* If we are on the south side of the room  */
@@ -375,7 +379,8 @@ function Map(props) {
         // console.log(`room doesn't fit, trying again`);
       }
     }
-    return cleanData(worldData);
+    // return cleanData(worldData);
+    return worldData;
   }
 
   // function isoToTwoD(x, y) {
@@ -393,10 +398,6 @@ function Map(props) {
   };
 
   let worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
   worldArray = newRoom(worldData);
 
   /* Display map */
