@@ -127,6 +127,11 @@ function Map(props) {
               worldData[y][x].wallType = 'corner_nw_inner';
               worldData[y][x].spriteOffset = dungeonTiles.nw;
             }
+            if (northWall && westWall && oldTile('wall_e') &&
+                nearbyWall('n') === 'wall_e') {
+              worldData[y][x].wallType = 'corner_sw_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.swo;    
+            }
             // if (northWall && westWall && oldTile('wall_n') )
             // {
             //   worldData[y][x].wallType = 'wall_n';
