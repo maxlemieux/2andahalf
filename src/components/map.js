@@ -84,17 +84,14 @@ function Map(props) {
         const tile = {
           empty: true,
           type: 'empty',
-          sprite: {
-            spriteOffset: [0,0],
-          },
-          walkable: false,
+          spriteOffset: [0,0],
           x: j,
           y: i,
           xScreen: thisX,
           yScreen: thisY,
           xIso,
           yIso,
-          z: 1,
+          z: 0,
         };
         thisRow.push(tile);
       };
