@@ -56,7 +56,6 @@ function Map(props) {
     const empty = false;
     const type = 'ground';
     const wallType = undefined;
-    const walkable = true;
     const z = 0;  
     const sprite = {
       backgroundImage: floorSprite,
@@ -84,7 +83,9 @@ function Map(props) {
         const tile = {
           empty: true,
           type: 'empty',
-          spriteOffset: [0,0],
+          sprite: {
+            spriteOffset: [0,0],
+          },
           x: j,
           y: i,
           xScreen: thisX,
