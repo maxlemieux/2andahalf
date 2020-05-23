@@ -5,10 +5,6 @@ import getNearbyTiles from "../tileUtil.js";
 import spriteInfo from "../spriteInfo.js";
 const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
-const seedrandom = require('seedrandom');
-const RANDOM_KEY = 'fdsafdsfaoo';
-const worldSeed = new seedrandom(RANDOM_KEY)();
-
 const MAP_WIDTH = 24;
 const MAP_HEIGHT = 24;
 
@@ -90,15 +86,11 @@ function Map(props) {
     const mapWidth = worldData[0].length;
     const mapHeight = worldData.length;
 
-    // check seeded random position and room size, see if it fits
+    // check random position and room size, see if it fits
     let roomFound = false;
     while (roomFound === false) {
-      const roomWidth = Math.floor(worldSeed * mapWidth / 4) + 4;
-      const roomHeight = Math.floor(worldSeed * mapHeight / 4) + 4;
-
-      /* For some reason, using seedrandom on the topLeftX and topLeftY breaks everything */
-      // const topLeftX = Math.floor(worldSeed * mapWidth);
-      // const topLeftY = Math.floor(worldSeed * mapHeight);
+      const roomWidth = Math.floor(mapWidth / 4) + 4;
+      const roomHeight = Math.floor(mapHeight / 4) + 4;
 
       /* Random room position */
       const topLeftX = Math.floor(Math.random() * mapWidth);
@@ -179,22 +171,24 @@ function Map(props) {
               worldData = createFloor(x, y, worldData);  
               continue;
             }
-
             if (northWall && !eastWall && !westWall &&
                 oldEmpty) {
               worldData = wall(x, y, 'n', worldData);
               continue;
             }
-
             if (northWall && !eastWall && !westWall &&
                (oldTile('nw') || oldTile('ne'))) {
               worldData = wall(x, y, 'n', worldData);
               continue;
             }
-
             if (northWall && !eastWall && !westWall &&
-               (oldTile('w') || oldTile('se') || oldTile('sw'))) {
+                oldTile('w')) {
               worldData = wall(x, y, 'seo', worldData);
+              continue;
+            }           
+            if (northWall && !eastWall && !westWall &&
+                oldTile('e')) {
+              worldData = wall(x, y, 'swo', worldData);
               continue;
             }
 
@@ -236,18 +230,15 @@ function Map(props) {
               oldTile('e')) {
               continue;
             };
-
             if (!northWall && !southWall && eastWall && oldEmpty) {
               worldData = wall(x, y, 'e', worldData);
               continue;
             }
-
             if (!northWall && !southWall && eastWall &&
                  oldTile('n')) {
               worldData = wall(x, y, 'swo', worldData);
               continue;
             }
-
             if (!northWall && !southWall && eastWall &&
                  oldTile('s')) {
               worldData = wall(x, y, 'nwo', worldData);
@@ -276,8 +267,13 @@ function Map(props) {
             } 
 
             if (southWall && eastWall &&
-                nearbyWall('e') === 's') {
+              nearbyWall('e') === 's') {
               worldData = wall(x, y, 's', worldData);
+              continue; 
+            }         
+            if (southWall && eastWall &&
+              oldTile('n')) {
+              worldData = wall(x, y, 'swo', worldData);
               continue; 
             }
 
@@ -293,7 +289,7 @@ function Map(props) {
               continue;
             }
             if (southWall && !eastWall && !westWall &&
-                oldTile('e')) {
+                (oldTile('e') || oldTile('ne'))) {
               worldData = wall(x, y, 'nwo', worldData);
               continue;
             }
@@ -309,8 +305,6 @@ function Map(props) {
               continue;
             }
 
-
-
             /* FLOORS */
             if (!northWall && !southWall && !westWall && !eastWall) {
               // Always paint the floor tiles that are in the center of the new room
@@ -318,7 +312,7 @@ function Map(props) {
               continue;
             };
           };
-        }; // for row to see what to do
+        };
       } else {
         // console.log(`room doesn't fit, trying again`);
       }
