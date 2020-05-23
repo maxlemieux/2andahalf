@@ -8,7 +8,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 1236;
+let seedKey = 1237;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -295,41 +295,43 @@ function Map(props) {
             }
 
             /** EAST WALL */
-            if (eastCenter) {
-              switch(nearbyTiles.this.wallType) {
-                case undefined:
-                  worldData = wall(x, y, 'e', worldData);
-                  break;
-                case 'w':
-                  worldData = createFloor(x, y, worldData);
-                  break;
-                case 'e':
-                  break;
-                case 'n':
-                  worldData = wall(x, y, 'swo', worldData);
-                  break;
-                case 's':
-                  worldData = wall(x, y, 'nwo', worldData);
-                  break;
-                case 'nw':
-                  worldData = wall(x, y, 'swo', worldData);
-                  break;
-                case 'ne':
-                  if (nearbyTile('n') === 'e' || nearbyTile('n') === 'ne') {
-                    worldData = wall(x, y, 'e', worldData);
-                  }
-                  break;
-                case 'se':
-                  worldData = wall(x, y, 'e', worldData);
-                  break;
-                case 'sw':
-                  worldData = createFloor(x, y, worldData);
-                  break;
-                default:
-                  break;
-              };
+            if (eastCenter && oldTile(undefined)) {
+              worldData = wall(x, y, 'e', worldData);
               continue;
             };
+            if (eastCenter && oldTile('w')) {
+              worldData = createFloor(x, y, worldData);
+              continue;
+            }
+            if (eastCenter && oldTile('e')) {
+              continue;
+            }
+            if (eastCenter && oldTile('n')) {
+              worldData = wall(x, y, 'swo', worldData);
+              continue;
+            }
+            if (eastCenter && oldTile('s')) {
+              worldData = wall(x, y, 'nwo', worldData);
+              continue;
+            }
+            if (eastCenter && oldTile('nw')) {
+              worldData = wall(x, y, 'swo', worldData);
+              continue;
+            }
+            if (eastCenter && 
+                nearbyTile('n') === 'e' || nearbyTile('n') === 'ne') {
+              worldData = wall(x, y, 'e', worldData);
+              continue;
+            }
+            if (eastCenter && oldTile('se')) {
+              worldData = wall(x, y, 'e', worldData);
+              continue;
+            }
+            if (eastCenter && oldTile('sw')) {
+              worldData = createFloor(x, y, worldData);
+
+              continue;
+            }
 
             /* SOUTH WALL 
                ========== */
