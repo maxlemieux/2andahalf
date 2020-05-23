@@ -8,7 +8,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 3;
+let seedKey = 6;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -148,6 +148,14 @@ function Map(props) {
             const southWall = (i === (roomHeight - 1));
             const westWall = (j === 0)
             const eastWall = (j === (roomWidth - 1));
+            const neCorner = northWall && eastWall;
+            const seCorner = southWall && eastWall;
+            const swCorner = southWall && westWall;
+            const nwCorner = northWall && westWall;
+            const southCenter = southWall && !westWall && !eastWall;
+            const northCenter = northWall && !westWall && !eastWall;
+            const eastCenter = eastWall && !northWall && !southWall;
+            const westCenter = westWall && !northWall && !southWall;
 
             const oldTile = (wallType) => {
               return nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === wallType;
@@ -171,70 +179,70 @@ function Map(props) {
             /** NORTH WALL 
                ========== */
             /** NORTHWEST CORNER */
-            if (northWall && westWall &&
+            if (nwCorner &&
                 oldEmpty) {
               worldData = wall(x, y, 'nw', worldData);
               continue;
             }
-            if (northWall && westWall && oldTile('e') &&
+            if (nwCorner && oldTile('e') &&
                 nearbyTile('n') === 'e') {
               worldData = wall(x, y, 'swo', worldData);
               continue;
             }
 
             // NORTHEAST CORNER
-            if (northWall && eastWall &&
+            if (neCorner &&
                 oldEmpty) {
               worldData = wall(x, y, 'ne', worldData);
               continue;
             }
-            if (northWall && eastWall &&
+            if (neCorner &&
                 oldTile('n')) {
               worldData = wall(x, y, 'n', worldData);
               continue;
             }
           
             // NORTH CENTER wall
-            if (northWall && !eastWall && !westWall && 
+            if (northCenter && 
                 oldTile('s')) {
               /* North and south walls are overlapping, make a floor */
               worldData = createFloor(x, y, worldData);  
               continue;
             }
-            if (northWall && !eastWall && !westWall &&
+            if (northCenter &&
                 oldEmpty) {
               worldData = wall(x, y, 'n', worldData);
               continue;
             }
-            if (northWall && !eastWall && !westWall &&
+            if (northCenter &&
                (oldTile('nw') || oldTile('ne'))) {
               worldData = wall(x, y, 'n', worldData);
               continue;
             }
-            if (northWall && !eastWall && !westWall &&
+            if (northCenter &&
                 oldTile('w')) {
               worldData = wall(x, y, 'seo', worldData);
               continue;
             }           
-            if (northWall && !eastWall && !westWall &&
+            if (northCenter &&
                 oldTile('e')) {
               worldData = wall(x, y, 'swo', worldData);
               continue;
             }
 
             /* WEST WALL */
-            if (!northWall && !southWall && westWall &&
+            if (westCenter &&
                  oldEmpty) {
               worldData = wall(x, y, 'w', worldData);
               continue;
             };
-            if (!northWall && !southWall && westWall && 
+            if (westCenter && 
                 oldTile('e')) {
               /* A west wall and an east wall are overlapping, make a floor */
               worldData = createFloor(x, y, worldData);
               continue;
             };
-            if (!northWall && !southWall && westWall &&
+            if (westCenter &&
                 oldTile('n') &&
                 (nearbyTile('w') === 'n' || 
                  nearbyTile('w') === 'nw' || 
@@ -242,7 +250,7 @@ function Map(props) {
               worldData = wall(x, y, 'seo', worldData);
               continue;
             }
-            if (!northWall && !southWall && westWall &&
+            if (westCenter &&
               oldTile('n') &&
               nearbyTile('w') === 'sw') {
               worldData = wall(x, y, 'neo', worldData);
@@ -250,31 +258,32 @@ function Map(props) {
             }
 
             /* EAST WALL */
-            if (!northWall && !southWall && eastWall && oldEmpty) {
+            if (eastCenter &&
+                oldEmpty) {
               worldData = wall(x, y, 'e', worldData);
               continue;
             };
-            if (!northWall && !southWall && eastWall &&
-              oldTile('w')) {
+            if (eastCenter &&
+                oldTile('w')) {
               /* A west wall and an east wall are overlapping, make a floor */
               worldData = createFloor(x, y, worldData);
               continue;
             };
-            if (!northWall && !southWall && eastWall &&
-              oldTile('e')) {
+            if (eastCenter &&
+                oldTile('e')) {
               continue;
             };
-            if (!northWall && !southWall && eastWall &&
+            if (eastCenter &&
                  oldTile('n')) {
               worldData = wall(x, y, 'swo', worldData);
               continue;
             };
-            if (!northWall && !southWall && eastWall &&
+            if (eastCenter &&
                  oldTile('s')) {
               worldData = wall(x, y, 'nwo', worldData);
               continue;
             };
-            if (!northWall && !southWall && eastWall &&
+            if (eastCenter &&
                 oldTile('nw')) {
               worldData = wall(x, y, 'swo', worldData);
               continue;
@@ -283,36 +292,47 @@ function Map(props) {
             /* SOUTH WALL 
                ========== */
             // southwest corner of room
-            if (southWall && westWall &&
-                oldEmpty) {
-              worldData = wall(x, y, 'sw', worldData);
-              continue;
-            }
-            if (southWall && westWall &&
-                nearbyTile('w') === 's') {
+            if (swCorner &&
+                nearbyTile('w') === 's' &&
+                nearbyTile('n') === 'ground') {
               worldData = wall(x, y, 's', worldData);
               continue;
-            }
-            
+            };
+            if (swCorner &&
+                oldTile('w') &&
+                nearbyTile('e') === 'ground' &&
+               (nearbyTile('n') === 'w' || nearbyTile('n') === 'nw') &&
+               (nearbyTile('s') === 'w' || nearbyTile('s') === 'sw')) {
+              worldData = wall(x, y, 'w', worldData);
+              continue;
+            };
+
+            if (swCorner &&
+                oldEmpty &&
+                nearbyTile('ne') === 'ground') {
+              worldData = wall(x, y, 'sw', worldData);
+              continue;
+            };
+
             // southeast corner of room
-            if (southWall && eastWall &&
+            if (seCorner &&
                 oldEmpty) {
               worldData = wall(x, y, 'se', worldData);  
               continue;
             } 
 
-            if (southWall && eastWall &&
+            if (seCorner &&
               nearbyTile('e') === 's') {
               worldData = wall(x, y, 's', worldData);
               continue; 
             }         
-            if (southWall && eastWall &&
+            if (seCorner &&
               oldTile('n')) {
               worldData = wall(x, y, 'swo', worldData);
               continue; 
             }
-            if (southWall && eastWall &&
-                oldTile('w') &&
+            if (seCorner &&
+              oldTile('w') &&
                 nearbyTile('w') === 's' &&
                 nearbyTile('n') === 'ground') {
               worldData = wall(x, y, 'neo', worldData);
@@ -320,28 +340,28 @@ function Map(props) {
             };
 
             // south wall center
-            if (southWall && !eastWall && !westWall &&
+            if (southCenter &&
                 oldEmpty) {
               worldData = wall(x, y, 's', worldData);
               continue;
             }
-            if (southWall && !eastWall && !westWall &&
+            if (southCenter &&
                 oldTile('w')) {
               worldData = wall(x, y, 'neo', worldData);
               continue;
             }
-            if (southWall && !eastWall && !westWall &&
+            if (southCenter &&
                 (oldTile('e') || oldTile('ne'))) {
               worldData = wall(x, y, 'nwo', worldData);
               continue;
             }
-            if (southWall && !eastWall && !westWall &&
+            if (southCenter &&
               (oldTile('sw') || oldTile('se')) &&
                 nearbyTile('w') === 's') {
               worldData = wall(x, y, 's', worldData);
               continue;
             }
-            if (southWall && !eastWall && !westWall &&
+            if (southCenter &&
                 (oldTile('n') || oldTile('nw'))) {
               worldData = createFloor(x, y, worldData); 
               continue;
