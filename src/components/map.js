@@ -155,7 +155,7 @@ function Map(props) {
 
             const oldEmpty = (nearbyTiles.this.type === 'empty');
 
-            const nearbyWall = (direction) => {
+            const nearbyTile = (direction) => {
               if (nearbyTiles[direction] && nearbyTiles[direction].type === 'wall') {
                 return nearbyTiles[direction].wallType;
               };
@@ -177,7 +177,7 @@ function Map(props) {
               continue;
             }
             if (northWall && westWall && oldTile('e') &&
-                nearbyWall('n') === 'e') {
+                nearbyTile('n') === 'e') {
               worldData = wall(x, y, 'swo', worldData);
               continue;
             }
@@ -236,15 +236,15 @@ function Map(props) {
             };
             if (!northWall && !southWall && westWall &&
                 oldTile('n') &&
-                (nearbyWall('w') === 'n' || 
-                 nearbyWall('w') === 'nw' || 
-                 nearbyWall('w') === 'swo')) {
+                (nearbyTile('w') === 'n' || 
+                 nearbyTile('w') === 'nw' || 
+                 nearbyTile('w') === 'swo')) {
               worldData = wall(x, y, 'seo', worldData);
               continue;
             }
             if (!northWall && !southWall && westWall &&
               oldTile('n') &&
-              nearbyWall('w') === 'sw') {
+              nearbyTile('w') === 'sw') {
               worldData = wall(x, y, 'neo', worldData);
               continue;
             }
@@ -289,7 +289,7 @@ function Map(props) {
               continue;
             }
             if (southWall && westWall &&
-                nearbyWall('w') === 's') {
+                nearbyTile('w') === 's') {
               worldData = wall(x, y, 's', worldData);
               continue;
             }
@@ -302,7 +302,7 @@ function Map(props) {
             } 
 
             if (southWall && eastWall &&
-              nearbyWall('e') === 's') {
+              nearbyTile('e') === 's') {
               worldData = wall(x, y, 's', worldData);
               continue; 
             }         
@@ -313,8 +313,8 @@ function Map(props) {
             }
             if (southWall && eastWall &&
                 oldTile('w') &&
-                nearbyWall('w') === 's' &&
-                nearbyWall('n') === 'ground') {
+                nearbyTile('w') === 's' &&
+                nearbyTile('n') === 'ground') {
               worldData = wall(x, y, 'neo', worldData);
               continue;
             };
@@ -337,7 +337,7 @@ function Map(props) {
             }
             if (southWall && !eastWall && !westWall &&
               (oldTile('sw') || oldTile('se')) &&
-                nearbyWall('w') === 's') {
+                nearbyTile('w') === 's') {
               worldData = wall(x, y, 's', worldData);
               continue;
             }
