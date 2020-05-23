@@ -8,7 +8,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 1237;
+let seedKey = 1244;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -324,9 +324,15 @@ function Map(props) {
               continue;
             };
             if (eastCenter && oldTile('sw')) {
+                console.log(`found ${nearbyTile('w')}`)
+              worldData = wall(x, y, 'nwo', worldData);
+              continue;
+            };
+            if (eastCenter && oldTile('sw')) {
               worldData = createFloor(x, y, worldData);
               continue;
             };
+
             if (eastCenter) {
               worldData = wall(x, y, 'e', worldData);
               continue;
