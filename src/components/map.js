@@ -319,7 +319,7 @@ function Map(props) {
               continue;
             }
             if (eastCenter && 
-                nearbyTile('n') === 'e' || nearbyTile('n') === 'ne') {
+              ((nearbyTile('n') === 'e') || (nearbyTile('n') === 'ne'))) {
               worldData = wall(x, y, 'e', worldData);
               continue;
             }
@@ -397,6 +397,11 @@ function Map(props) {
               (oldTile('sw') || oldTile('se')) &&
                 nearbyTile('w') === 's') {
               worldData = wall(x, y, 's', worldData);
+              continue;
+            }
+            if (southCenter &&
+                oldTile('nw')) {
+              worldData = wall(x, y, 'neo', worldData);
               continue;
             }
             if (southCenter &&
