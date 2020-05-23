@@ -8,7 +8,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 6;
+let seedKey = 17;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -197,8 +197,14 @@ function Map(props) {
               continue;
             }
             if (neCorner &&
-                oldTile('n')) {
-              worldData = wall(x, y, 'n', worldData);
+              oldTile('n')) {
+                worldData = wall(x, y, 'n', worldData);
+                continue;
+              }
+            if (neCorner &&
+                oldTile('w') &&
+                nearbyTile('n') === 'nw') {
+              worldData = wall(x, y, 'seo', worldData);
               continue;
             }
           
@@ -259,22 +265,22 @@ function Map(props) {
 
             /** EAST WALL */
             if (eastCenter) {
-              switch(eastCenter) {
-                case oldEmpty:
+              switch(nearbyTiles.this.wallType) {
+                case undefined:
                   worldData = wall(x, y, 'e', worldData);
                   break;
-                case oldTile('w'):
+                case 'w':
                   worldData = createFloor(x, y, worldData);
                   break;
-                case oldTile('e'):
+                case 'e':
                   break;
-                case oldTile('n'):
+                case 'n':
                   worldData = wall(x, y, 'swo', worldData);
                   break;
-                case oldTile('s'):
+                case 's':
                   worldData = wall(x, y, 'nwo', worldData);
                   break;
-                case oldTile('nw'):
+                case 'nw':
                   worldData = wall(x, y, 'swo', worldData);
                   break;
                 default:
