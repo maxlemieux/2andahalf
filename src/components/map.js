@@ -123,28 +123,27 @@ function Map(props) {
         roomFound = true;
         console.log(`New room with top left x: ${topLeftX}, y: ${topLeftY}, width ${roomWidth}, height ${roomHeight}`);
 
-        /* For each row in the new room */
+        /** For each row in the new room */
         for (let i=0; i<roomHeight; i++) {
           const y = topLeftY + i;
-          /* For each tile in that row of the new room */
+          /** For each tile in that row of the new room */
           for (let j=0; j<roomWidth; j++) {
             const x = topLeftX + j;
 
             /* Information about nearby tiles in 8 directions */
             const nearbyTiles = getNearbyTiles(x, y, worldData);
     
-            /* Check the existing tile on the map to see what is there and what to do */
-            /* Type will be either 'empty', 'wall' or 'ground' */
-
+            /** Check the existing tile on the map to see what is there and what to do */
+            /** Type will be either 'empty', 'wall' or 'ground' */
             if (nearbyTiles.this.type === 'ground') {
-              /* This is a floor tile from an old room, we want to keep it.
+              /** This is a floor tile from an old room, we want to keep it.
                  Continue by going to the next tile in the row map */
               continue;
             } 
             
-            /* If we got this far, it's time to build new stuff. */
+            /** If we got this far, it's time to build new stuff. */
 
-            /* Boolean conditions */
+            /** Boolean conditions */
             const northWall = (i === 0);
             const southWall = (i === (roomHeight - 1));
             const westWall = (j === 0)
@@ -162,9 +161,9 @@ function Map(props) {
               };
             };
 
-            /* NORTH WALL 
+            /** NORTH WALL 
                ========== */
-            // NORTHWEST CORNER
+            /** NORTHWEST CORNER */
             if (northWall && westWall &&
                 oldEmpty) {
               worldData = wall(x, y, 'nw', worldData);
@@ -244,30 +243,35 @@ function Map(props) {
             }
 
             /* EAST WALL */
+            if (!northWall && !southWall && eastWall && oldEmpty) {
+              worldData = wall(x, y, 'e', worldData);
+              continue;
+            };
             if (!northWall && !southWall && eastWall &&
               oldTile('w')) {
               /* A west wall and an east wall are overlapping, make a floor */
               worldData = createFloor(x, y, worldData);
               continue;
-            }
+            };
             if (!northWall && !southWall && eastWall &&
               oldTile('e')) {
               continue;
             };
-            if (!northWall && !southWall && eastWall && oldEmpty) {
-              worldData = wall(x, y, 'e', worldData);
-              continue;
-            }
             if (!northWall && !southWall && eastWall &&
                  oldTile('n')) {
               worldData = wall(x, y, 'swo', worldData);
               continue;
-            }
+            };
             if (!northWall && !southWall && eastWall &&
                  oldTile('s')) {
               worldData = wall(x, y, 'nwo', worldData);
               continue;
-            }
+            };
+            if (!northWall && !southWall && eastWall &&
+                 oldTile('nw')) {
+              worldData = wall(x, y, 'swo', worldData);
+              continue;
+            };
 
             /* SOUTH WALL 
                ========== */
