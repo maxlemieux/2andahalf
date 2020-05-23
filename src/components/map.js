@@ -36,6 +36,17 @@ function Map(props) {
     return worldData;
   }
 
+  const createFloor = (x, y, worldData) => {
+    worldData[y][x].sprite.backgroundImage = floorSprite;
+    worldData[y][x].wallType = undefined;
+    worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+    worldData[y][x].type = 'ground';
+    worldData[y][x].walkable = true;
+    worldData[y][x].z = 0;  
+
+    return worldData;
+  }
+
   const buildMap = (mapWidth, mapHeight) => {
     const worldData = [];
     /* X: j, Y: i */
@@ -165,12 +176,7 @@ function Map(props) {
             if (northWall && !eastWall && !westWall && 
                 oldTile('s')) {
               /* North and south walls are overlapping, make a floor */
-              worldData[y][x].sprite.backgroundImage = floorSprite;
-              worldData[y][x].wallType = undefined;
-              worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              worldData[y][x].type = 'ground';
-              worldData[y][x].walkable = true;
-              worldData[y][x].z = 0;  
+              worldData = createFloor(x, y, worldData);  
               continue;
             }
 
@@ -188,7 +194,7 @@ function Map(props) {
 
             if (northWall && !eastWall && !westWall &&
                (oldTile('w') || oldTile('se') || oldTile('sw'))) {
-                worldData = wall(x, y, 'seo', worldData);
+              worldData = wall(x, y, 'seo', worldData);
               continue;
             }
 
@@ -201,12 +207,7 @@ function Map(props) {
             if (!northWall && !southWall && westWall && 
                 oldTile('e')) {
               /* A west wall and an east wall are overlapping, make a floor */
-              worldData[y][x].sprite.backgroundImage = floorSprite;
-              worldData[y][x].wallType = undefined;
-              worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              worldData[y][x].type = 'ground';
-              worldData[y][x].walkable = true;
-              worldData[y][x].z = 0;  
+              worldData = createFloor(x, y, worldData);
               continue;
             };
             if (!northWall && !southWall && westWall &&
@@ -228,12 +229,7 @@ function Map(props) {
             if (!northWall && !southWall && eastWall &&
               oldTile('w')) {
               /* A west wall and an east wall are overlapping, make a floor */
-              worldData[y][x].sprite.backgroundImage = floorSprite;
-              worldData[y][x].wallType = undefined;
-              worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              worldData[y][x].type = 'ground';
-              worldData[y][x].walkable = true;
-              worldData[y][x].z = 0;  
+              worldData = createFloor(x, y, worldData);
               continue;
             }
             if (!northWall && !southWall && eastWall &&
@@ -254,7 +250,7 @@ function Map(props) {
 
             if (!northWall && !southWall && eastWall &&
                  oldTile('s')) {
-                  worldData = wall(x, y, 'nwo', worldData);
+              worldData = wall(x, y, 'nwo', worldData);
               continue;
             }
 
@@ -309,13 +305,7 @@ function Map(props) {
             }
             if (southWall && !eastWall && !westWall &&
                 (oldTile('n') || oldTile('nw'))) {
-              /* make a floor */
-              worldData[y][x].sprite.backgroundImage = floorSprite;
-              worldData[y][x].wallType = undefined;
-              worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              worldData[y][x].type = 'ground';
-              worldData[y][x].walkable = true;
-              worldData[y][x].z = 0;  
+              worldData = createFloor(x, y, worldData); 
               continue;
             }
 
@@ -324,12 +314,7 @@ function Map(props) {
             /* FLOORS */
             if (!northWall && !southWall && !westWall && !eastWall) {
               // Always paint the floor tiles that are in the center of the new room
-              worldData[y][x].sprite.backgroundImage = floorSprite;
-              worldData[y][x].wallType = undefined;
-              worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-              worldData[y][x].type = 'ground';
-              worldData[y][x].walkable = true;
-              worldData[y][x].z = 0;
+              worldData = createFloor(x, y, worldData);
               continue;
             };
           };
@@ -359,7 +344,9 @@ function Map(props) {
     };
   };
 
+  /* Make a few rooms */
   let worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
   worldArray = newRoom(worldData);
 
   /* Display map */

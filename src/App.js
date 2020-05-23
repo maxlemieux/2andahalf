@@ -26,7 +26,7 @@ function App() {
       <header className="App-header">
           {/* Width in Tiles: {Math.floor(window.innerWidth / 64)} */}
           {/* Tiles Height: {Math.floor(window.innerHeight / 32)} */}
-          <div className="item">2andahalf</div>
+          {/* <div className="item">2andahalf</div> */}
       </header>
 
       <Map />
@@ -34,12 +34,12 @@ function App() {
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>
          <div className='App-LogEntry'>
-            Welcome to 2andahalf.
+            {/* Welcome to 2andahalf. */}
           </div>
         </div>
         <div className='App-log' data-logtype='combat'>
         <div className='App-LogEntry'>
-            You land on your feet.
+            {/* You land on your feet. */}
           </div>
 
         </div>
