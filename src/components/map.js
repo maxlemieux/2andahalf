@@ -113,7 +113,7 @@ function Map(props) {
             const oldEmpty = (nearbyTiles.this.type === 'empty');
 
             const nearbyWall = (direction) => {
-              if (nearbyTiles[direction].type === 'wall') {
+              if (nearbyTiles[direction] && nearbyTiles[direction].type === 'wall') {
                 return nearbyTiles[direction].wallType;
               };
             };
@@ -173,11 +173,11 @@ function Map(props) {
               worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
             }
 
-            // if (northWall && !eastWall && !westWall &&
-            //    (oldTile('wall_w') || oldTile('corner_se_inner') || oldTile('corner_sw_inner'))) {
-            //   worldData[y][x].wallType = 'corner_se_outer';
-            //   worldData[y][x].spriteOffset = dungeonTiles.seo;
-            // }
+            if (northWall && !eastWall && !westWall &&
+               (oldTile('wall_w') || oldTile('corner_se_inner') || oldTile('corner_sw_inner'))) {
+              worldData[y][x].wallType = 'corner_se_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.seo;
+            }
 
             // if (northWall && !eastWall && !westWall &&
             //    (oldTile('wall_e') || oldTile('corner_sw_inner'))) {
@@ -262,14 +262,16 @@ function Map(props) {
               worldData[y][x].z = 0;  
             };
 
-            // /* Old tile was north wall and the wall to the west is a north wall or an inner northwest corner */
-            // if (!northWall && !southWall && westWall &&
-            //     oldTile('wall_n') &&
-            //     ((nearbyTiles.w.type === 'wall' && nearbyTiles.w.wallType === 'wall_n') ||
-            //      (nearbyTiles.w.type === 'wall' && nearbyTiles.w.wallType === 'corner_nw_inner'))) {
-            //   worldData[y][x].wallType = 'corner_se_outer';
-            //   worldData[y][x].spriteOffset = dungeonTiles.seo;
-            // }
+            /* Old tile was north wall and the wall to the west is a north wall 
+               or an inner northwest corner or an outer southwest corner */
+            if (!northWall && !southWall && westWall &&
+                oldTile('wall_n') &&
+                (nearbyWall('w') === 'wall_n' || 
+                 nearbyWall('w') === 'corner_nw_inner' || 
+                 nearbyWall('w') === 'corner_sw_outer')) {
+              worldData[y][x].wallType = 'corner_se_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.seo;
+            }
             // /* Old tile was south wall and the wall to the west is a south wall */
             // if (!northWall && !southWall && westWall &&
             //      oldTile('wall_s') &&
