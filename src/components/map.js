@@ -8,7 +8,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 37;
+let seedKey = 1234;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -198,12 +198,18 @@ function Map(props) {
             }
             if (neCorner &&
               oldTile('n')) {
-                worldData = wall(x, y, 'n', worldData);
-                continue;
-              }
+              worldData = wall(x, y, 'n', worldData);
+              continue;
+            }
+            if (neCorner &&
+              oldTile('s') &&
+              nearbyTile('w') === 'ground') {
+              worldData = wall(x, y, 'nwo', worldData);
+              continue;
+            }
             if (neCorner &&
                 oldTile('w') &&
-                nearbyTile('n') === 'nw' &&
+               (nearbyTile('n') === 'nw' || nearbyTile('n') === 'w') &&
                (nearbyTile('w') === 'n' || nearbyTile('w') === 'swo')) {
               worldData = wall(x, y, 'seo', worldData);
               continue;
@@ -269,12 +275,24 @@ function Map(props) {
                 worldData = wall(x, y, 'neo', worldData);
                 continue;
               }
-              if (westCenter &&
-                  oldTile('sw') &&
-                  nearbyTile('n') === 'w') {
-                worldData = wall(x, y, 'w', worldData);
-                continue;
-              }
+            if (westCenter &&
+                oldTile('sw') &&
+                nearbyTile('n') === 'w') {
+              worldData = wall(x, y, 'w', worldData);
+              continue;
+            }
+            if (westCenter &&
+                oldTile('se') &&
+                nearbyTile('w') === 's') {
+              worldData = wall(x, y, 'neo', worldData);
+              continue;
+            }
+            if (westCenter &&
+                oldTile('nw') &&
+                nearbyTile('n') === 'w') {
+              worldData = wall(x, y, 'w', worldData);
+              continue;
+            }
 
             /** EAST WALL */
             if (eastCenter) {
@@ -298,6 +316,9 @@ function Map(props) {
                   break;
                 case 'se':
                   worldData = wall(x, y, 'e', worldData);
+                  break;
+                case 'sw':
+                  worldData = createFloor(x, y, worldData);
                   break;
                 default:
                   break;
@@ -345,8 +366,7 @@ function Map(props) {
             }
             if (seCorner &&
               oldTile('w') &&
-                nearbyTile('w') === 's' &&
-                nearbyTile('n') === 'ground') {
+                nearbyTile('w') === 's') {
               worldData = wall(x, y, 'neo', worldData);
               continue;
             };
