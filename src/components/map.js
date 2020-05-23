@@ -159,6 +159,13 @@ function Map(props) {
               if (nearbyTiles[direction] && nearbyTiles[direction].type === 'wall') {
                 return nearbyTiles[direction].wallType;
               };
+              if (nearbyTiles[direction] && nearbyTiles[direction].type === 'empty') {
+                return 'empty';
+              };
+              if (nearbyTiles[direction] && nearbyTiles[direction].type === 'ground') {
+                return 'ground';
+              };
+              return false;
             };
 
             /** NORTH WALL 
@@ -268,7 +275,7 @@ function Map(props) {
               continue;
             };
             if (!northWall && !southWall && eastWall &&
-                 oldTile('nw')) {
+                oldTile('nw')) {
               worldData = wall(x, y, 'swo', worldData);
               continue;
             };
@@ -304,6 +311,13 @@ function Map(props) {
               worldData = wall(x, y, 'swo', worldData);
               continue; 
             }
+            if (southWall && eastWall &&
+                oldTile('w') &&
+                nearbyWall('w') === 's' &&
+                nearbyWall('n') === 'ground') {
+              worldData = wall(x, y, 'neo', worldData);
+              continue;
+            };
 
             // south wall center
             if (southWall && !eastWall && !westWall &&
