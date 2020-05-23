@@ -7,8 +7,8 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
 const seedrandom = require('seedrandom');
 
-/* Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 1;
+/** Random seed start point. Call getSeed() for a seeded random value  */
+let seedKey = 3;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -16,10 +16,15 @@ const getSeed = () => {
   return thisSeed;
 }
 
-/* Map size in 64x32 tiles */
+/** Map size in 64x32 tiles */
 const MAP_WIDTH = 24;
 const MAP_HEIGHT = 24;
 
+/**
+ * Functional component to display the main game map.
+ * MapRow and MapTile are probably still too thin,
+ * need to keep moving code out of this component.
+ */
 function Map(props) {
   const style = {
     top: '0px',
@@ -57,18 +62,18 @@ function Map(props) {
 
   const buildMap = (mapWidth, mapHeight) => {
     const worldData = [];
-    /* X: j, Y: i */
+    /** X: j, Y: i */
     for (let i=0; i<mapHeight; i++) {
       const thisY = 32 + (32 * i) - (window.innerHeight / 2);
       const thisRow = [];
       for (let j=0; j<mapWidth; j++) {
-        /* Move the map to the right by 1/4 the inner window width to center on screen */
+        /** Move the map to the right by 1/4 the inner window width to center on screen */
         const thisX = 32 * j + (window.innerWidth / 4);
 
-        /* Get isometric coordinates for this tile */
+        /** Get isometric coordinates for this tile */
         const { xIso, yIso } = twoDToIso(thisX, thisY);
 
-        /* Create the tile with some defaults */
+        /** Create the tile with some defaults */
         const tile = {
           empty: true,
           type: 'empty',
@@ -94,19 +99,21 @@ function Map(props) {
   const worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
 
   const newRoom = (worldData) => {
-    // get size of array to determine potential size of room
+    /** get size of array to determine potential size of room */
     const mapWidth = worldData[0].length;
     const mapHeight = worldData.length;
 
-    // check random position and room size, see if it fits
+    /** check random position and room size, see if it fits */
     let roomFound = false;
     while (roomFound === false) {
       const roomWidth = Math.floor(getSeed() * mapWidth / 4) + 4;
       const roomHeight = Math.floor(getSeed() * mapHeight / 4) + 4;
 
-      /* Random room position */
-      const topLeftX = Math.floor(Math.random() * mapWidth);
-      const topLeftY = Math.floor(Math.random() * mapHeight);
+      /** Random room position */
+      // const topLeftX = Math.floor(Math.random() * mapWidth);
+      // const topLeftY = Math.floor(Math.random() * mapHeight);
+      const topLeftX = Math.floor(getSeed() * mapWidth);
+      const topLeftY = Math.floor(getSeed() * mapHeight);
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
         roomFound = true;
         console.log(`New room with top left x: ${topLeftX}, y: ${topLeftY}, width ${roomWidth}, height ${roomHeight}`);
