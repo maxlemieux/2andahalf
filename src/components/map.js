@@ -257,41 +257,34 @@ function Map(props) {
               continue;
             }
 
-            /* EAST WALL */
-            if (eastCenter &&
-                oldEmpty) {
-              worldData = wall(x, y, 'e', worldData);
-              continue;
-            };
-            if (eastCenter &&
-                oldTile('w')) {
-              /* A west wall and an east wall are overlapping, make a floor */
-              worldData = createFloor(x, y, worldData);
-              continue;
-            };
-            if (eastCenter &&
-                oldTile('e')) {
-              continue;
-            };
-            if (eastCenter &&
-                 oldTile('n')) {
-              worldData = wall(x, y, 'swo', worldData);
-              continue;
-            };
-            if (eastCenter &&
-                 oldTile('s')) {
-              worldData = wall(x, y, 'nwo', worldData);
-              continue;
-            };
-            if (eastCenter &&
-                oldTile('nw')) {
-              worldData = wall(x, y, 'swo', worldData);
+            /** EAST WALL */
+            if (eastCenter) {
+              switch(eastCenter) {
+                case oldEmpty:
+                  worldData = wall(x, y, 'e', worldData);
+                  break;
+                case oldTile('w'):
+                  worldData = createFloor(x, y, worldData);
+                  break;
+                case oldTile('e'):
+                  break;
+                case oldTile('n'):
+                  worldData = wall(x, y, 'swo', worldData);
+                  break;
+                case oldTile('s'):
+                  worldData = wall(x, y, 'nwo', worldData);
+                  break;
+                case oldTile('nw'):
+                  worldData = wall(x, y, 'swo', worldData);
+                  break;
+                default:
+                  break;
+              };
               continue;
             };
 
             /* SOUTH WALL 
                ========== */
-            // southwest corner of room
             if (swCorner &&
                 nearbyTile('w') === 's' &&
                 nearbyTile('n') === 'ground') {
@@ -306,7 +299,6 @@ function Map(props) {
               worldData = wall(x, y, 'w', worldData);
               continue;
             };
-
             if (swCorner &&
                 oldEmpty &&
                 nearbyTile('ne') === 'ground') {
@@ -314,13 +306,11 @@ function Map(props) {
               continue;
             };
 
-            // southeast corner of room
             if (seCorner &&
                 oldEmpty) {
               worldData = wall(x, y, 'se', worldData);  
               continue;
             } 
-
             if (seCorner &&
               nearbyTile('e') === 's') {
               worldData = wall(x, y, 's', worldData);
@@ -339,7 +329,6 @@ function Map(props) {
               continue;
             };
 
-            // south wall center
             if (southCenter &&
                 oldEmpty) {
               worldData = wall(x, y, 's', worldData);
