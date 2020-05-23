@@ -34,29 +34,36 @@ function Map(props) {
     backgroundColor: 'gray',
   };
 
+  /** Build a wall */
   const wall = (x, y, wallType, worldData) => {
-    worldData[y][x].type = 'wall';
-    worldData[y][x].wallType = wallType;
-    worldData[y][x].empty = false;
-    worldData[y][x].z = 1;
-    worldData[y][x].sprite.backgroundImage = dungeonSprite;
+    const empty = false;
+    const type = 'wall';
+    const z = 1;
+    const sprite = {
+      backgroundImage: dungeonSprite,
+    };
     if (wallType === 'n') {
-      worldData[y][x].sprite.spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+      sprite.spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
     } else {
-      worldData[y][x].sprite.spriteOffset = dungeonTiles[wallType];
-    }
-    
+      sprite.spriteOffset = dungeonTiles[wallType];
+    };
+    Object.assign(worldData[y][x], { empty, sprite, type, wallType, z });    
     return worldData;
-  }
+  };
 
+  /** Build a floor */
   const createFloor = (x, y, worldData) => {
-    worldData[y][x].sprite.backgroundImage = floorSprite;
-    worldData[y][x].wallType = undefined;
-    worldData[y][x].sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
-    worldData[y][x].type = 'ground';
-    worldData[y][x].walkable = true;
-    worldData[y][x].z = 0;  
+    const empty = false;
+    const type = 'ground';
+    const wallType = undefined;
+    const walkable = true;
+    const z = 0;  
+    const sprite = {
+      backgroundImage: floorSprite,
+    };
+    sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
 
+    Object.assign(worldData[y][x], { empty, sprite, type, wallType, z });    
     return worldData;
   }
 
