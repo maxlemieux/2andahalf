@@ -100,18 +100,27 @@ function Map(props) {
             
             /* If we got this far, it's time to build new stuff. */
 
+            /* Boolean conditions to use */
+            const northWall = (i === 0);
+            const westWall = (j === 0)
+            const eastWall = (j === (roomWidth - 1));
+            const southWall = (i === (roomHeight - 1));
+
+            const oldTile = (wallType) => {
+              return nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === wallType;
+            }
+
             /* NORTH WALL */
             
             // NORTHWEST CORNER of room
             /* Old tile was empty */
-            if ((i === 0) && (j === 0) && nearbyTiles.this.type === 'empty')
+            if (northWall && westWall && nearbyTiles.this.type === 'empty')
             {
               worldData[y][x].wallType = 'corner_nw_inner';
               worldData[y][x].spriteOffset = dungeonTiles.nw;
             }
             /* Old tile was a North wall */
-            if ((i === 0) && (j === 0) &&
-                (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n')) 
+            if (northWall && westWall && oldTile('wall_n') )
             {
               worldData[y][x].wallType = 'wall_n';
               worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
@@ -119,20 +128,19 @@ function Map(props) {
 
             // NORTHEAST CORNER of room
             /* Old tile was empty */
-            if ((i === 0) && j === (roomWidth - 1) && nearbyTiles.this.type === 'empty') {
+            if (northWall && eastWall && nearbyTiles.this.type === 'empty') {
               worldData[y][x].wallType = 'corner_ne_inner';
               worldData[y][x].spriteOffset = dungeonTiles.ne;
             }
             /* Old tile was a North wall */
-            if ((i === 0) && (j === (roomWidth - 1)) && 
-                (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n')) {
+            if (northWall && eastWall && oldTile('wall_n')) {
               worldData[y][x].wallType = 'wall_n';
               worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
             }
           
             // NORTH CENTER wall
-            if (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s' && 
-              (i === 0) && ((j !== 0) && (j !== roomWidth -1))) {
+            if (oldTile('wall_s') && 
+              northWall && !eastWall && !westWall) {
               /* North and south walls are overlapping, make a floor */
               worldData[y][x].backgroundImage = floorSprite;
               worldData[y][x].wallType = undefined;
@@ -142,42 +150,34 @@ function Map(props) {
               worldData[y][x].z = 0;  
             }
 
-            /* Old tile was empty */
             if (nearbyTiles.this.type === 'empty' &&
-                (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+                northWall && !eastWall && !westWall)
             {
               worldData[y][x].wallType = 'wall_n';
               worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
             }
 
-            /* Old tile was northeast or northwest inner corner */
-            if (nearbyTiles.this.type === 'wall' && 
-               (nearbyTiles.wallType === 'corner_nw_inner' || nearbyTiles.wallType === 'corner_ne_inner') &&
-               (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            if ((oldTile('corner_nw_inner') || oldTile('corner_ne_inner')) &&
+               northWall && !eastWall && !westWall)
             {
               worldData[y][x].wallType = 'wall_n';
               worldData[y][x].spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
             }
 
-            /* Old tile was west wall or southeast inner corner */
-            if (nearbyTiles.this.type === 'wall' && 
-               (nearbyTiles.this.wallType === 'wall_w' || nearbyTiles.this.wallType === 'corner_se_inner') && 
-               (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            if ((oldTile('wall_w') || oldTile('corner_se_inner') || oldTile('corner_sw_inner')) && 
+              northWall && !eastWall && !westWall)
             {
               worldData[y][x].wallType = 'corner_se_outer';
               worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
 
-            /* Old tile was east wall or southwest inner corner */
-            if (nearbyTiles.this.type === 'wall' && 
-               (nearbyTiles.this.wallType === 'wall_e' || nearbyTiles.this.wallType === 'corner_sw_inner') &&
-               (i === 0) && ((j !== 0) && (j !== roomWidth -1)))
+            if ((oldTile('wall_e') || oldTile('corner_sw_inner')) &&
+               northWall && !eastWall && !westWall)
             {
               worldData[y][x].wallType = 'corner_sw_outer';
               worldData[y][x].spriteOffset = dungeonTiles.swo;
             }
-            if ((i === 0) && (j === 0) && 
-                 nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_sw_inner') 
+            if (northWall && westWall && oldTile('corner_sw_inner')) 
             {
               worldData[y][x].wallType = 'corner_se_outer';
               worldData[y][x].spriteOffset = dungeonTiles.seo;
@@ -222,15 +222,17 @@ function Map(props) {
             }
 
             /* WEST WALL */
-            /* Old tile was north wall */
+            /* Old tile was north wall and the wall to the west is a north wall */
             if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
-                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') {
+                 (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_n') &&
+                 (nearbyTiles.w.type === 'wall' && nearbyTiles.w.wallType === 'wall_n')) {
               worldData[y][x].wallType = 'corner_se_outer';
               worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
-            /* Old tile was south wall */
+            /* Old tile was south wall and the wall to the west is a south wall */
             if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
-                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') {
+                 (nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'wall_s') &&
+                 (nearbyTiles.w.type === 'wall' && nearbyTiles.w.wallType === 'wall_s')) {
               worldData[y][x].wallType = 'corner_ne_outer';
               worldData[y][x].spriteOffset = dungeonTiles.neo;
             }
@@ -261,7 +263,13 @@ function Map(props) {
               worldData[y][x].wallType = 'corner_se_outer';
               worldData[y][x].spriteOffset = dungeonTiles.seo;
             }
-
+            /* Old tile was inner southwest corner and the tile to the north is a west wall */
+            if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
+                  nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_sw_inner' &&
+                  nearbyTiles.n.type === 'wall' && nearbyTiles.n.wallType === 'wall_w') {
+              worldData[y][x].wallType = 'corner_se_outer';
+              worldData[y][x].spriteOffset = dungeonTiles.seo;
+            }
             /* Old tile was inner northwest corner and the tiles to the north and south are west walls */
             if (((i !== 0 && i !== roomHeight -1) && (j === 0)) &&
                   nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === 'corner_nw_inner' &&
