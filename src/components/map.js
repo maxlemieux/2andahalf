@@ -22,11 +22,17 @@ function Map(props) {
   };
 
   const wall = (x, y, wallType, worldData) => {
-    worldData[y][x].sprite.backgroundImage = dungeonSprite;
     worldData[y][x].type = 'wall';
     worldData[y][x].wallType = wallType;
-    worldData[y][x].sprite.spriteOffset = dungeonTiles[wallType];
-
+    worldData[y][x].empty = false;
+    worldData[y][x].z = 1;
+    worldData[y][x].sprite.backgroundImage = dungeonSprite;
+    if (wallType === 'n') {
+      worldData[y][x].sprite.spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+    } else {
+      worldData[y][x].sprite.spriteOffset = dungeonTiles[wallType];
+    }
+    
     return worldData;
   }
 
@@ -97,7 +103,7 @@ function Map(props) {
           for (let j=0; j<roomWidth; j++) {
             const x = topLeftX + j;
 
-            /* Object containing information about nearby tiles in 8 directions */
+            /* Information about nearby tiles in 8 directions */
             const nearbyTiles = getNearbyTiles(x, y, worldData);
     
             /* Check the existing tile on the map to see what is there and what to do */
@@ -111,11 +117,11 @@ function Map(props) {
             
             /* If we got this far, it's time to build new stuff. */
 
-            /* Boolean conditions to use */
+            /* Boolean conditions */
             const northWall = (i === 0);
+            const southWall = (i === (roomHeight - 1));
             const westWall = (j === 0)
             const eastWall = (j === (roomWidth - 1));
-            const southWall = (i === (roomHeight - 1));
 
             const oldTile = (wallType) => {
               return nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === wallType;
@@ -148,8 +154,7 @@ function Map(props) {
             // NORTHEAST CORNER
             if (northWall && eastWall &&
                 oldEmpty) {
-              worldData[y][x].wallType = 'ne';
-              worldData[y][x].sprite.spriteOffset = dungeonTiles.ne;
+              worldData = wall(x, y, 'ne', worldData);
               continue;
             }
             if (northWall && eastWall &&
@@ -347,15 +352,6 @@ function Map(props) {
               worldData[y][x].z = 0;
               continue;
             };
-
-            /* ALL TILES */
-            /* Since we just drew either a wall or a floor on this tile, set empty to false */
-            worldData[y][x].empty = false;
-            /* And set z-index to '1' if a tile is a wall */
-            if (worldData[y][x].type === 'wall') {
-              worldData[y][x].z = 1;
-            }
-          }; // for tile
         }; // for row to see what to do
       } else {
         // console.log(`room doesn't fit, trying again`);
