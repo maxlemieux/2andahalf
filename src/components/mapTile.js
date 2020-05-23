@@ -18,6 +18,8 @@ function MapTile(props) {
   
   return (
     <div className="map-tile App-map-tile"
+         data-x={props.tile.x}
+         data-y={props.tile.y}
          style={style}>
            <small>x{props.tile.x} y{props.tile.y}</small>
     </div>
