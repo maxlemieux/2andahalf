@@ -5,6 +5,18 @@ import getNearbyTiles from "../tileUtil.js";
 import spriteInfo from "../spriteInfo.js";
 const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
+const seedrandom = require('seedrandom');
+
+/* Random seed start point. Call getSeed() for a seeded random value  */
+let seedKey = 1;
+const seed = new seedrandom(seedKey);
+const getSeed = () => {
+  const thisSeed = seed(seedKey);
+  seedKey++;
+  return thisSeed;
+}
+
+/* Map size in 64x32 tiles */
 const MAP_WIDTH = 24;
 const MAP_HEIGHT = 24;
 
@@ -89,8 +101,8 @@ function Map(props) {
     // check random position and room size, see if it fits
     let roomFound = false;
     while (roomFound === false) {
-      const roomWidth = Math.floor(mapWidth / 4) + 4;
-      const roomHeight = Math.floor(mapHeight / 4) + 4;
+      const roomWidth = Math.floor(getSeed() * mapWidth / 4) + 4;
+      const roomHeight = Math.floor(getSeed() * mapHeight / 4) + 4;
 
       /* Random room position */
       const topLeftX = Math.floor(Math.random() * mapWidth);
