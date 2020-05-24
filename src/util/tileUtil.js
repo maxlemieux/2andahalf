@@ -3,6 +3,68 @@ import spriteInfo from './spriteUtil';
 
 const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
+const tileToCartesian = (axis, tileNumber) => {
+  if (axis === 'x') {
+    return 32 * tileNumber + (window.innerWidth / 4);
+  }
+  if (axis === 'y') {
+    return 32 + (32 * tileNumber) - (window.innerHeight / 2);
+  }
+  return undefined;
+};
+
+const isoToTwoD = (x, y) => {
+  const twoD = {};
+  twoD.x = (2 * y + x) / 2;
+  twoD.y = (2 * y - x) / 2;
+  return twoD;
+};
+
+const twoDToIso = (x, y) => {
+  const iso = {};
+  iso.x = x - y;
+  iso.y = (x + y) / 2;
+  return {
+    xIso: iso.x,
+    yIso: iso.y,
+  };
+};
+
+const buildMap = (mapWidth, mapHeight) => {
+  const worldData = [];
+  for (let y = 0; y < mapHeight; y += 1) {
+    const cartY = tileToCartesian('y', y);
+    const thisRow = [];
+    for (let x=0; x<mapWidth; x++) {
+      /** Move the map to the right by 1/4 the inner window width to center on screen */
+      const cartX = tileToCartesian('x', x);
+
+      /** Get isometric coordinates for this tile */
+      const { xIso, yIso } = twoDToIso(cartX, cartY);
+
+      /** Create the tile with some defaults */
+      const tile = {
+        empty: true,
+        tileType: 'empty',
+        sprite: {
+          spriteOffset: [0, 0],
+        },
+        x,
+        y,
+        cartX,
+        cartY,
+        xIso,
+        yIso,
+        z: 0,
+      };
+      thisRow.push(tile);
+    }
+    worldData.push(thisRow);
+  }
+  return worldData;
+};
+
+
 /** Build a wall */
 const createWall = (x, y, wallType, worldData) => {
   const empty = false;
@@ -75,32 +137,6 @@ const placeRandom = (worldData) => {
   return [tryX, tryY];
 };
 
-const tileToCartesian = (axis, tileNumber) => {
-  if (axis === 'x') {
-    return 32 * tileNumber + (window.innerWidth / 4);
-  }
-  if (axis === 'y') {
-    return 32 + (32 * tileNumber) - (window.innerHeight / 2);
-  }
-  return undefined;
-};
-
-const isoToTwoD = (x, y) => {
-  const twoD = {};
-  twoD.x = (2 * y + x) / 2;
-  twoD.y = (2 * y - x) / 2;
-  return twoD;
-};
-
-const twoDToIso = (x, y) => {
-  const iso = {};
-  iso.x = x - y;
-  iso.y = (x + y) / 2;
-  return {
-    xIso: iso.x,
-    yIso: iso.y,
-  };
-};
 
 const getNearbyTiles = (x, y, worldData) => {
   const nearbyTiles = {
@@ -145,6 +181,7 @@ const getNearbyTiles = (x, y, worldData) => {
 };
 
 export {
+  buildMap,
   createWall,
   createFloor,
   getNearbyTiles,
