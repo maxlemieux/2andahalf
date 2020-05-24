@@ -2,7 +2,8 @@ import { getSeed } from './util';
 
 const { createFloor, createWall, getNearbyTiles } = require('./tileUtil');
 
-const createRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLeftY) => {
+const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
+  let worldData = _worldData;
   /** get size of array to determine potential size of room */
   const mapWidth = worldData[0].length;
   const mapHeight = worldData.length;
@@ -10,26 +11,26 @@ const createRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLef
   /** check random position and room size, see if it fits */
   let roomFound = false;
   while (roomFound === false) {
-    const roomWidth = widthTiles || Math.floor(getSeed() * mapWidth / 4) + 4;
-    const roomHeight = heightTiles || Math.floor(getSeed() * mapHeight / 4) + 4;
+    const roomWidth = widthTiles || Math.floor(getSeed() * (mapWidth / 4)) + 4;
+    const roomHeight = heightTiles || Math.floor(getSeed() * (mapHeight / 4)) + 4;
 
     /** Random room position */
-    const topLeftX = thisTopLeftX || Math.floor(getSeed() * mapWidth);
-    const topLeftY = thisTopLeftY || Math.floor(getSeed() * mapHeight);
-    if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
+    const tX = _tX || Math.floor(getSeed() * mapWidth);
+    const tY = _tY || Math.floor(getSeed() * mapHeight);
+    if (roomWidth + tX < mapWidth && roomHeight + tY < mapHeight && roomFound === false) {
       roomFound = true;
-      console.log(`New room with top left x: ${topLeftX}, y: ${topLeftY}, width ${roomWidth}, height ${roomHeight}`);
+      console.log(`New room with top left x: ${tX}, y: ${tY}, width ${roomWidth}, height ${roomHeight}`);
 
       /** For each row in the new room */
-      for (let i=0; i<roomHeight; i++) {
-        const y = topLeftY + i;
+      for (let i = 0; i < roomHeight; i += 1) {
+        const y = tY + i;
         /** For each tile in that row of the new room */
-        for (let j=0; j<roomWidth; j++) {
-          const x = topLeftX + j;
+        for (let j = 0; j < roomWidth; j += 1) {
+          const x = tX + j;
 
           /* Information about nearby tiles in 8 directions */
           const nearbyTiles = getNearbyTiles(x, y, worldData);
-  
+
           /** Check the existing tile on the map to see what is there and what to do */
           /** Type will be either 'empty', 'wall' or 'ground' */
 
@@ -41,6 +42,7 @@ const createRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLef
             if (nearbyTiles.this.tileType === thisType) {
               return true;
             }
+            return false;
           };
 
           const nearbyTile = (direction) => {
@@ -56,11 +58,11 @@ const createRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLef
             return false;
           };
 
-          if (oldTile('ground')) {
-            /** This is a floor tile from an old room, we want to keep it.
-               Continue by going to the next tile in the row map */
-            continue;
-          } 
+          // if (oldTile('ground')) {
+          //   /** This is a floor tile from an old room, we want to keep it.
+          //      Continue by going to the next tile in the row map */
+          //   continue;
+          // };
           /** If we got this far, it's time to build new stuff. */
 
           /** Boolean conditions */
@@ -79,13 +81,11 @@ const createRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLef
 
           /** NORTH WALL 
              ========== */
-          if (nwCorner &&
-              oldTile('empty')) {
+          if (nwCorner && oldTile('empty')) {
             worldData = createWall(x, y, 'nw', worldData);
             continue;
           };
-          if (nwCorner && oldTile('e') &&
-              nearbyTile('n') === 'e') {
+          if (nwCorner && oldTile('e') && nearbyTile('n') === 'e') {
             worldData = createWall(x, y, 'swo', worldData);
             continue;
           }
