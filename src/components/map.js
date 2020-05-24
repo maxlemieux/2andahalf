@@ -1,17 +1,17 @@
 import React from "react";
 import MapRow from "./mapRow";
 import Player from "./player";
-import spriteInfo from "../spriteInfo.js";
+import spriteInfo from "../util/spriteUtil.js";
 const { playerSprite, playerTiles, dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
-const { getNearbyTiles, isoTwoTwoD, twoDToIso } = require('../tileUtil.js');
+const { getNearbyTiles, isoTwoTwoD, twoDToIso } = require('../util/tileUtil.js');
 
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 1246;
-const seed = new seedrandom(seedKey);
+let seedKey = 1247;
 const getSeed = () => {
+  const seed = new seedrandom(seedKey);
   const thisSeed = seed(seedKey);
   seedKey++;
   return thisSeed;
