@@ -2,32 +2,14 @@ import React from "react";
 import MapRow from "./mapRow";
 import Player from "./player";
 import spriteInfo from "../util/spriteUtil.js";
-const { playerSprite, playerTiles, dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
+const { playerSprite, dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 
-const { getNearbyTiles, isoTwoTwoD, twoDToIso } = require('../util/tileUtil.js');
-
-const seedrandom = require('seedrandom');
-
-/** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 1247;
-const getSeed = () => {
-  const seed = new seedrandom(seedKey);
-  const thisSeed = seed(seedKey);
-  seedKey++;
-  return thisSeed;
-}
+const { getNearbyTiles, twoDToIso, tileToCartesian } = require('../util/tileUtil.js');
+const { getSeed } = require('../util/util.js');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 32;
 const MAP_HEIGHT = 32;
-
-function tileToCartesian(axis, tileNumber) {
-  if (axis === 'x') {
-    return 32 * tileNumber + (window.innerWidth / 4);
-  } else if (axis === 'y') {
-    return 32 + (32 * tileNumber) - (window.innerHeight / 2);
-  };
-};
 
 /**
  * Functional component to display the main game map.
@@ -66,28 +48,9 @@ function Map(props) {
     return player;
   }
 
-  /** Get a pair of random floor coordinates */
-  const placeRandom = (worldData) => {
-    // find an empty floor tile
-    let foundFloor = false;
-    let tryX;
-    let tryY;
-    while (foundFloor === false) {
-      tryX = Math.floor(getSeed() * worldData.length);
-      tryY = Math.floor(getSeed() * worldData[0].length);
-      let tryTile = worldData[tryY][tryX];
-      console.log(tryTile)
-      if (tryTile.type === 'ground') {
-        console.log(`found ground at x: ${tryX}, y: ${tryY}`)
-        foundFloor = true;
-      }
-    }
-    return [tryX, tryY];
-  }
 
-  const spawn = (thing, tileX, tileY, worldData) => {
-    return worldData;
-  }
+
+
 
   
 

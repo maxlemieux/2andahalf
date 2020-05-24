@@ -1,3 +1,38 @@
+import { getSeed } from './util';
+
+
+const spawn = (thing, tileX, tileY, worldData) => {
+  return worldData;
+};
+
+/** Get a pair of random floor coordinates */
+const placeRandom = (worldData) => {
+  // find an empty floor tile
+  let foundFloor = false;
+  let tryX;
+  let tryY;
+  while (foundFloor === false) {
+    tryX = Math.floor(getSeed() * worldData.length);
+    tryY = Math.floor(getSeed() * worldData[0].length);
+    const tryTile = worldData[tryY][tryX];
+    if (tryTile.type === 'ground') {
+      // console.log(`found ground at x: ${tryX}, y: ${tryY}`)
+      foundFloor = true;
+    }
+  }
+  return [tryX, tryY];
+};
+
+const tileToCartesian = (axis, tileNumber) => {
+  if (axis === 'x') {
+    return 32 * tileNumber + (window.innerWidth / 4);
+  }
+  if (axis === 'y') {
+    return 32 + (32 * tileNumber) - (window.innerHeight / 2);
+  }
+  return undefined;
+};
+
 const isoToTwoD = (x, y) => {
   const twoD = {};
   twoD.x = (2 * y + x) / 2;
@@ -61,4 +96,7 @@ module.exports = {
   getNearbyTiles,
   twoDToIso,
   isoToTwoD,
+  tileToCartesian,
+  placeRandom,
+  spawn,
 };

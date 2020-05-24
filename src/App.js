@@ -34,12 +34,10 @@ function App() {
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>
          <div className='App-LogEntry'>
-            {/* Welcome to 2andahalf. */}
           </div>
         </div>
         <div className='App-log' data-logtype='combat'>
         <div className='App-LogEntry'>
-            {/* You land on your feet. */}
           </div>
 
         </div>
