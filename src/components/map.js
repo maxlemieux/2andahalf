@@ -179,8 +179,14 @@ class Map extends Component {
               continue;
             }
             if (northCenter &&
-                oldTile('empty')) {
-              worldData = createWall(x, y, 'n', worldData);
+              oldTile('empty')) {
+            worldData = createWall(x, y, 'n', worldData);
+            continue;
+            };
+            if (northCenter &&
+                oldTile('sw') &&
+               (nearbyTile('n') === 'w' || nearbyTile('n') === 'nw')) {
+              worldData = createWall(x, y, 'seo', worldData);
               continue;
             };
             if (northCenter &&
@@ -385,6 +391,10 @@ class Map extends Component {
 
   /* Make a few rooms */
   worldArray = this.newRoom(this.worldData);
+  worldArray = this.newRoom(this.worldArray);
+  worldArray = this.newRoom(this.worldArray);
+  worldArray = this.newRoom(this.worldArray);
+  worldArray = this.newRoom(this.worldArray);
   // worldArray = newRoom(worldData);
   // worldArray = newRoom(worldData);
   // worldArray = newRoom(worldData);
