@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import Map from "./components/map";
+import Player from "./components/player";
+const { newPlayer } = require('./util/playerUtil');
 
 function App() {
   // const [dimensions, setDimensions] = React.useState({ 
@@ -20,6 +22,7 @@ function App() {
   //     window.removeEventListener('resize', handleResize)
   //   };
   // });
+  const playerCharacter = newPlayer(5, 5);
 
   return (
     <div className="App">
@@ -30,6 +33,7 @@ function App() {
       </header>
 
       <Map />
+      <Player player={playerCharacter} />
 
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>

@@ -101,7 +101,6 @@ const createFloor = (x, y, worldData) => {
     backgroundImage: floorSprite,
     spriteOffset: floorTiles.tiles[Math.floor(getSeed() * floorTiles.tiles.length)],
   };
-  console.log(`creating floor with tileType ${tileType}`);
   Object.assign(
     worldData[y][x],
     {
@@ -112,7 +111,6 @@ const createFloor = (x, y, worldData) => {
       z,
     },
   );
-  console.log(`result ${worldData[y][x].tileType}`);
 
   return worldData;
 };
@@ -132,7 +130,6 @@ const placeRandom = (worldData) => {
     tryY = Math.floor(getSeed() * worldData[0].length);
     const tryTile = worldData[tryY][tryX];
     if (tryTile.tileType === 'ground') {
-      // console.log(`found ground at x: ${tryX}, y: ${tryY}`)
       foundFloor = true;
     }
   }

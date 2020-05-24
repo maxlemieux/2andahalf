@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import MapRow from "./mapRow";
-// import Player from "./player";
 import createRoom from '../util/roomUtil';
 const { buildMap } = require('../util/tileUtil');
-// const { newPlayer } = require('../util/playerUtil');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 16;
@@ -64,7 +62,6 @@ class Map extends Component {
     // this.worldData = createRoom(this.worldData);
   }    /* Make a few rooms */
 
-  // playerCharacter = newPlayer(5, 5);
 
   /* Display map */
   render() {

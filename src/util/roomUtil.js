@@ -218,8 +218,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             worldData = createWall(x, y, 'e', worldData);
           }
           if (eastCenter
-            && oldTile('se')) {
-               worldData = createWall(x, y, 'e', worldData);
+              && oldTile('se')) {
+            worldData = createWall(x, y, 'e', worldData);
           }
           if (eastCenter
               && oldTile('sw')) {
@@ -289,7 +289,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             worldData = createWall(x, y, 'neo', worldData);
           }
           if (southCenter
-              && (oldTile('n') || oldTile('nw'))) {
+              && (oldTile('n')
+              || oldTile('nw'))) {
             worldData = createFloor(x, y, worldData);
           }
 
