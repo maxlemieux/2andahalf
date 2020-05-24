@@ -1,8 +1,8 @@
 import React from "react";
 
 function MapTile(props) {
-  // console.log(props.tile)
   const sprite = props.tile.sprite;
+
   const spriteOffsetX = sprite.spriteOffset[0];
   const spriteOffsetY = sprite.spriteOffset[1];
   const backgroundImage = sprite.backgroundImage;
