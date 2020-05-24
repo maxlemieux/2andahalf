@@ -167,8 +167,6 @@ function Map(props) {
               }
             };
 
-            const oldEmpty = (nearbyTiles.this.type === 'empty');
-
             const nearbyTile = (direction) => {
               if (nearbyTiles[direction] && nearbyTiles[direction].type === 'wall') {
                 return nearbyTiles[direction].wallType;
@@ -186,7 +184,7 @@ function Map(props) {
                ========== */
             /** NORTHWEST CORNER */
             if (nwCorner &&
-                oldEmpty) {
+                oldTile('empty')) {
               worldData = wall(x, y, 'nw', worldData);
               continue;
             };
@@ -198,7 +196,7 @@ function Map(props) {
 
             // NORTHEAST CORNER
             if (neCorner &&
-                oldEmpty) {
+              oldTile('empty')) {
               worldData = wall(x, y, 'ne', worldData);
               continue;
             }
@@ -229,7 +227,7 @@ function Map(props) {
               continue;
             }
             if (northCenter &&
-                oldEmpty) {
+              oldTile('empty')) {
               worldData = wall(x, y, 'n', worldData);
               continue;
             };
@@ -251,7 +249,7 @@ function Map(props) {
 
             /* WEST WALL */
             if (westCenter &&
-                 oldEmpty) {
+              oldTile('empty')) {
               worldData = wall(x, y, 'w', worldData);
               continue;
             };
@@ -361,14 +359,14 @@ function Map(props) {
               continue;
             };
             if (swCorner &&
-                oldEmpty &&
+              oldTile('empty') &&
                 nearbyTile('ne') === 'ground') {
               worldData = wall(x, y, 'sw', worldData);
               continue;
             };
 
             if (seCorner &&
-                oldEmpty) {
+                oldTile('empty')) {
               worldData = wall(x, y, 'se', worldData);  
               continue;
             };
@@ -390,7 +388,7 @@ function Map(props) {
             };
 
             if (southCenter &&
-                oldEmpty) {
+                oldTile('empty')) {
               worldData = wall(x, y, 's', worldData);
               continue;
             };
