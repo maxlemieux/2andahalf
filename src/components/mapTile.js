@@ -1,11 +1,10 @@
 import React from "react";
 
 function MapTile(props) {
-  const sprite = props.tile.sprite;
+  const spriteOffsetX = props.tile.sprite.spriteOffset[0];
+  const spriteOffsetY = props.tile.sprite.spriteOffset[1];
+  const backgroundImage = props.tile.sprite.backgroundImage;
 
-  const spriteOffsetX = sprite.spriteOffset[0];
-  const spriteOffsetY = sprite.spriteOffset[1];
-  const backgroundImage = sprite.backgroundImage;
   const style = {
     left: props.tile.xIso + 'px',
     top: props.tile.yIso + 'px',

@@ -67,7 +67,7 @@ const placeRandom = (worldData) => {
     tryX = Math.floor(getSeed() * worldData.length);
     tryY = Math.floor(getSeed() * worldData[0].length);
     const tryTile = worldData[tryY][tryX];
-    if (tryTile.type === 'ground') {
+    if (tryTile.tileType === 'ground') {
       // console.log(`found ground at x: ${tryX}, y: ${tryY}`)
       foundFloor = true;
     }

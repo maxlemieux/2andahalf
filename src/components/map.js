@@ -1,15 +1,13 @@
 import React from "react";
 import MapRow from "./mapRow";
 import Player from "./player";
-import spriteInfo from "../util/spriteUtil.js";
-const { playerSprite, dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const { newPlayer } = require('../util/playerUtil');
-const { getNearbyTiles, twoDToIso, tileToCartesian, createWall, createFloor } = require('../util/tileUtil.js');
-const { getSeed } = require('../util/util.js');
+const { getNearbyTiles, twoDToIso, tileToCartesian, createWall, createFloor } = require('../util/tileUtil');
+const { getSeed } = require('../util/util');
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 32;
-const MAP_HEIGHT = 32;
+const MAP_WIDTH = 24;
+const MAP_HEIGHT = 24;
 
 /**
  * Functional component to display the main game map.
@@ -40,14 +38,14 @@ function Map(props) {
         /** Create the tile with some defaults */
         const tile = {
           empty: true,
-          type: 'empty',
+          tileType: 'empty',
           sprite: {
             spriteOffset: [0,0],
           },
           x,
           y,
-          xScreen: cartX,
-          yScreen: cartY,
+          cartX,
+          cartY,
           xIso,
           yIso,
           z: 0,
@@ -91,34 +89,35 @@ function Map(props) {
     
             /** Check the existing tile on the map to see what is there and what to do */
             /** Type will be either 'empty', 'wall' or 'ground' */
-            if (nearbyTiles.this.type === 'ground') {
-              /** This is a floor tile from an old room, we want to keep it.
-                 Continue by going to the next tile in the row map */
-              continue;
-            } 
-            const oldTile = (tileType) => {
-              if (nearbyTiles.this.type === 'wall' && 
-                  nearbyTiles.this.wallType === tileType) {
+
+            const oldTile = (thisType) => {
+              if (nearbyTiles.this.tileType === 'wall' && 
+                  nearbyTiles.this.wallType === thisType) {
                 return true;
               }
-              if (nearbyTiles.this.type === tileType) {
+              if (nearbyTiles.this.tileType === thisType) {
                 return true;
               }
             };
 
             const nearbyTile = (direction) => {
-              if (nearbyTiles[direction] && nearbyTiles[direction].type === 'wall') {
+              if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'wall') {
                 return nearbyTiles[direction].wallType;
               };
-              if (nearbyTiles[direction] && nearbyTiles[direction].type === 'empty') {
+              if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'empty') {
                 return 'empty';
               };
-              if (nearbyTiles[direction] && nearbyTiles[direction].type === 'ground') {
+              if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'ground') {
                 return 'ground';
               };
               return false;
             };
 
+            if (oldTile('ground')) {
+              /** This is a floor tile from an old room, we want to keep it.
+                 Continue by going to the next tile in the row map */
+              continue;
+            } 
             /** If we got this far, it's time to build new stuff. */
 
             /** Boolean conditions */
@@ -135,7 +134,6 @@ function Map(props) {
             const eastCenter = eastWall && !northWall && !southWall;
             const westCenter = westWall && !northWall && !southWall;
 
-            
             /** NORTH WALL 
                ========== */
             if (nwCorner &&
@@ -278,10 +276,6 @@ function Map(props) {
               worldData = createWall(x, y, 'e', worldData);
               continue;
             };
-            // if (eastCenter && oldTile('se')) {
-            //   worldData = createWall(x, y, 'e', worldData);
-            //   continue;
-            // };
             if (eastCenter && oldTile('sw')) {
               worldData = createWall(x, y, 'nwo', worldData);
               continue;
@@ -313,8 +307,7 @@ function Map(props) {
               continue;
             };
             if (swCorner &&
-                oldTile('empty') &&
-                nearbyTile('ne') === 'ground') {
+                oldTile('empty')) {
               worldData = createWall(x, y, 'sw', worldData);
               continue;
             };
@@ -392,7 +385,9 @@ function Map(props) {
   /* Make a few rooms */
   let worldArray = newRoom(worldData);
   worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
+  // worldArray = newRoom(worldData);
+  // worldArray = newRoom(worldData);
+  // worldArray = newRoom(worldData);
   // let worldArray = newRoom(worldData, 12, 12, 0, 0);
   // worldArray = newRoom(worldData, 6, 12, 3, 15);
 

@@ -1,6 +1,6 @@
 const SeedRandom = require('seedrandom');
 
-let seedKey = 1255;
+let seedKey = 1258;
 const getSeed = () => {
   const seed = new SeedRandom(seedKey);
   const thisSeed = seed(seedKey);

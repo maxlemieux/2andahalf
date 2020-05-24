@@ -1,11 +1,8 @@
 import React from "react";
 
-// By extending the React.Component class, Player inherits functionality from it
 function Player(props) {
-  const player = props.player;
-  console.log(player);
-  // Setting the initial state of the Player component
-  const sprite = player.sprite;
+  console.log(props.player);
+  const sprite = props.player.sprite;
   
   const spriteOffsetX = sprite.spriteOffset[0];
   const spriteOffsetY = sprite.spriteOffset[1];

@@ -47,4 +47,4 @@ const spriteInfo = {
   },
 };
 
-module.exports = spriteInfo;
+export default spriteInfo;

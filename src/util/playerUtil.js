@@ -36,7 +36,7 @@ function newPlayer(x, y) {
 }
 
 
-module.exports = {
+export {
   movePlayer,
   newPlayer,
 };
