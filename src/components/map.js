@@ -52,9 +52,16 @@ class Map extends Component {
     this.worldData = createRoom(this.worldData);
     this.worldData = createRoom(this.worldData);
     this.worldData = createRoom(this.worldData);
-    this.worldData = createRoom(this.worldData);
-    this.worldData = createRoom(this.worldData);
-    this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
+    // this.worldData = createRoom(this.worldData);
   }    /* Make a few rooms */
 
   // playerCharacter = newPlayer(5, 5);

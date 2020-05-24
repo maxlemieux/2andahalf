@@ -99,9 +99,9 @@ const createFloor = (x, y, worldData) => {
   const z = 0;
   const sprite = {
     backgroundImage: floorSprite,
+    spriteOffset: floorTiles.tiles[Math.floor(getSeed() * floorTiles.tiles.length)],
   };
-  sprite.spriteOffset = floorTiles.tiles[Math.floor(getSeed() * floorTiles.tiles.length)];
-
+  console.log(`creating floor with tileType ${tileType}`);
   Object.assign(
     worldData[y][x],
     {
@@ -112,12 +112,14 @@ const createFloor = (x, y, worldData) => {
       z,
     },
   );
+  console.log(`result ${worldData[y][x].tileType}`);
+
   return worldData;
 };
 
-const spawn = (thing, tileX, tileY, worldData) => {
-  return worldData;
-};
+// const spawn = (thing, tileX, tileY, worldData) => {
+//   return worldData;
+// };
 
 /** Get a pair of random floor coordinates */
 const placeRandom = (worldData) => {
@@ -187,7 +189,7 @@ export {
   getNearbyTiles,
   isoToTwoD,
   placeRandom,
-  spawn,
+  // spawn,
   tileToCartesian,
   twoDToIso,
 };

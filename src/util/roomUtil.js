@@ -46,13 +46,16 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           };
 
           const nearbyTile = (direction) => {
-            if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'wall') {
+            if (nearbyTiles[direction]
+                && nearbyTiles[direction].tileType === 'wall') {
               return nearbyTiles[direction].wallType;
             }
-            if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'empty') {
+            if (nearbyTiles[direction]
+                && nearbyTiles[direction].tileType === 'empty') {
               return 'empty';
             }
-            if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'ground') {
+            if (nearbyTiles[direction]
+                && nearbyTiles[direction].tileType === 'ground') {
               return 'ground';
             }
             return false;
@@ -81,9 +84,19 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             worldData = createWall(x, y, 'nw', worldData);
           }
           if (nwCorner
-              && oldTile('e')
-              && nearbyTile('n') === 'e') {
+            && oldTile('e')
+            && (nearbyTile('n') === 'e' || nearbyTile('n') === 'ne')
+            && (nearbyTile('e') === 'n' || nearbyTile('e') === 'seo')) {
             worldData = createWall(x, y, 'swo', worldData);
+          }
+          if (nwCorner
+            && oldTile('n')) {
+            worldData = createWall(x, y, 'n', worldData);
+          }
+          if (nwCorner
+            && oldTile('s')
+            && nearbyTile('e') === 'ground') {
+            worldData = createWall(x, y, 'neo', worldData);
           }
 
           if (neCorner
@@ -101,7 +114,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
           if (neCorner
               && oldTile('w')
-              && (nearbyTile('n') === 'nw' || nearbyTile('n') === 'w')
+              && (nearbyTile('n') === 'w' || nearbyTile('n') === 'nw')
               && (nearbyTile('w') === 'n' || nearbyTile('w') === 'swo')) {
             worldData = createWall(x, y, 'seo', worldData);
           }
@@ -177,16 +190,10 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
 
           /** EAST WALL */
+          console.log(oldTile('ground'));
           if (eastCenter
-              && oldTile('empty')) {
-            worldData = createWall(x, y, 'e', worldData);
-          }
-          if (eastCenter
-              && oldTile('ground')) {
-            worldData = createFloor(x, y, worldData);
-          }
-          if (eastCenter
-              && oldTile('w')) {
+              && (oldTile('w')
+              || oldTile('ground'))) {
             worldData = createFloor(x, y, worldData);
           }
           if (eastCenter
@@ -204,10 +211,15 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             worldData = createWall(x, y, 'swo', worldData);
           }
           if (eastCenter
-              && (oldTile('se')
+              && (oldTile('empty')
+              || (oldTile('se')
               || ((nearbyTile('n') === 'e')
-              || (nearbyTile('n') === 'ne')))) {
+              || (nearbyTile('n') === 'ne'))))) {
             worldData = createWall(x, y, 'e', worldData);
+          }
+          if (eastCenter
+            && oldTile('se')) {
+               worldData = createWall(x, y, 'e', worldData);
           }
           if (eastCenter
               && oldTile('sw')) {
