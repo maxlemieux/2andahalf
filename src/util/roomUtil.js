@@ -212,7 +212,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && oldTile('sw')) {
             worldData = createFloor(x, y, worldData);
           }
-
           if (eastCenter) {
             worldData = createWall(x, y, 'e', worldData);
           }
@@ -223,7 +222,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && nearbyTile('w') === 's'
               && nearbyTile('n') === 'ground') {
             worldData = createWall(x, y, 's', worldData);
-            continue;
           }
           if (swCorner
               && oldTile('w')
@@ -231,73 +229,60 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && (nearbyTile('n') === 'w' || nearbyTile('n') === 'nw')
               && (nearbyTile('s') === 'w' || nearbyTile('s') === 'sw')) {
             worldData = createWall(x, y, 'w', worldData);
-            continue;
           }
           if (swCorner
               && oldTile('empty')) {
             worldData = createWall(x, y, 'sw', worldData);
-            continue;
           }
 
           if (seCorner
               && oldTile('empty')) {
             worldData = createWall(x, y, 'se', worldData);  
-            continue;
           }
           if (seCorner
               && nearbyTile('e') === 's') {
             worldData = createWall(x, y, 's', worldData);
-            continue; 
           }
           if (seCorner
               && oldTile('n')) {
             worldData = createWall(x, y, 'swo', worldData);
-            continue; 
           }
           if (seCorner
               && oldTile('w')
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 'neo', worldData);
-            continue;
           }
 
           if (southCenter
               && oldTile('empty')) {
             worldData = createWall(x, y, 's', worldData);
-            continue;
           }
           if (southCenter
               && oldTile('w')) {
             worldData = createWall(x, y, 'neo', worldData);
-            continue;
           }
           if (southCenter
               && (oldTile('e') || oldTile('ne'))) {
             worldData = createWall(x, y, 'nwo', worldData);
-            continue;
           }
           if (southCenter
               && (oldTile('sw') || oldTile('se'))
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 's', worldData);
-            continue;
           }
           if (southCenter
               && oldTile('nw')) {
             worldData = createWall(x, y, 'neo', worldData);
-            continue;
           }
           if (southCenter
               && (oldTile('n') || oldTile('nw'))) {
             worldData = createFloor(x, y, worldData);
-            continue;
           };
 
           /* FLOORS */
           if (!northWall && !southWall && !westWall && !eastWall) {
             // Always paint the floor tiles that are in the center of the new room
             worldData = createFloor(x, y, worldData);
-            continue;
           }
         }
       }
