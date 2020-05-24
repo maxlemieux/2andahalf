@@ -139,7 +139,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             worldData = createWall(x, y, 'n', worldData);
             continue;
           }
-          if (northCenter && oldTile('w')) {
+          if (northCenter
+              && oldTile('w')) {
             worldData = createWall(x, y, 'seo', worldData);
             continue;
           }
@@ -279,18 +280,18 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && nearbyTile('e') === 's') {
             worldData = createWall(x, y, 's', worldData);
             continue; 
-          };
+          }
           if (seCorner
               && oldTile('n')) {
             worldData = createWall(x, y, 'swo', worldData);
             continue; 
-          };
+          }
           if (seCorner
               && oldTile('w')
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 'neo', worldData);
             continue;
-          };
+          }
 
           if (southCenter
               && oldTile('empty')) {

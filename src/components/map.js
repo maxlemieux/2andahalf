@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MapRow from "./mapRow";
 import Player from "./player";
-const { createRoom } = require('../util/roomUtil');
+import createRoom from '../util/roomUtil';
 const { buildMap } = require('../util/tileUtil');
 const { newPlayer } = require('../util/playerUtil');
 
