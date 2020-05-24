@@ -196,7 +196,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           if (eastCenter
             && oldTile('s')
             && (nearbyTile('e') === 's'
-            || nearbyTile('e') === 'sw')) {
+            || nearbyTile('e') === 'se')) {
             worldData = createWall(x, y, 'nwo', worldData);
           }
           if (eastCenter
