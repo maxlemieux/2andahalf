@@ -10,4 +10,4 @@ const getSeed = () => {
 
 module.exports = {
   getSeed,
-}
+};

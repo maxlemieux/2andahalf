@@ -1,5 +1,57 @@
 import { getSeed } from './util';
+import spriteInfo from './spriteUtil';
 
+const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
+
+/** Build a wall */
+const createWall = (x, y, wallType, worldData) => {
+  const empty = false;
+  const type = 'wall';
+  const z = 1;
+  const sprite = {
+    backgroundImage: dungeonSprite,
+  };
+  if (wallType === 'n') {
+    sprite.spriteOffset = dungeonTiles.n[Math.floor(getSeed() * dungeonTiles.n.length)];
+  } else {
+    sprite.spriteOffset = dungeonTiles[wallType];
+  }
+  Object.assign(
+    worldData[y][x],
+    {
+      empty,
+      sprite,
+      type,
+      wallType,
+      z,
+    },
+  );
+  return worldData;
+};
+
+/** Build a floor */
+const createFloor = (x, y, worldData) => {
+  const empty = false;
+  const type = 'ground';
+  const wallType = undefined;
+  const z = 0;
+  const sprite = {
+    backgroundImage: floorSprite,
+  };
+  sprite.spriteOffset = floorTiles.tiles[Math.floor(getSeed() * floorTiles.tiles.length)];
+
+  Object.assign(
+    worldData[y][x],
+    {
+      empty,
+      sprite,
+      type,
+      wallType,
+      z,
+    },
+  );
+  return worldData;
+};
 
 const spawn = (thing, tileX, tileY, worldData) => {
   return worldData;
@@ -45,8 +97,8 @@ const twoDToIso = (x, y) => {
   iso.x = x - y;
   iso.y = (x + y) / 2;
   return {
-    xIso: iso.x, 
-    yIso: iso.y 
+    xIso: iso.x,
+    yIso: iso.y,
   };
 };
 
@@ -92,11 +144,13 @@ const getNearbyTiles = (x, y, worldData) => {
   return nearbyTiles;
 };
 
-module.exports = {
+export {
+  createWall,
+  createFloor,
   getNearbyTiles,
-  twoDToIso,
   isoToTwoD,
-  tileToCartesian,
   placeRandom,
   spawn,
+  tileToCartesian,
+  twoDToIso,
 };
