@@ -19,7 +19,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
     const tY = _tY || Math.floor(getSeed() * mapHeight);
     if (roomWidth + tX < mapWidth && roomHeight + tY < mapHeight && roomFound === false) {
       roomFound = true;
-      console.log(`New room with top left x: ${tX}, y: ${tY}, width ${roomWidth}, height ${roomHeight}`);
+      console.log(`New room: top left x: ${tX}, y: ${tY}, w ${roomWidth}, h ${roomHeight}`);
 
       /** For each row in the new room */
       for (let i = 0; i < roomHeight; i += 1) {
@@ -58,11 +58,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             return false;
           };
 
-          // if (oldTile('ground')) {
-          //   /** This is a floor tile from an old room, we want to keep it.
-          //      Continue by going to the next tile in the row map */
-          //   continue;
-          // };
           /** If we got this far, it's time to build new stuff. */
 
           /** Boolean conditions */
@@ -237,7 +232,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
 
           if (seCorner
               && oldTile('empty')) {
-            worldData = createWall(x, y, 'se', worldData);  
+            worldData = createWall(x, y, 'se', worldData);
           }
           if (seCorner
               && nearbyTile('e') === 's') {
@@ -277,7 +272,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           if (southCenter
               && (oldTile('n') || oldTile('nw'))) {
             worldData = createFloor(x, y, worldData);
-          };
+          }
 
           /* FLOORS */
           if (!northWall && !southWall && !westWall && !eastWall) {
