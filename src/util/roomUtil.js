@@ -217,9 +217,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && oldTile('sw')) {
             worldData = createFloor(x, y, worldData);
           }
-          if (eastCenter) {
-            worldData = createWall(x, y, 'e', worldData);
-          }
 
           /* SOUTH WALL
              ========== */
