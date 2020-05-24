@@ -3,7 +3,7 @@ import MapRow from "./mapRow";
 import Player from "./player";
 import spriteInfo from "../util/spriteUtil.js";
 const { playerSprite, dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
-
+const { newPlayer } = require('../util/playerUtil');
 const { getNearbyTiles, twoDToIso, tileToCartesian, createWall, createFloor } = require('../util/tileUtil.js');
 const { getSeed } = require('../util/util.js');
 
@@ -25,43 +25,17 @@ function Map(props) {
     backgroundColor: 'gray',
   };
 
-  /** Load a player character */
-  function newPlayer(x, y) {
-    /** Get isometric coordinates for this tile */
-    const cartX = tileToCartesian('x', x);
-    const cartY = tileToCartesian('y', y);
-    const { xIso, yIso } = twoDToIso(cartX, cartY);
-    const player = {
-      type: 'player',
-      sprite: {
-        backgroundImage: playerSprite,
-        spriteOffset: [0,0],
-      },
-      x,
-      y,
-      z: 1,
-      xIso,
-      yIso,
-      cartX,
-      cartY,
-    };  
-    return player;
-  }
-
-
-
   const buildMap = (mapWidth, mapHeight) => {
     const worldData = [];
-    /** X: j, Y: i */
-    for (let i=0; i<mapHeight; i++) {
-      const thisY = tileToCartesian('y', i);
+    for (let y=0; y<mapHeight; y++) {
+      const cartY = tileToCartesian('y', y);
       const thisRow = [];
-      for (let j=0; j<mapWidth; j++) {
+      for (let x=0; x<mapWidth; x++) {
         /** Move the map to the right by 1/4 the inner window width to center on screen */
-        const thisX = tileToCartesian('x', j);
+        const cartX = tileToCartesian('x', x);
 
         /** Get isometric coordinates for this tile */
-        const { xIso, yIso } = twoDToIso(thisX, thisY);
+        const { xIso, yIso } = twoDToIso(cartX, cartY);
 
         /** Create the tile with some defaults */
         const tile = {
@@ -70,10 +44,10 @@ function Map(props) {
           sprite: {
             spriteOffset: [0,0],
           },
-          x: j,
-          y: i,
-          xScreen: thisX,
-          yScreen: thisY,
+          x,
+          y,
+          xScreen: cartX,
+          yScreen: cartY,
           xIso,
           yIso,
           z: 0,
@@ -122,23 +96,6 @@ function Map(props) {
                  Continue by going to the next tile in the row map */
               continue;
             } 
-            
-            /** If we got this far, it's time to build new stuff. */
-
-            /** Boolean conditions */
-            const northWall = (i === 0);
-            const southWall = (i === (roomHeight - 1));
-            const westWall = (j === 0)
-            const eastWall = (j === (roomWidth - 1));
-            const neCorner = northWall && eastWall;
-            const seCorner = southWall && eastWall;
-            const swCorner = southWall && westWall;
-            const nwCorner = northWall && westWall;
-            const southCenter = southWall && !westWall && !eastWall;
-            const northCenter = northWall && !westWall && !eastWall;
-            const eastCenter = eastWall && !northWall && !southWall;
-            const westCenter = westWall && !northWall && !southWall;
-
             const oldTile = (tileType) => {
               if (nearbyTiles.this.type === 'wall' && 
                   nearbyTiles.this.wallType === tileType) {
@@ -162,6 +119,23 @@ function Map(props) {
               return false;
             };
 
+            /** If we got this far, it's time to build new stuff. */
+
+            /** Boolean conditions */
+            const northWall = (i === 0);
+            const southWall = (i === (roomHeight - 1));
+            const westWall = (j === 0)
+            const eastWall = (j === (roomWidth - 1));
+            const neCorner = northWall && eastWall;
+            const seCorner = southWall && eastWall;
+            const swCorner = southWall && westWall;
+            const nwCorner = northWall && westWall;
+            const southCenter = southWall && !westWall && !eastWall;
+            const northCenter = northWall && !westWall && !eastWall;
+            const eastCenter = eastWall && !northWall && !southWall;
+            const westCenter = westWall && !northWall && !southWall;
+
+            
             /** NORTH WALL 
                ========== */
             if (nwCorner &&
@@ -298,15 +272,16 @@ function Map(props) {
               continue;
             };
             if (eastCenter && 
+               (oldTile('se') || 
               ((nearbyTile('n') === 'e') || 
-               (nearbyTile('n') === 'ne'))) {
+               (nearbyTile('n') === 'ne')))) {
               worldData = createWall(x, y, 'e', worldData);
               continue;
             };
-            if (eastCenter && oldTile('se')) {
-              worldData = createWall(x, y, 'e', worldData);
-              continue;
-            };
+            // if (eastCenter && oldTile('se')) {
+            //   worldData = createWall(x, y, 'e', worldData);
+            //   continue;
+            // };
             if (eastCenter && oldTile('sw')) {
               worldData = createWall(x, y, 'nwo', worldData);
               continue;
@@ -415,8 +390,10 @@ function Map(props) {
   }
 
   /* Make a few rooms */
-  // let worldArray = newRoom(worldData);
-  let worldArray = newRoom(worldData, 12, 12, 0, 0);
+  let worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
+  worldArray = newRoom(worldData);
+  // let worldArray = newRoom(worldData, 12, 12, 0, 0);
   // worldArray = newRoom(worldData, 6, 12, 3, 15);
 
   // worldArray = placeRandom('foo', worldArray);
