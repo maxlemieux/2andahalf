@@ -22,7 +22,7 @@ function MapTile(props) {
          data-x={props.tile.x}
          data-y={props.tile.y}
          style={style}>
-           <small>x{props.tile.x} y{props.tile.y}</small>
+      <small>x{props.tile.x} y{props.tile.y}</small>
     </div>
   );
 }

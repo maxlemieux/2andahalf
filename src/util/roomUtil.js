@@ -108,7 +108,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
 
           if (northCenter
               && oldTile('s')) {
-            /* North and south walls are overlapping, make a floor */
             worldData = createFloor(x, y, worldData);
           }
           if (northCenter
@@ -117,7 +116,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
           if (northCenter
               && oldTile('sw')
-              && (nearbyTile('n') === 'w' || nearbyTile('n') === 'nw')) {
+              && (nearbyTile('n') === 'w'
+              || nearbyTile('n') === 'nw')) {
             worldData = createWall(x, y, 'seo', worldData);
           }
           if (northCenter
@@ -140,7 +140,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
           if (westCenter
               && oldTile('e')) {
-            /* A west wall and an east wall are overlapping, make a floor */
             worldData = createFloor(x, y, worldData);
           }
           if (westCenter
@@ -276,7 +275,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
 
           /* FLOORS */
           if (!northWall && !southWall && !westWall && !eastWall) {
-            // Always paint the floor tiles that are in the center of the new room
             worldData = createFloor(x, y, worldData);
           }
         }
