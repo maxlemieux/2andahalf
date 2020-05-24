@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import MapRow from "./mapRow";
 import Player from "./player";
 const { newPlayer } = require('../util/playerUtil');
@@ -10,20 +10,21 @@ const MAP_WIDTH = 24;
 const MAP_HEIGHT = 24;
 
 /**
- * Functional component to display the main game map.
- * MapRow and MapTile are probably still too thin,
- * need to keep moving code out of this component.
+ * Stateful component to display the main game map.
+ * 
  */
-function Map(props) {
-  const style = {
-    top: '0px',
-    left: '0px',
-    width: '100%',
-    minHeight: '75vh',
-    backgroundColor: 'gray',
-  };
+class Map extends Component {
+    state = {
+      style: {
+        top: '0px',
+        left: '0px',
+        width: '100%',
+        minHeight: '75vh',
+        backgroundColor: 'gray',
+      }
+    }
 
-  const buildMap = (mapWidth, mapHeight) => {
+  buildMap = (mapWidth, mapHeight) => {
     const worldData = [];
     for (let y=0; y<mapHeight; y++) {
       const cartY = tileToCartesian('y', y);
@@ -57,9 +58,9 @@ function Map(props) {
     return worldData;  
   }
   
-  const worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
+  worldData = this.buildMap(MAP_WIDTH, MAP_HEIGHT);
 
-  const newRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLeftY) => {
+  newRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLeftY) => {
     /** get size of array to determine potential size of room */
     const mapWidth = worldData[0].length;
     const mapHeight = worldData.length;
@@ -383,8 +384,7 @@ function Map(props) {
   }
 
   /* Make a few rooms */
-  let worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
+  worldArray = this.newRoom(this.worldData);
   // worldArray = newRoom(worldData);
   // worldArray = newRoom(worldData);
   // worldArray = newRoom(worldData);
@@ -393,18 +393,20 @@ function Map(props) {
 
   // worldArray = placeRandom('foo', worldArray);
 
-  const playerCharacter = newPlayer(5, 5);
+  playerCharacter = newPlayer(5, 5);
 
   /* Display map */
-  return (
-    <div style={style} className="App-map"
-         >
-    {worldArray.map(function(object, i){
-      return <MapRow row={object} key={i} />;
-    })}
-    <Player player={playerCharacter} />
-    </div>
-  );
+  render() {
+    return (
+      <div style={this.state.style} className="App-map"
+          >
+      {this.worldArray.map(function(object, i){
+        return <MapRow row={object} key={i} />;
+      })}
+      <Player player={this.playerCharacter} />
+      </div>
+    );
+  }
 }
 
 export default Map;
