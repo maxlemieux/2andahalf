@@ -41,15 +41,20 @@ class Map extends Component {
     // });
   }
 
-  updateWorld = () => {
-    this.setState(() => ({
-      worldData: this.worldData
-    }));
-  }
+  // updateWorld = () => {
+  //   this.setState(() => ({
+  //     worldData: this.worldData
+  //   }));
+  // }
 
   initializeMap() {
-    this.mapData = buildMap(MAP_WIDTH, MAP_HEIGHT);
-    this.worldData = createRoom(this.mapData);
+    this.worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
+    this.worldData = createRoom(this.worldData);
+    this.worldData = createRoom(this.worldData);
+    this.worldData = createRoom(this.worldData);
+    this.worldData = createRoom(this.worldData);
+    this.worldData = createRoom(this.worldData);
+    this.worldData = createRoom(this.worldData);
   }    /* Make a few rooms */
 
   // playerCharacter = newPlayer(5, 5);
@@ -57,7 +62,7 @@ class Map extends Component {
   /* Display map */
   render() {
     this.initializeMap();
-  
+
     return (
       <div style={this.state.style} className="App-map">
       {this.worldData.map(function(object, i){
