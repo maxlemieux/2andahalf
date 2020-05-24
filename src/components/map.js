@@ -8,7 +8,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 const seedrandom = require('seedrandom');
 
 /** Random seed start point. Call getSeed() for a seeded random value  */
-let seedKey = 1244;
+let seedKey = 1246;
 const seed = new seedrandom(seedKey);
 const getSeed = () => {
   const thisSeed = seed(seedKey);
@@ -103,7 +103,7 @@ function Map(props) {
   
   const worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
 
-  const newRoom = (worldData) => {
+  const newRoom = (worldData, widthTiles, heightTiles, thisTopLeftX, thisTopLeftY) => {
     /** get size of array to determine potential size of room */
     const mapWidth = worldData[0].length;
     const mapHeight = worldData.length;
@@ -111,14 +111,14 @@ function Map(props) {
     /** check random position and room size, see if it fits */
     let roomFound = false;
     while (roomFound === false) {
-      const roomWidth = Math.floor(getSeed() * mapWidth / 4) + 4;
-      const roomHeight = Math.floor(getSeed() * mapHeight / 4) + 4;
+      const roomWidth = widthTiles || Math.floor(getSeed() * mapWidth / 4) + 4;
+      const roomHeight = heightTiles || Math.floor(getSeed() * mapHeight / 4) + 4;
 
       /** Random room position */
       // const topLeftX = Math.floor(Math.random() * mapWidth);
       // const topLeftY = Math.floor(Math.random() * mapHeight);
-      const topLeftX = Math.floor(getSeed() * mapWidth);
-      const topLeftY = Math.floor(getSeed() * mapHeight);
+      const topLeftX = thisTopLeftX || Math.floor(getSeed() * mapWidth);
+      const topLeftY = thisTopLeftY || Math.floor(getSeed() * mapHeight);
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
         roomFound = true;
         console.log(`New room with top left x: ${topLeftX}, y: ${topLeftY}, width ${roomWidth}, height ${roomHeight}`);
@@ -158,7 +158,13 @@ function Map(props) {
             const westCenter = westWall && !northWall && !southWall;
 
             const oldTile = (wallType) => {
-              return nearbyTiles.this.type === 'wall' && nearbyTiles.this.wallType === wallType;
+              if (nearbyTiles.this.type === 'wall' && 
+                  nearbyTiles.this.wallType === wallType) {
+                return true;
+              }
+              if (nearbyTiles.this.type === wallType) {
+                return true;
+              }
             };
 
             const oldEmpty = (nearbyTiles.this.type === 'empty');
@@ -449,9 +455,9 @@ function Map(props) {
   };
 
   /* Make a few rooms */
-  let worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
-  worldArray = newRoom(worldData);
+  // let worldArray = newRoom(worldData);
+  let worldArray = newRoom(worldData, 10, 10, 0, 0);
+  // worldArray = newRoom(worldData);
 
   /* Display map */
   return (
