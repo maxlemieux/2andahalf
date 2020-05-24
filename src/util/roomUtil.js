@@ -68,7 +68,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           /** Boolean conditions */
           const northWall = (i === 0);
           const southWall = (i === (roomHeight - 1));
-          const westWall = (j === 0)
+          const westWall = (j === 0);
           const eastWall = (j === (roomWidth - 1));
           const neCorner = northWall && eastWall;
           const seCorner = southWall && eastWall;
@@ -79,88 +79,74 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           const eastCenter = eastWall && !northWall && !southWall;
           const westCenter = westWall && !northWall && !southWall;
 
-          /** NORTH WALL 
+          /** NORTH WALL
              ========== */
           if (nwCorner
               && oldTile('empty')) {
             worldData = createWall(x, y, 'nw', worldData);
-            continue;
           }
           if (nwCorner
               && oldTile('e')
               && nearbyTile('n') === 'e') {
             worldData = createWall(x, y, 'swo', worldData);
-            continue;
           }
 
           if (neCorner
               && oldTile('empty')) {
             worldData = createWall(x, y, 'ne', worldData);
-            continue;
           }
           if (neCorner
               && oldTile('n')) {
             worldData = createWall(x, y, 'n', worldData);
-            continue;
           }
           if (neCorner
               && oldTile('s')
               && nearbyTile('w') === 'ground') {
             worldData = createWall(x, y, 'nwo', worldData);
-            continue;
           }
           if (neCorner
               && oldTile('w')
               && (nearbyTile('n') === 'nw' || nearbyTile('n') === 'w')
               && (nearbyTile('w') === 'n' || nearbyTile('w') === 'swo')) {
             worldData = createWall(x, y, 'seo', worldData);
-            continue;
           }
 
           if (northCenter
               && oldTile('s')) {
             /* North and south walls are overlapping, make a floor */
             worldData = createFloor(x, y, worldData);
-            continue;
           }
           if (northCenter
               && oldTile('empty')) {
             worldData = createWall(x, y, 'n', worldData);
-            continue;
           }
           if (northCenter
               && oldTile('sw')
               && (nearbyTile('n') === 'w' || nearbyTile('n') === 'nw')) {
             worldData = createWall(x, y, 'seo', worldData);
-            continue;
           }
           if (northCenter
               && (oldTile('nw') || oldTile('ne'))) {
             worldData = createWall(x, y, 'n', worldData);
-            continue;
           }
           if (northCenter
               && oldTile('w')) {
             worldData = createWall(x, y, 'seo', worldData);
-            continue;
           }
           if (northCenter
               && oldTile('e')) {
             worldData = createWall(x, y, 'swo', worldData);
-            continue;
           }
 
           /* WEST WALL */
           if (westCenter
               && oldTile('empty')) {
             worldData = createWall(x, y, 'w', worldData);
-            continue;
           }
           if (westCenter
               && oldTile('e')) {
             /* A west wall and an east wall are overlapping, make a floor */
             worldData = createFloor(x, y, worldData);
-            continue;
           }
           if (westCenter
               && oldTile('n')
@@ -168,85 +154,67 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               || nearbyTile('w') === 'nw'
               || nearbyTile('w') === 'swo')) {
             worldData = createWall(x, y, 'seo', worldData);
-            continue;
           }
           if (westCenter
               && oldTile('n')
               && nearbyTile('w') === 'sw') {
             worldData = createWall(x, y, 'neo', worldData);
-            continue;
           }
           if (westCenter
               && oldTile('s')
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 'neo', worldData);
-            continue;
           }
           if (westCenter
               && oldTile('sw')
               && nearbyTile('n') === 'w') {
             worldData = createWall(x, y, 'w', worldData);
-            continue;
           }
           if (westCenter
               && oldTile('se')
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 'neo', worldData);
-            continue;
           }
           if (westCenter
               && oldTile('nw')
               && nearbyTile('n') === 'w') {
             worldData = createWall(x, y, 'w', worldData);
-            continue;
           }
 
           /** EAST WALL */
           if (eastCenter
               && oldTile('w')) {
             worldData = createFloor(x, y, worldData);
-            continue;
-          }
-          if (eastCenter
-              && oldTile('e')) {
-            continue;
           }
           if (eastCenter
               && oldTile('n')) {
             worldData = createWall(x, y, 'swo', worldData);
-            continue;
           }
           if (eastCenter
               && oldTile('s')) {
             worldData = createWall(x, y, 'nwo', worldData);
-            continue;
           }
           if (eastCenter
               && oldTile('nw')) {
             worldData = createWall(x, y, 'swo', worldData);
-            continue;
           }
           if (eastCenter
               && (oldTile('se')
               || ((nearbyTile('n') === 'e')
               || (nearbyTile('n') === 'ne')))) {
             worldData = createWall(x, y, 'e', worldData);
-            continue;
           }
           if (eastCenter
               && oldTile('sw')) {
             worldData = createWall(x, y, 'nwo', worldData);
-            continue;
           }
           if (eastCenter
               && oldTile('sw')) {
             worldData = createFloor(x, y, worldData);
-            continue;
           }
 
           if (eastCenter) {
             worldData = createWall(x, y, 'e', worldData);
-            continue;
           }
 
           /* SOUTH WALL
