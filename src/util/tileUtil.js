@@ -6,7 +6,7 @@ const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
 /** Build a wall */
 const createWall = (x, y, wallType, worldData) => {
   const empty = false;
-  const type = 'wall';
+  const tileType = 'wall';
   const z = 1;
   const sprite = {
     backgroundImage: dungeonSprite,
@@ -21,7 +21,7 @@ const createWall = (x, y, wallType, worldData) => {
     {
       empty,
       sprite,
-      type,
+      tileType,
       wallType,
       z,
     },
@@ -32,7 +32,7 @@ const createWall = (x, y, wallType, worldData) => {
 /** Build a floor */
 const createFloor = (x, y, worldData) => {
   const empty = false;
-  const type = 'ground';
+  const tileType = 'ground';
   const wallType = undefined;
   const z = 0;
   const sprite = {
@@ -45,7 +45,7 @@ const createFloor = (x, y, worldData) => {
     {
       empty,
       sprite,
-      type,
+      tileType,
       wallType,
       z,
     },
