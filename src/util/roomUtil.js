@@ -35,8 +35,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           /** Type will be either 'empty', 'wall' or 'ground' */
 
           const oldTile = (thisType) => {
-            if (nearbyTiles.this.tileType === 'wall' && 
-                nearbyTiles.this.wallType === thisType) {
+            if (nearbyTiles.this.tileType === 'wall'
+                && nearbyTiles.this.wallType === thisType) {
               return true;
             }
             if (nearbyTiles.this.tileType === thisType) {
@@ -48,13 +48,13 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           const nearbyTile = (direction) => {
             if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'wall') {
               return nearbyTiles[direction].wallType;
-            };
+            }
             if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'empty') {
               return 'empty';
-            };
+            }
             if (nearbyTiles[direction] && nearbyTiles[direction].tileType === 'ground') {
               return 'ground';
-            };
+            }
             return false;
           };
 
@@ -154,7 +154,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && oldTile('empty')) {
             worldData = createWall(x, y, 'w', worldData);
             continue;
-          };
+          }
           if (westCenter
               && oldTile('e')) {
             /* A west wall and an east wall are overlapping, make a floor */
@@ -180,7 +180,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 'neo', worldData);
             continue;
-          };
+          }
           if (westCenter
               && oldTile('sw')
               && nearbyTile('n') === 'w') {
@@ -192,7 +192,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
               && nearbyTile('w') === 's') {
             worldData = createWall(x, y, 'neo', worldData);
             continue;
-          };
+          }
           if (westCenter
               && oldTile('nw')
               && nearbyTile('n') === 'w') {
@@ -248,7 +248,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             continue;
           }
 
-          /* SOUTH WALL 
+          /* SOUTH WALL
              ========== */
           if (swCorner
               && nearbyTile('w') === 's'
@@ -320,7 +320,7 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
           if (southCenter
               && (oldTile('n') || oldTile('nw'))) {
-            worldData = createFloor(x, y, worldData); 
+            worldData = createFloor(x, y, worldData);
             continue;
           };
 
