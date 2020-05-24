@@ -1,3 +1,20 @@
+const isoToTwoD = (x, y) => {
+  const twoD = {};
+  twoD.x = (2 * y + x) / 2;
+  twoD.y = (2 * y - x) / 2;
+  return twoD;
+};
+
+const twoDToIso = (x, y) => {
+  const iso = {};
+  iso.x = x - y;
+  iso.y = (x + y) / 2;
+  return {
+    xIso: iso.x, 
+    yIso: iso.y 
+  };
+};
+
 const getNearbyTiles = (x, y, worldData) => {
   const nearbyTiles = {
     w: null,
@@ -40,4 +57,8 @@ const getNearbyTiles = (x, y, worldData) => {
   return nearbyTiles;
 };
 
-module.exports = getNearbyTiles;
+module.exports = {
+  getNearbyTiles,
+  twoDToIso,
+  isoToTwoD,
+};

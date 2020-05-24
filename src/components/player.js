@@ -1,46 +1,37 @@
 import React from "react";
 
 // By extending the React.Component class, Player inherits functionality from it
-class Player extends React.Component {
+function Player(props) {
+  const player = props.player;
+  console.log(player);
   // Setting the initial state of the Player component
-  state = {
-    level: 1
-  };
-  sprite = props.player.sprite;
-  spriteOffsetX = sprite.spriteOffset[0];
-  spriteOffsetY = sprite.spriteOffset[1];
-  backgroundImage = sprite.backgroundImage;
-  style = {
-    left: props.tile.xIso + 'px',
-    top: props.tile.yIso + 'px',
+  const sprite = player.sprite;
+  
+  const spriteOffsetX = sprite.spriteOffset[0];
+  const spriteOffsetY = sprite.spriteOffset[1];
+  const backgroundImage = sprite.backgroundImage;
+  const style = {
+    left: props.xIso + 'px',
+    top: props.yIso + 'px',
     position: 'absolute',
     width: 64,
     height: 32,
     paddingTop: 96 + 'px',
     marginTop: 96 + 'px',
-    zIndex: props.tile.z,
+    zIndex: props.z,
     background: `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`,
   };
 
-  // levelUp increments this.state.level by 1
-  levelUp = () => {
-    // We always use the setState method to update a component's state
-    this.setState({ level: this.state.level + 1 });
-  };
-
-  // The render method returns the JSX that should be rendered
-  render() {
-    return (
-      <div className="player" style={style}>
-        <div className="playerSprite">
-        </div>
-        <div className="playerName">
-          Adventurer
-        </div>
-
+  return (
+    <div className="player" style={style}>
+      <div className="playerSprite">
       </div>
-    );
-  }
+      <div className="playerName">
+        Adventurer
+      </div>
+
+    </div>
+  );
 }
 
 export default Player;

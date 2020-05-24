@@ -1,5 +1,5 @@
 const spriteInfo = {
-  playerSprite: '',
+  playerSprite: '/img/isometric_hero/male_head1.png',
   playerTiles: [
     [0, 0],
   ],

@@ -1,10 +1,10 @@
 import React from "react";
 import MapRow from "./mapRow";
 import Player from "./player";
-import getNearbyTiles from "../tileUtil.js";
-
 import spriteInfo from "../spriteInfo.js";
-const { dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
+const { playerSprite, playerTiles, dungeonSprite, dungeonTiles, floorSprite, floorTiles } = spriteInfo;
+
+const { getNearbyTiles, isoTwoTwoD, twoDToIso } = require('../tileUtil.js');
 
 const seedrandom = require('seedrandom');
 
@@ -18,8 +18,16 @@ const getSeed = () => {
 }
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 24;
-const MAP_HEIGHT = 24;
+const MAP_WIDTH = 32;
+const MAP_HEIGHT = 32;
+
+function tileToCartesian(axis, tileNumber) {
+  if (axis === 'x') {
+    return 32 * tileNumber + (window.innerWidth / 4);
+  } else if (axis === 'y') {
+    return 32 + (32 * tileNumber) - (window.innerHeight / 2);
+  };
+};
 
 /**
  * Functional component to display the main game map.
@@ -36,36 +44,45 @@ function Map(props) {
   };
 
   /** Load a player character */
-  function newPlayer() {
+  function newPlayer(x, y) {
     /** Get isometric coordinates for this tile */
-    return {
+    const cartX = tileToCartesian('x', x);
+    const cartY = tileToCartesian('y', y);
+    const { xIso, yIso } = twoDToIso(cartX, cartY);
+    const player = {
       type: 'player',
       sprite: {
-        backgroundImage: spriteInfo.playerSprite,
+        backgroundImage: playerSprite,
         spriteOffset: [0,0],
       },
+      x,
+      y,
       z: 1,
+      xIso,
+      yIso,
+      cartX,
+      cartY,
     };  
+    return player;
   }
-  const playerCharacter = newPlayer();
 
-  /** Place something randomly */
-  const placeRandom = (thing, worldData) => {
+  /** Get a pair of random floor coordinates */
+  const placeRandom = (worldData) => {
     // find an empty floor tile
-    // use the seed though
     let foundFloor = false;
+    let tryX;
+    let tryY;
     while (foundFloor === false) {
-      let tryX = Math.floor(getSeed() * worldData.length);
-      let tryY = Math.floor(getSeed() * worldData[0].length);
+      tryX = Math.floor(getSeed() * worldData.length);
+      tryY = Math.floor(getSeed() * worldData[0].length);
       let tryTile = worldData[tryY][tryX];
       console.log(tryTile)
       if (tryTile.type === 'ground') {
         console.log(`found ground at x: ${tryX}, y: ${tryY}`)
-        tryTile.hasPlayer = true;
         foundFloor = true;
       }
     }
-    return worldData;
+    return [tryX, tryY];
   }
 
   const spawn = (thing, tileX, tileY, worldData) => {
@@ -110,11 +127,11 @@ function Map(props) {
     const worldData = [];
     /** X: j, Y: i */
     for (let i=0; i<mapHeight; i++) {
-      const thisY = 32 + (32 * i) - (window.innerHeight / 2);
+      const thisY = tileToCartesian('y', i);
       const thisRow = [];
       for (let j=0; j<mapWidth; j++) {
         /** Move the map to the right by 1/4 the inner window width to center on screen */
-        const thisX = 32 * j + (window.innerWidth / 4);
+        const thisX = tileToCartesian('x', j);
 
         /** Get isometric coordinates for this tile */
         const { xIso, yIso } = twoDToIso(thisX, thisY);
@@ -155,8 +172,6 @@ function Map(props) {
       const roomHeight = heightTiles || Math.floor(getSeed() * mapHeight / 4) + 4;
 
       /** Random room position */
-      // const topLeftX = Math.floor(Math.random() * mapWidth);
-      // const topLeftY = Math.floor(Math.random() * mapHeight);
       const topLeftX = thisTopLeftX || Math.floor(getSeed() * mapWidth);
       const topLeftY = thisTopLeftY || Math.floor(getSeed() * mapHeight);
       if (roomWidth + topLeftX < mapWidth && roomHeight + topLeftY < mapHeight && roomFound === false) {
@@ -477,37 +492,23 @@ function Map(props) {
     return worldData;
   }
 
-  // function isoToTwoD(x, y) {
-  //   const twoD = {};
-  //   twoD.x = (2 * y + x) / 2;
-  //   twoD.y = (2 * y - x) / 2;
-  //   return twoD;
-  // };
-  
-  function twoDToIso(x, y) {
-    const iso = {};
-    iso.x = x - y;
-    iso.y = (x + y) / 2;
-    return {
-      xIso: iso.x, 
-      yIso: iso.y 
-    };
-  };
-
   /* Make a few rooms */
   // let worldArray = newRoom(worldData);
-  let worldArray = newRoom(worldData, 10, 10, 0, 0);
-  // worldArray = newRoom(worldData);
+  let worldArray = newRoom(worldData, 12, 12, 0, 0);
+  // worldArray = newRoom(worldData, 6, 12, 3, 15);
 
-  worldArray = placeRandom('foo', worldArray);
+  // worldArray = placeRandom('foo', worldArray);
+
+  const playerCharacter = newPlayer(5, 5);
 
   /* Display map */
   return (
-    <div style={style} className="App-map">
+    <div style={style} className="App-map"
+         >
     {worldArray.map(function(object, i){
       return <MapRow row={object} key={i} />;
     })}
-    <Player player={playerCharacter} x='5' y='5' />
+    <Player player={playerCharacter} />
     </div>
   );
 }
