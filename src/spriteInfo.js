@@ -1,4 +1,8 @@
 const spriteInfo = {
+  playerSprite: '',
+  playerTiles: [
+    [0, 0],
+  ],
   dungeonSprite: '/img/environment/iso_dungeon_walls_by_pfunked.png',
   dungeonTiles: {
     n: [/* The same two plain ones repeated */

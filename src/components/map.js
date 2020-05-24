@@ -1,5 +1,6 @@
 import React from "react";
 import MapRow from "./mapRow";
+import Player from "./player";
 import getNearbyTiles from "../tileUtil.js";
 
 import spriteInfo from "../spriteInfo.js";
@@ -34,6 +35,45 @@ function Map(props) {
     backgroundColor: 'gray',
   };
 
+  /** Load a player character */
+  function newPlayer() {
+    /** Get isometric coordinates for this tile */
+    return {
+      type: 'player',
+      sprite: {
+        backgroundImage: spriteInfo.playerSprite,
+        spriteOffset: [0,0],
+      },
+      z: 1,
+    };  
+  }
+  const playerCharacter = newPlayer();
+
+  /** Place something randomly */
+  const placeRandom = (thing, worldData) => {
+    // find an empty floor tile
+    // use the seed though
+    let foundFloor = false;
+    while (foundFloor === false) {
+      let tryX = Math.floor(getSeed() * worldData.length);
+      let tryY = Math.floor(getSeed() * worldData[0].length);
+      let tryTile = worldData[tryY][tryX];
+      console.log(tryTile)
+      if (tryTile.type === 'ground') {
+        console.log(`found ground at x: ${tryX}, y: ${tryY}`)
+        tryTile.hasPlayer = true;
+        foundFloor = true;
+      }
+    }
+    return worldData;
+  }
+
+  const spawn = (thing, tileX, tileY, worldData) => {
+    return worldData;
+  }
+
+  
+
   /** Build a wall */
   const wall = (x, y, wallType, worldData) => {
     const empty = false;
@@ -43,7 +83,7 @@ function Map(props) {
       backgroundImage: dungeonSprite,
     };
     if (wallType === 'n') {
-      sprite.spriteOffset = dungeonTiles.n[Math.floor(Math.random() * dungeonTiles.n.length)];
+      sprite.spriteOffset = dungeonTiles.n[Math.floor(getSeed() * dungeonTiles.n.length)];
     } else {
       sprite.spriteOffset = dungeonTiles[wallType];
     };
@@ -60,7 +100,7 @@ function Map(props) {
     const sprite = {
       backgroundImage: floorSprite,
     };
-    sprite.spriteOffset = floorTiles.tiles[Math.floor(Math.random() * floorTiles.tiles.length)];
+    sprite.spriteOffset = floorTiles.tiles[Math.floor(getSeed() * floorTiles.tiles.length)];
 
     Object.assign(worldData[y][x], { empty, sprite, type, wallType, z });    
     return worldData;
@@ -157,12 +197,12 @@ function Map(props) {
             const eastCenter = eastWall && !northWall && !southWall;
             const westCenter = westWall && !northWall && !southWall;
 
-            const oldTile = (wallType) => {
+            const oldTile = (tileType) => {
               if (nearbyTiles.this.type === 'wall' && 
-                  nearbyTiles.this.wallType === wallType) {
+                  nearbyTiles.this.wallType === tileType) {
                 return true;
               }
-              if (nearbyTiles.this.type === wallType) {
+              if (nearbyTiles.this.type === tileType) {
                 return true;
               }
             };
@@ -425,6 +465,8 @@ function Map(props) {
               worldData = createFloor(x, y, worldData);
               continue;
             };
+
+
           };
         };
       } else {
@@ -457,12 +499,15 @@ function Map(props) {
   let worldArray = newRoom(worldData, 10, 10, 0, 0);
   // worldArray = newRoom(worldData);
 
+  worldArray = placeRandom('foo', worldArray);
+
   /* Display map */
   return (
     <div style={style} className="App-map">
     {worldArray.map(function(object, i){
       return <MapRow row={object} key={i} />;
     })}
+    <Player player={playerCharacter} x='5' y='5' />
     </div>
   );
 }
