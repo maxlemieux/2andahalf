@@ -21,6 +21,8 @@ const initializeMap = (mapWidth, mapHeight) => {
         sprite: {
           spriteOffset: [0, 0],
         },
+        seeThrough: true,
+        passThrough: false,
         x,
         y,
         cartX,
@@ -43,7 +45,7 @@ const buildMap = (_worldData) => {
   let worldData = _worldData;
   const maxLeafSize = 20;
   const leafArr = [];
-  const rootLeaf = new Leaf(0, 0, worldData.length, worldData[0].length);
+  const rootLeaf = new Leaf(0, 0, worldData[0].length, worldData.length);
   leafArr.push(rootLeaf);
 
   let didSplit = true;
@@ -62,8 +64,8 @@ const buildMap = (_worldData) => {
       }
     }
   }
+  // console.log(worldData)
   worldData = rootLeaf.createRooms(worldData);
-  console.log(worldData)
 
   return worldData;
 };

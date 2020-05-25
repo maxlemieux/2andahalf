@@ -28,29 +28,26 @@ class Leaf {
     // this.split = Math.floor(getSeed() * this.max);
     this.splitLocation = seedrandomRange(this.minLeafSize, this.max);
     if (this.splitH) {
-      const leftChild = new Leaf(this.x, this.y, this.width, this.splitLocation);
-      this.leftChild = leftChild;
-      const rightChild = new Leaf(this.x, this.y + this.splitLocation, this.width, this.height - this.splitLocation);
-      this.rightChild = rightChild;
+      this.leftChild = new Leaf(this.x, this.y, this.width, this.splitLocation);
+      this.rightChild = new Leaf(this.x, this.y + this.splitLocation, this.width, this.height - this.splitLocation);
     } else {
-      const leftChild = new Leaf(this.x, this.y, this.splitLocation, this.height);
-      this.leftChild = leftChild;
-      const rightChild = new Leaf(this.x + this.splitLocation, this.y, this.width - this.splitLocation, this.height);
-      this.rightChild = rightChild;
+      this.leftChild = new Leaf(this.x, this.y, this.splitLocation, this.height);
+      this.rightChild = new Leaf(this.x + this.splitLocation, this.y, this.width - this.splitLocation, this.height);
     }
     return true;
   }
 
   createRooms(_worldData) {
-    this.worldData = _worldData;
+    const worldData = _worldData;
     if (this.leftChild || this.rightChild) {
       if (this.leftChild) {
-        this.leftChild.createRooms(this.worldData);
+        this.leftChild.createRooms(worldData);
       }
       if (this.rightChild) {
-        this.rightChild.createRooms(this.worldData);
+        this.rightChild.createRooms(worldData);
       }
     } else {
+      console.log(`setting roomSize`)
       this.roomSize = [
         seedrandomRange(3, this.width - 2),
         seedrandomRange(3, this.height - 2),
@@ -60,16 +57,14 @@ class Leaf {
         seedrandomRange(1, this.height - this.roomSize[1] - 1),
       ];
     }
-    console.log(this.roomSize)
-    const newWorldData = createRoom(
-      this.worldData,
+
+    return createRoom(
+      worldData,
       this.roomSize[0],
       this.roomSize[1],
       this.x + this.roomPos[0],
       this.y + this.roomPos[1],
     );
-
-    return newWorldData;
   }
 }
 

@@ -13,6 +13,7 @@ const MAP_HEIGHT = 32;
 class Map extends Component {
   constructor(props) {
     super(props);
+    this.emptyMap = initializeMap(MAP_WIDTH, MAP_HEIGHT);
     this.state = {
       style: {
         top: '0px',
@@ -21,20 +22,14 @@ class Map extends Component {
         minHeight: '75vh',
         backgroundColor: 'gray',
       },
+      worldData: buildMap(this.emptyMap),
     };
-    this.processMap();
   }
 
-  processMap() {
-    this.emptyMap = initializeMap(MAP_WIDTH, MAP_HEIGHT);
-    this.worldData = buildMap(this.emptyMap);
-  }
-
-  /* Display map */
   render() {
     return (
       <div style={this.state.style} className="App-map">
-      {this.worldData.map(function(object, i){
+      {this.state.worldData.map(function(object, i){
         return <MapRow row={object} key={i} />;
       })}
       {/* <Player player={this.playerCharacter} /> */}
