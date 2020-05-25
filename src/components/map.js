@@ -2,11 +2,13 @@ import React from "react";
 import { getSeed, seedrandomRange } from '../util/util';
 import createRoom from '../util/roomUtil';
 import initializeMap from '../util/mapUtil';
-import MapTile from "./mapTile";
+import MapRow from "./mapRow";
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 32;
-const MAP_HEIGHT = 32;
+const MAP_WIDTH = 64;
+const MAP_HEIGHT = 64;
+
+
 
 /** Object constructor for Leaf. 
  * This could probably also be an ES6 class object. 
@@ -14,13 +16,18 @@ const MAP_HEIGHT = 32;
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 6;
+  this.minLeafSize = 32;
   this.x = _x;
   this.y = _y;
+  this.room = {};
+  this.halls = [];
 
   this.split = () => {
-    if (this.leftChild || this.rightChild) {
+    if (this.leftChild !== undefined|| this.rightChild !== undefined) {
+      // already split, abort!
       return false;
+    } else {
+      // console.log(`leftChild: ${this.leftChild}`)
     }
     this.splitH = (getSeed() > 0.5);
     if (this.width > this.height && this.width / this.height >= 1.25) {
@@ -28,11 +35,18 @@ function Leaf(_x, _y, _width, _height) {
     } else if (this.height > this.width && this.height / this.width >= 1.25) {
       this.splitH = true;
     }
+    console.log(`splitH: ${this.splitH}`)
+    
+    console.log(`Checking leaf size for potential split: height ${this.height} width ${this.width} and minLeafSize ${this.minLeafSize}`)
     this.max = (this.splitH ? this.height : this.width) - this.minLeafSize;
     if (this.max <= this.minLeafSize) {
+      // area is too small to split any more, abort!
+      console.log(`area is too small to split any more, abort!`)
       return false;
     }
+
     this.splitLoc = seedrandomRange(this.minLeafSize, this.max);
+    console.log(`New split location ${this.splitLoc}`)
     if (this.splitH) {
       this.leftChild = new Leaf(this.x, this.y, this.width, this.splitLoc);
       this.rightChild = new Leaf(this.x, this.y + this.splitLoc, this.width, this.height - this.splitLoc);
@@ -43,14 +57,14 @@ function Leaf(_x, _y, _width, _height) {
     return true;
   }
 
-  this.createRooms = (_worldData, setWorldData) => {
-    const worldData = _worldData;
+  this.createRooms = (_worldData) => {
+    let worldData = _worldData;
     if (this.leftChild || this.rightChild) {
       if (this.leftChild) {
-        this.leftChild.createRooms(worldData, setWorldData);
+        this.leftChild.createRooms(worldData);
       }
       if (this.rightChild) {
-        this.rightChild.createRooms(worldData, setWorldData);
+        this.rightChild.createRooms(worldData);
       }
     } else {
       this.roomSize = [
@@ -64,29 +78,24 @@ function Leaf(_x, _y, _width, _height) {
     }
 
     if (this.roomSize && this.roomPos && worldData) {
-      const newWorldData = createRoom(
+      worldData = createRoom(
         worldData,
         this.roomSize[0],
         this.roomSize[1],
         this.x + this.roomPos[0],
         this.y + this.roomPos[1],
       );
-      setWorldData(newWorldData);
+    } else {
+      // something is missing, what is it?
+      console.log(`this.roomsize ${this.roomSize}, this.roomPos ${this.roomPos}`)
     }
   }
 }
 
 /**
- * Stateful component to display the main game map.
+ * Functional component to display the main game map.
  */
-// class Map extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
 function Map(props) {
-  console.log('Beginning map build');
-
   let worldData;
 
   const style = {
@@ -97,14 +106,12 @@ function Map(props) {
     backgroundColor: 'gray',
   };
 
-  const setWorldData = (_worldData) => {
-    worldData = _worldData;
-  };
-
   const buildMap = () => {
     /** BSP dungeon generation
      * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
      * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
+    console.log('Beginning map build');
+
     let mapData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
 
     const maxLeafSize = 20;
@@ -130,24 +137,21 @@ function Map(props) {
         }
       }
     }
-    console.log('mapData')
-    console.log(mapData)
-    worldData = rootLeaf.createRooms(mapData, setWorldData);
-    console.log('worldData');
-    console.log(worldData)
+
+    // console.log('mapData')
+    // console.log(mapData)
+    return rootLeaf.createRooms(mapData);
   };
-  buildMap();
+
+  worldData = buildMap();
+  
   return (
     <div style={style} className="App-map">
-    {worldData.map(function(row, i){
-      return (
-      <div className="map-row">
-      {row.map(function(tile, j){
-        return <MapTile tile={tile} key={j} />;
+      {worldData.map(function(row, i){
+        return (
+          <MapRow row={row} key={i}/>
+        )
       })}
-      </div>
-      )
-    })}
     </div>
   );
 };

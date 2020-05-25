@@ -3,12 +3,14 @@ import { getSeed } from './util';
 const { createFloor, createWall, getNearbyTiles } = require('./tileUtil');
 
 const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
-  console.log('we are in createRoom and initial worldData is')
+  console.log(`createRoom widthTiles ${widthTiles}, heightTiles ${heightTiles}, tX ${_tX}, tY ${_tY}`);
+  console.log('we are in createRoom and initial worldData is');
   console.log(_worldData);
   let worldData = _worldData;
   /** get size of array to determine potential size of room */
   const mapWidth = worldData[0].length;
   const mapHeight = worldData.length;
+  console.log(`current mapWidth ${mapWidth} mapHeight ${mapHeight}`)
 
   /** check random position and room size, see if it fits */
   let roomFound = false;
