@@ -43,7 +43,7 @@ const buildMap = (worldData) => {
    * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
   const maxLeafSize = 20;
   const leafArr = [];
-  const rootLeaf = new Leaf(0, 0, worldData[0].length, worldData.length);
+  const rootLeaf = new Leaf(0, 0, worldData.length, worldData[0].length);
   leafArr.push(rootLeaf);
 
   let didSplit = true;

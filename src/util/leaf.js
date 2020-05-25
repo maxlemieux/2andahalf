@@ -1,17 +1,12 @@
 import { getSeed } from './util';
 
 class Leaf {
-  constructor(height, width) {
-    this.height = height;
-    this.width = width;
-    this.minLeafSize = 6;
-  }
-
-  leaf(X, Y, _width, _height) {
-    this.x = X;
-    this.y = Y;
+  constructor(_x, _y, _width, _height) {
     this.width = _width;
     this.height = _height;
+    this.minLeafSize = 6;
+    this.x = _x;
+    this.y = _y;
   }
 
   split() {
