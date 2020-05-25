@@ -45,7 +45,7 @@ class Map extends Component {
   //   }));
   // }
 
-  initializeMap() {
+  processMap() {
     this.worldData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
     this.worldData = buildMap(this.worldData);
     // this.worldData = createRoom(this.worldData);
@@ -63,7 +63,7 @@ class Map extends Component {
 
   /* Display map */
   render() {
-    this.initializeMap();
+    this.processMap();
 
     return (
       <div style={this.state.style} className="App-map">

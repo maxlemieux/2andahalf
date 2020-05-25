@@ -190,7 +190,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
 
           /** EAST WALL */
-          console.log(oldTile('ground'));
           if (eastCenter
               && (oldTile('w')
               || oldTile('ground'))) {
