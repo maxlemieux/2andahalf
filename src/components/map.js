@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { getSeed, seedrandomRange } from '../util/util';
 import createRoom from '../util/roomUtil';
 import initializeMap from '../util/mapUtil';
@@ -79,77 +79,77 @@ function Leaf(_x, _y, _width, _height) {
 /**
  * Stateful component to display the main game map.
  */
-class Map extends Component {
-  constructor(props) {
-    super(props);
+// class Map extends Component {
+//   constructor(props) {
+//     super(props);
 
-    this.state = {
-      style: {
-        top: '0px',
-        left: '0px',
-        width: '100%',
-        minHeight: '75vh',
-        backgroundColor: 'gray',
-      },
-    };
-    
-    this.setWorldData = (_worldData) => {
-      this.setState({ worldData: _worldData});
-    };
+//     this.state = {
+function Map(props) {
+  console.log('Beginning map build');
 
-    this.buildMap = () => {
-      /** BSP dungeon generation
-       * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
-       * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
-      let mapData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
+  let worldData;
 
-      const maxLeafSize = 20;
-      const leafArr = [];
-      const rootLeaf = new Leaf(0, 0, mapData[0].length, mapData.length);
-      leafArr.push(rootLeaf);
-    
-      let didSplit = true;
-      while (didSplit) {
-        didSplit = false;
-        for (let i = 0; i < leafArr.length; i += 1) {
-          const leaf = leafArr[i];
-          if (!leaf.leftChild && !leaf.rightChild) {
-            if (leaf.width > maxLeafSize || leaf.height > maxLeafSize) {
-              if (leaf.split()) {
-                leafArr.push(leaf.leftChild);
-                leafArr.push(leaf.rightChild);
-                didSplit = true;
-              } else {
-                console.log('We did not split')
-              }
+  const style = {
+    top: '0px',
+    left: '0px',
+    width: '100%',
+    minHeight: '75vh',
+    backgroundColor: 'gray',
+  };
+
+  const setWorldData = (_worldData) => {
+    worldData = _worldData;
+  };
+
+  const buildMap = () => {
+    /** BSP dungeon generation
+     * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
+     * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
+    let mapData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
+
+    const maxLeafSize = 20;
+    const leafArr = [];
+    const rootLeaf = new Leaf(0, 0, mapData[0].length, mapData.length);
+    leafArr.push(rootLeaf);
+  
+    let didSplit = true;
+    while (didSplit) {
+      didSplit = false;
+      for (let i = 0; i < leafArr.length; i += 1) {
+        const leaf = leafArr[i];
+        if (!leaf.leftChild && !leaf.rightChild) {
+          if (leaf.width > maxLeafSize || leaf.height > maxLeafSize) {
+            if (leaf.split()) {
+              leafArr.push(leaf.leftChild);
+              leafArr.push(leaf.rightChild);
+              didSplit = true;
+            } else {
+              console.log('We did not split')
             }
           }
         }
       }
-      console.log('mapData')
-      console.log(mapData)
-      this.state.worldData = rootLeaf.createRooms(mapData, this.setWorldData);
-      console.log('this.state.worldData');
-      console.log(this.state.worldData)
-    };
-    this.buildMap();
-  }
-
-  render() {
-    return (
-      <div style={this.state.style} className="App-map">
-      {this.state.worldData.map(function(row, i){
-        return (
-        <div className="map-row">
-        {row.map(function(tile, j){
-          return <MapTile tile={tile} setWorldData={this.setWorldData} key={j} />;
-        })}
-        </div>
-        )
+    }
+    console.log('mapData')
+    console.log(mapData)
+    worldData = rootLeaf.createRooms(mapData, setWorldData);
+    console.log('worldData');
+    console.log(worldData)
+  };
+  buildMap();
+  return (
+    <div style={style} className="App-map">
+    {worldData.map(function(row, i){
+      return (
+      <div className="map-row">
+      {row.map(function(tile, j){
+        return <MapTile tile={tile} key={j} />;
       })}
       </div>
-    );
-  }
-}
+      )
+    })}
+    </div>
+  );
+};
 
 export default Map;

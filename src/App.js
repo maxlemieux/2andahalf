@@ -1,28 +1,11 @@
 import React from 'react';
 import './App.css';
 import Map from "./components/map";
-import Player from "./components/player";
-const { newPlayer } = require('./util/playerUtil');
+// import Player from "./components/player";
+// const { newPlayer } = require('./util/playerUtil');
 
 function App() {
-  // const [dimensions, setDimensions] = React.useState({ 
-  //   height: window.innerHeight,
-  //   width: window.innerWidth
-  // })
-  // React.useEffect(() => {
-  //   function handleResize() {
-  //     console.log('resized');
-  //     setDimensions({
-  //       height: window.innerHeight,
-  //       width: window.innerWidth
-  //     })
-  //   };
-  //   window.addEventListener('resize', handleResize);
-  //   return _ => {
-  //     window.removeEventListener('resize', handleResize)
-  //   };
-  // });
-  const playerCharacter = newPlayer(5, 5);
+  // const playerCharacter = newPlayer(5, 5);
 
   return (
     <div className="App">
@@ -33,7 +16,7 @@ function App() {
       </header>
 
       <Map />
-      <Player player={playerCharacter} />
+      {/* <Player player={playerCharacter} /> */}
 
       <footer className="App-footer">
         <div className='App-log' data-logtype='chat'>
