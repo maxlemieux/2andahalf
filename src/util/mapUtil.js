@@ -47,22 +47,33 @@ const buildMap = (worldData) => {
   leafArr.push(rootLeaf);
 
   let didSplit = true;
-
-  while (didSplit) {
+  console.log('foobarbaz')
+  while (didSplit === true) {
     didSplit = false;
     for (let i = 0; i < leafArr.length; i += 1) {
       const leaf = leafArr[i];
+      console.log(`leaf number ${i} of the leaf array`)
       if (!leaf.leftChild && !leaf.rightChild) {
+        console.log('this leaf does not have children, make them')
         if (leaf.width > maxLeafSize || leaf.height > maxLeafSize) {
-          if (leaf.split()) {
+          console.log(`leaf width ${leaf.width} or height ${leaf.height} bigger than maxLeafSize ${maxLeafSize}`);
+          if (leaf.split() === true) {
+            console.log('leaf split was true')
             leafArr.push(leaf.leftChild);
             leafArr.push(leaf.rightChild);
+            console.log(`leaf right child ${leaf.rightChild}`);
             didSplit = true;
+          } else {
+            console.log('leaf split was false')
           }
+        } else {
+          console.log('leaf width and height are under maxLeafSize')
+          console.log(`w ${leaf.width} h ${leaf.height}`)
         }
       }
     }
   }
+  console.log(leafArr.length);
 
   return worldData;
 };

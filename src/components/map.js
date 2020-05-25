@@ -4,8 +4,8 @@ import MapRow from "./mapRow";
 const { buildMap, initializeMap } = require('../util/mapUtil');
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 16;
-const MAP_HEIGHT = 16;
+const MAP_WIDTH = 32;
+const MAP_HEIGHT = 32;
 
 /**
  * Stateful component to display the main game map.
