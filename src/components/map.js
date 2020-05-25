@@ -5,8 +5,8 @@ import initializeMap from '../util/mapUtil';
 import MapRow from "./mapRow";
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 64;
-const MAP_HEIGHT = 64;
+const MAP_WIDTH = 32;
+const MAP_HEIGHT = 32;
 
 
 
@@ -16,7 +16,7 @@ const MAP_HEIGHT = 64;
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 32;
+  this.minLeafSize = 8;
   this.x = _x;
   this.y = _y;
   this.room = {};
@@ -68,8 +68,8 @@ function Leaf(_x, _y, _width, _height) {
       }
     } else {
       this.roomSize = [
-        seedrandomRange(3, this.width - 2),
-        seedrandomRange(3, this.height - 2),
+        seedrandomRange(6, this.width - 2),
+        seedrandomRange(6, this.height - 2),
       ];
       this.roomPos = [
         seedrandomRange(1, this.width - this.roomSize[0] - 1),

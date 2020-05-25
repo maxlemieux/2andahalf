@@ -15,3 +15,10 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+// function noScroll() {
+//   window.scrollTo(0, 0);
+// }
+
+// // add listener to disable scroll
+// window.addEventListener('scroll', noScroll);
