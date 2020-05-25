@@ -18,17 +18,25 @@ class Leaf {
     if (this.leftChild || this.rightChild) {
       return false;
     }
-    let splitH = (getSeed() > 0.5);
+    this.splitH = (getSeed() > 0.5);
     if (this.width > this.height && this.width / this.height >= 1.25) {
-      splitH = false;
+      this.splitH = false;
     } else if (this.height > this.width && this.height / this.width >= 1.25) {
-      splitH = true;
+      this.splitH = true;
     }
-    const max = (splitH ? this.height : this.width) - this.minLeafSize;
-    if (max <= this.minLeafSize) {
+    this.max = (this.splitH ? this.height : this.width) - this.minLeafSize;
+    if (this.max <= this.minLeafSize) {
       return false;
     }
-    const split = 
+    this.split = Math.floor(getSeed() * this.max);
+    if (this.splitH) {
+      this.leftChild = new Leaf(this.x, this.y, this.width, this.split);
+      this.rightChild = new Leaf(this.x, this.y + this.split, this.width, this.height - this.split);
+    } else {
+      this.leftChild = new Leaf(this.x, this.y, this.split, this.height);
+      this.rightChild = new Leaf(this.x + this.split, this.y, this.width - this.split, this.height);
+    }
+    return true;
   }
 }
 

@@ -1,4 +1,7 @@
+import Leaf from './leaf';
+
 const { tileToCartesian, twoDToIso } = require('./tileUtil');
+
 
 const initializeMap = (mapWidth, mapHeight) => {
   const worldData = [];
@@ -38,6 +41,28 @@ const buildMap = (worldData) => {
   /** BSP dungeon generation
    * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
    * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
+  const maxLeafSize = 20;
+  const leafArr = [];
+  const rootLeaf = new Leaf(0, 0, worldData[0].length, worldData.length);
+  leafArr.push(rootLeaf);
+
+  let didSplit = true;
+
+  while (didSplit) {
+    didSplit = false;
+    for (let i = 0; i < leafArr.length; i += 1) {
+      const leaf = leafArr[i];
+      if (!leaf.leftChild && !leaf.rightChild) {
+        if (leaf.width > maxLeafSize || leaf.height > maxLeafSize) {
+          if (leaf.split()) {
+            leafArr.push(leaf.leftChild);
+            leafArr.push(leaf.rightChild);
+            didSplit = true;
+          }
+        }
+      }
+    }
+  }
 
   return worldData;
 };
