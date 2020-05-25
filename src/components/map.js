@@ -35,18 +35,18 @@ function Leaf(_x, _y, _width, _height) {
     } else if (this.height > this.width && this.height / this.width >= 1.25) {
       this.splitH = true;
     }
-    console.log(`splitH: ${this.splitH}`)
+    // console.log(`splitH: ${this.splitH}`)
     
-    console.log(`Checking leaf size for potential split: height ${this.height} width ${this.width} and minLeafSize ${this.minLeafSize}`)
+    // console.log(`Checking leaf size for potential split: height ${this.height} width ${this.width} and minLeafSize ${this.minLeafSize}`)
     this.max = (this.splitH ? this.height : this.width) - this.minLeafSize;
     if (this.max <= this.minLeafSize) {
       // area is too small to split any more, abort!
-      console.log(`area is too small to split any more, abort!`)
+      // console.log(`area is too small to split any more, abort!`)
       return false;
     }
 
     this.splitLoc = seedrandomRange(this.minLeafSize, this.max);
-    console.log(`New split location ${this.splitLoc}`)
+    // console.log(`New split location ${this.splitLoc}`)
     if (this.splitH) {
       this.leftChild = new Leaf(this.x, this.y, this.width, this.splitLoc);
       this.rightChild = new Leaf(this.x, this.y + this.splitLoc, this.width, this.height - this.splitLoc);
@@ -89,6 +89,8 @@ function Leaf(_x, _y, _width, _height) {
       // something is missing, what is it?
       console.log(`this.roomsize ${this.roomSize}, this.roomPos ${this.roomPos}`)
     }
+    // need to return something here
+    return worldData;
   }
 }
 
@@ -96,8 +98,6 @@ function Leaf(_x, _y, _width, _height) {
  * Functional component to display the main game map.
  */
 function Map(props) {
-  let worldData;
-
   const style = {
     top: '0px',
     left: '0px',
@@ -140,10 +140,12 @@ function Map(props) {
 
     // console.log('mapData')
     // console.log(mapData)
-    return rootLeaf.createRooms(mapData);
+    const newStuff = rootLeaf.createRooms(mapData);
+    console.log(newStuff);
+    return newStuff;
   };
 
-  worldData = buildMap();
+  let worldData = buildMap();
   
   return (
     <div style={style} className="App-map">
