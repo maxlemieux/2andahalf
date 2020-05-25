@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MapRow from "./mapRow";
-import createRoom from '../util/roomUtil';
-const { buildMap } = require('../util/tileUtil');
+// import createRoom from '../util/roomUtil';
+const { buildMap, initializeMap } = require('../util/mapUtil');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 16;
@@ -46,10 +46,8 @@ class Map extends Component {
   // }
 
   initializeMap() {
-    this.worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
-    this.worldData = createRoom(this.worldData);
-    this.worldData = createRoom(this.worldData);
-    this.worldData = createRoom(this.worldData);
+    this.worldData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
+    this.worldData = buildMap(this.worldData);
     // this.worldData = createRoom(this.worldData);
     // this.worldData = createRoom(this.worldData);
     // this.worldData = createRoom(this.worldData);
