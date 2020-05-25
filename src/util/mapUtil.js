@@ -24,6 +24,4 @@ const initializeMap = (mapWidth, mapHeight) => {
 };
 
 
-export {
-  initializeMap
-};
+module.exports = initializeMap;

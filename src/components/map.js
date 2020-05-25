@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import MapTile from "./mapTile";
 import { getSeed, seedrandomRange } from '../util/util';
 import createRoom from '../util/roomUtil';
-// import Leaf from '../util/leaf';
-const { initializeMap } = require('../util/mapUtil');
-
-
-
+import initializeMap from '../util/mapUtil';
+import MapTile from "./mapTile";
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 32;
@@ -67,14 +63,16 @@ function Leaf(_x, _y, _width, _height) {
       ];
     }
 
-    const newWorldData = createRoom(
-      worldData,
-      this.roomSize[0],
-      this.roomSize[1],
-      this.x + this.roomPos[0],
-      this.y + this.roomPos[1],
-    );
-    setWorldData(newWorldData);
+    if (this.roomSize && this.roomPos && worldData) {
+      const newWorldData = createRoom(
+        worldData,
+        this.roomSize[0],
+        this.roomSize[1],
+        this.x + this.roomPos[0],
+        this.y + this.roomPos[1],
+      );
+      setWorldData(newWorldData);
+    }
   }
 }
 
@@ -94,41 +92,47 @@ class Map extends Component {
         backgroundColor: 'gray',
       },
     };
+    
+    this.setWorldData = (_worldData) => {
+      this.setState({ worldData: _worldData});
+    };
+
     this.buildMap = () => {
       /** BSP dungeon generation
        * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
        * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
-      let worldData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
+      let mapData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
 
       const maxLeafSize = 20;
       const leafArr = [];
-      const rootLeaf = new Leaf(0, 0, worldData[0].length, worldData.length);
+      const rootLeaf = new Leaf(0, 0, mapData[0].length, mapData.length);
       leafArr.push(rootLeaf);
     
       let didSplit = true;
-      while (didSplit === true) {
+      while (didSplit) {
         didSplit = false;
         for (let i = 0; i < leafArr.length; i += 1) {
           const leaf = leafArr[i];
           if (!leaf.leftChild && !leaf.rightChild) {
             if (leaf.width > maxLeafSize || leaf.height > maxLeafSize) {
-              if (leaf.split() === true) {
+              if (leaf.split()) {
                 leafArr.push(leaf.leftChild);
                 leafArr.push(leaf.rightChild);
                 didSplit = true;
+              } else {
+                console.log('We did not split')
               }
             }
           }
         }
       }
-      // console.log(worldData)    
-      this.setState({worldData: rootLeaf.createRooms(worldData, this.setWorldData)});
+      console.log('mapData')
+      console.log(mapData)
+      this.state.worldData = rootLeaf.createRooms(mapData, this.setWorldData);
+      console.log('this.state.worldData');
+      console.log(this.state.worldData)
     };
     this.buildMap();
-  }
-
-  setWorldData = (_worldData) => {
-    this.setState({ worldData: _worldData});
   }
 
   render() {
