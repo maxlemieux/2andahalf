@@ -9,7 +9,6 @@ function MapTile(props) {
 
   const cartX = tileToCartesian('x', props.tile.x);
   const cartY = tileToCartesian('y', props.tile.y);
-  /** Get isometric coordinates for this tile */
   const { xIso, yIso } = twoDToIso(cartX, cartY);
 
   const style = {

@@ -24,15 +24,13 @@ class Leaf {
     if (this.max <= this.minLeafSize) {
       return false;
     }
-    // var split:int = Registry.randomNumber(MIN_LEAF_SIZE, max); // determine where we're going to split
-    // this.split = Math.floor(getSeed() * this.max);
-    this.splitLocation = seedrandomRange(this.minLeafSize, this.max);
+    this.splitLoc = seedrandomRange(this.minLeafSize, this.max);
     if (this.splitH) {
-      this.leftChild = new Leaf(this.x, this.y, this.width, this.splitLocation);
-      this.rightChild = new Leaf(this.x, this.y + this.splitLocation, this.width, this.height - this.splitLocation);
+      this.leftChild = new Leaf(this.x, this.y, this.width, this.splitLoc);
+      this.rightChild = new Leaf(this.x, this.y + this.splitLoc, this.width, this.height - this.splitLoc);
     } else {
-      this.leftChild = new Leaf(this.x, this.y, this.splitLocation, this.height);
-      this.rightChild = new Leaf(this.x + this.splitLocation, this.y, this.width - this.splitLocation, this.height);
+      this.leftChild = new Leaf(this.x, this.y, this.splitLoc, this.height);
+      this.rightChild = new Leaf(this.x + this.splitLoc, this.y, this.width - this.splitLoc, this.height);
     }
     return true;
   }
