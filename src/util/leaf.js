@@ -1,4 +1,4 @@
-import { getSeed } from './util';
+import { getSeed, seedrandomRange } from './util';
 import createRoom from './roomUtil';
 
 class Leaf {
@@ -24,55 +24,52 @@ class Leaf {
     if (this.max <= this.minLeafSize) {
       return false;
     }
-    this.split = Math.floor(getSeed() * this.max);
+    // var split:int = Registry.randomNumber(MIN_LEAF_SIZE, max); // determine where we're going to split
+    // this.split = Math.floor(getSeed() * this.max);
+    this.splitLocation = seedrandomRange(this.minLeafSize, this.max);
     if (this.splitH) {
-      this.leftChild = new Leaf(this.x, this.y, this.width, this.split);
-      this.rightChild = new Leaf(this.x, this.y + this.split, this.width, this.height - this.split);
+      const leftChild = new Leaf(this.x, this.y, this.width, this.splitLocation);
+      this.leftChild = leftChild;
+      const rightChild = new Leaf(this.x, this.y + this.splitLocation, this.width, this.height - this.splitLocation);
+      this.rightChild = rightChild;
     } else {
-      this.leftChild = new Leaf(this.x, this.y, this.split, this.height);
-      this.rightChild = new Leaf(this.x + this.split, this.y, this.width - this.split, this.height);
+      const leftChild = new Leaf(this.x, this.y, this.splitLocation, this.height);
+      this.leftChild = leftChild;
+      const rightChild = new Leaf(this.x + this.splitLocation, this.y, this.width - this.splitLocation, this.height);
+      this.rightChild = rightChild;
     }
     return true;
   }
 
   createRooms(_worldData) {
+    this.worldData = _worldData;
     if (this.leftChild || this.rightChild) {
       if (this.leftChild) {
-        this.leftChild.createRooms();
+        this.leftChild.createRooms(this.worldData);
       }
       if (this.rightChild) {
-        this.rightChild.createRooms();
+        this.rightChild.createRooms(this.worldData);
       }
     } else {
       this.roomSize = [
-        Math.floor(
-          getSeed()
-          * (this.width - 2),
-        ),
-        Math.floor(
-          getSeed()
-          * (this.height - 2),
-        ),
+        seedrandomRange(3, this.width - 2),
+        seedrandomRange(3, this.height - 2),
       ];
       this.roomPos = [
-        Math.floor(
-          getSeed()
-          * (this.width - this.roomSize.x - 1),
-        ),
-        Math.floor(
-          getSeed()
-          * (this.height - this.roomSize.y - 1),
-        ),
+        seedrandomRange(1, this.width - this.roomSize[0] - 1),
+        seedrandomRange(1, this.height - this.roomSize[1] - 1),
       ];
     }
-
-    return createRoom(
-      _worldData,
+    console.log(this.roomSize)
+    const newWorldData = createRoom(
+      this.worldData,
       this.roomSize[0],
       this.roomSize[1],
       this.x + this.roomPos[0],
       this.y + this.roomPos[1],
     );
+
+    return newWorldData;
   }
 }
 

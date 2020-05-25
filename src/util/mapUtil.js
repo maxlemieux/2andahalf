@@ -63,6 +63,7 @@ const buildMap = (_worldData) => {
     }
   }
   worldData = rootLeaf.createRooms(worldData);
+  console.log(worldData)
 
   return worldData;
 };

@@ -1,7 +1,6 @@
 import React from "react";
 
 function Player(props) {
-  console.log(props.player);
   const sprite = props.player.sprite;
   
   const spriteOffsetX = sprite.spriteOffset[0];
