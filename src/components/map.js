@@ -244,17 +244,20 @@ function Leaf(_x, _y, _width, _height) {
 
   this.createRooms = (_worldData) => {
     let worldData = _worldData;
-    if (this.leftChild || this.rightChild) {
-      if (this.leftChild) {
-        this.leftChild.createRooms(worldData);
-      }
-      if (this.rightChild) {
-        this.rightChild.createRooms(worldData);
-      }
-      if (this.leftChild && this.rightChild) {
-        worldData = this.createHall(this.leftChild.getRoom(), this.rightChild.getRoom(), worldData);
-      }
-    } else {
+    if (this.leftChild) {
+      this.leftChild.createRooms(worldData);
+    }
+    if (this.rightChild) {
+      this.rightChild.createRooms(worldData);
+    }
+    if (this.leftChild && this.rightChild) {
+      worldData = this.createHall(
+        this.leftChild.getRoom(),
+        this.rightChild.getRoom(),
+        worldData
+      );
+    }
+    if (!this.leftChild && !this.rightChild) {
       this.roomSize = {
         x: seedrandomRange(6, this.width - 2),
         y: seedrandomRange(6, this.height - 2),
