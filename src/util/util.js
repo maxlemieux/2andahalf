@@ -9,9 +9,10 @@ const getSeed = () => {
   return thisSeed;
 };
 
-const seedrandomRange = (start, end) => {
+const seedrandomRange = (val1, val2) => {
   const randomArray = [];
-  for (let i = start; i <= end; i += 1) {
+  const sortedVals = [val1, val2].sort(function(a, b){return a-b});
+  for (let i = sortedVals[0]; i <= sortedVals[1]; i += 1) {
     randomArray.push(i);
   }
   const randomVal = randomArray[Math.floor(getSeed() * randomArray.length)];
@@ -19,6 +20,7 @@ const seedrandomRange = (start, end) => {
   // if (randomVal === undefined) {
   //   console.log(randomArray)
   // }
+  // console.log(randomVal);
   return randomVal;
 };
 

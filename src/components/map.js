@@ -60,8 +60,8 @@ function Leaf(_x, _y, _width, _height) {
     console.log('left and right room')
     console.log(`L T ${leftRoom.top}`)
     console.log(`L B ${leftRoom.bottom}`)
-    console.log(rightRoom.top)
-    console.log(rightRoom.bottom)
+    console.log(`R T ${rightRoom.top}`)
+    console.log(`R B ${rightRoom.bottom}`)
     let worldData = _worldData;
     const halls = [];
     const point1 = {
@@ -72,11 +72,14 @@ function Leaf(_x, _y, _width, _height) {
       x: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
       y: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
     }
+    console.log(`point1`)
+    console.log(point1)
     console.log(`point2`)
     console.log(point2)
     const w = point2.x - point1.x;
     const h = point2.y - point1.y;
     if (isNaN(w)) {
+      console.log(`oh no, w === NaN, maybe it is because point1.x ${point1.x} or point1.y ${point1.y}`)
       console.log(`oh no, w === NaN, maybe it is because point2.x ${point2.x} or point2.y ${point2.y}`)
     }
     console.log(`w: ${w}, h: ${h}`)
@@ -95,7 +98,6 @@ function Leaf(_x, _y, _width, _height) {
         height: Math.abs(h)
       });
     };
-
     if (w < 0 && h < 0 
         && getSeed() > 0.5) {
       halls.push({
@@ -194,7 +196,6 @@ function Leaf(_x, _y, _width, _height) {
         height: Math.abs(h),
       })
     };
-
     if (w > 0 && h > 0 && getSeed() > 0.5) {
       halls.push({
         x: point1.x,
