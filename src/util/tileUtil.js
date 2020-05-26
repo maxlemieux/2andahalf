@@ -38,6 +38,7 @@ const createWall = (x, y, wallType, worldData) => {
   const sprite = {
     backgroundImage: dungeonSprite,
   };
+  const hasPlayer = false;
   if (wallType === 'n') {
     sprite.spriteOffset = dungeonTiles.n[Math.floor(getSeed() * dungeonTiles.n.length)];
   } else {
@@ -51,6 +52,7 @@ const createWall = (x, y, wallType, worldData) => {
       tileType,
       wallType,
       z,
+      hasPlayer,
     },
   );
   return worldData;
@@ -66,6 +68,7 @@ const createFloor = (x, y, worldData) => {
     backgroundImage: floorSprite,
     spriteOffset: floorTiles.tiles[Math.floor(getSeed() * floorTiles.tiles.length)],
   };
+  const hasPlayer = false;
   Object.assign(
     worldData[y][x],
     {
@@ -74,6 +77,7 @@ const createFloor = (x, y, worldData) => {
       tileType,
       wallType,
       z,
+      hasPlayer,
     },
   );
 
@@ -88,17 +92,17 @@ const createFloor = (x, y, worldData) => {
 const getRandomEmptyFloor = (worldData) => {
   // find an empty floor tile
   let foundFloor = false;
-  let tryX;
-  let tryY;
+  let x;
+  let y;
   while (foundFloor === false) {
-    tryX = Math.floor(getSeed() * worldData.length);
-    tryY = Math.floor(getSeed() * worldData[0].length);
-    const tryTile = worldData[tryY][tryX];
+    x = Math.floor(getSeed() * worldData.length);
+    y = Math.floor(getSeed() * worldData[0].length);
+    const tryTile = worldData[y][x];
     if (tryTile.tileType === 'ground') {
       foundFloor = true;
     }
   }
-  return [tryX, tryY];
+  return { x, y };
 };
 
 

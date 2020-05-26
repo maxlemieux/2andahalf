@@ -6,14 +6,13 @@ import MapRow from './mapRow';
 const { getRandomEmptyFloor } = require('../util/tileUtil');
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 24;
-const MAP_HEIGHT = 24;
+const MAP_WIDTH = 30;
+const MAP_HEIGHT = 30;
 
 /** Size for leaf splits on BSP */
-const maxLeafSize = 8;
+const maxLeafSize = 10;
 
 /** Object constructor for Leaf. 
- * This could probably also be an ES6 class object. 
 */
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
@@ -401,7 +400,9 @@ function Map(props) {
       }
     }
     const createdRooms = rootLeaf.createRooms(mapData);
-    console.log(getRandomEmptyFloor(createdRooms));
+    const randomSpawn = getRandomEmptyFloor(createdRooms);
+    createdRooms[randomSpawn.y][randomSpawn.x].hasPlayer = true;
+    console.log(`Attempting to spawn player at x ${randomSpawn.x}, y ${randomSpawn.y}`)
     return createdRooms;
   };
 

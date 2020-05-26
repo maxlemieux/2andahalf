@@ -1,8 +1,8 @@
 const spriteInfo = {
-  playerSprite: '/img/isometric_hero/male_head1.png',
-  playerTiles: [
-    [0, 0],
-  ],
+  playerSprite: {
+    background: '/img/isometric_hero/clothes.png',
+    spriteOffset: [32, 96],
+  },
   dungeonSprite: '/img/environment/iso_dungeon_walls_by_pfunked.png',
   dungeonTiles: {
     n: [/* The same two plain ones repeated */

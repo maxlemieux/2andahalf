@@ -2,6 +2,7 @@ import React from "react";
 import Player from "./player";
 
 const { tileToCartesian, twoDToIso } = require('../util/tileUtil');
+const playerSprite = require('../util/spriteUtil');
 
 function MapTile(props) {
   const spriteOffsetX = props.tile.sprite.spriteOffset[0];
@@ -24,13 +25,19 @@ function MapTile(props) {
     background: `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`,
   };
   
+  const playerObj = {
+    xIso,
+    yIso,
+    sprite: playerSprite,
+  }
+
   return (
     <div className="map-tile App-map-tile"
          data-x={props.tile.x}
          data-y={props.tile.y}
          style={style}>
-      <small>x{props.tile.x} y{props.tile.y}</small>
-      {props.hasPlayer === true && <Player />}
+      {/* <small>x{props.tile.x} y{props.tile.y}</small> */}
+      {props.tile.hasPlayer === true && <Player player={playerObj} />}
     </div>
   );
 }
