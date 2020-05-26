@@ -17,7 +17,7 @@ const maxLeafSize = 8;
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 8;
+  this.minLeafSize = 10;
   this.x = _x;
   this.y = _y;
   this.halls = [];
@@ -54,12 +54,12 @@ function Leaf(_x, _y, _width, _height) {
     let worldData = _worldData;
     const halls = [];
     const point1 = {
-      x: seedrandomRange(leftRoom.x, leftRoom.x + leftRoom.width),
-      y: seedrandomRange(leftRoom.top, leftRoom.bottom),
+      x: seedrandomRange(leftRoom.x + 2, leftRoom.x + leftRoom.width - 3),
+      y: seedrandomRange(leftRoom.top + 2, leftRoom.bottom - 3),
     }
     const point2 = {
-      x: seedrandomRange(rightRoom.x, rightRoom.x + rightRoom.width),
-      y: seedrandomRange(rightRoom.top, rightRoom.bottom),
+      x: seedrandomRange(rightRoom.x + 2, rightRoom.x + rightRoom.width - 3),
+      y: seedrandomRange(rightRoom.top + 2, rightRoom.bottom - 3),
     }
 
     const w = point2.x - point1.x;
@@ -259,13 +259,13 @@ function Leaf(_x, _y, _width, _height) {
     if (halls[2] && worldData) {
       console.log('halls[2]')
       console.log(halls[2])
-      // worldData = createRoom(
-      //   worldData,
-      //   halls[2].width,
-      //   halls[2].height,
-      //   halls[2].x,
-      //   halls[2].y
-      // );
+      worldData = createRoom(
+        worldData,
+        halls[2].width,
+        halls[2].height,
+        halls[2].x,
+        halls[2].y
+      );
     }
     return worldData;
   }
