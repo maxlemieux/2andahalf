@@ -57,75 +57,8 @@ function Leaf(_x, _y, _width, _height) {
     return true;
   }
 
-  this.createRooms = (_worldData) => {
+  this.createHall = (leftRoom,rightRoom, _worldData) => {
     let worldData = _worldData;
-    if (this.leftChild || this.rightChild) {
-      if (this.leftChild) {
-        this.leftChild.createRooms(worldData);
-      }
-      if (this.rightChild) {
-        this.rightChild.createRooms(worldData);
-      }
-    } else {
-      this.roomSize = [
-        seedrandomRange(6, this.width - 2),
-        seedrandomRange(6, this.height - 2),
-      ];
-      this.roomPos = [
-        seedrandomRange(1, this.width - this.roomSize[0] - 1),
-        seedrandomRange(1, this.height - this.roomSize[1] - 1),
-      ];
-    }
-
-    if (this.roomSize && this.roomPos && worldData) {
-      this.room = {
-        width: this.roomSize[0],
-        height: this.roomSize[1],
-        x: this.x + this.roomPos[0],
-        y: this.y + this.roomPos[1],
-      }
-      worldData = createRoom(
-        worldData,
-        this.roomSize[0],
-        this.roomSize[1],
-        this.x + this.roomPos[0],
-        this.y + this.roomPos[1],
-      );
-    } else {
-      // something is missing, what is it?
-      console.log(`this.roomsize ${this.roomSize}, this.roomPos ${this.roomPos}`)
-    }
-    // need to return something here
-    return worldData;
-  }
-
-  this.getRoom = () => {
-    if (this.room !== {}) {
-      return this.room;
-    } else {
-      let lRoom;
-      let rRoom;
-      if  (this.leftChild) {
-        const lRoom = this.leftChild.getRoom();
-      }
-      if  (this.rightChild) {
-        const rRoom = this.rightChild.getRoom();
-      }
-      if (lRoom === undefined && rRoom === undefined) {
-        return undefined;
-      } else if (rRoom === undefined) {
-        return lRoom;
-      } else if (lRoom === undefined) {
-        return rRoom;
-      } else if (getSeed() > .5) {
-        return lRoom
-      } else {
-        return rRoom
-      }
-    }
-  }
-
-  this.createHall = (leftRoom,rightRoom) => {
     const halls = [];
     const point1 = [
       seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
@@ -182,6 +115,87 @@ function Leaf(_x, _y, _width, _height) {
         halls.push([point2[0], point2[1], 1, Math.abs(h)])
       } else if (h > 0) {
         halls.push([point1[0], point1[1], 1, Math.abs(h)])
+      }
+    }
+    console.log(halls)
+    // halls.forEach(hall, () => {
+    //   worldData = createRoom(
+    //     worldData,
+    //     this.roomSize[0],
+    //     this.roomSize[1],
+    //     this.x + this.roomPos[0],
+    //     this.y + this.roomPos[1],
+    //   );
+    // })
+  }
+
+  this.createRooms = (_worldData) => {
+    let worldData = _worldData;
+    if (this.leftChild || this.rightChild) {
+      if (this.leftChild) {
+        this.leftChild.createRooms(worldData);
+      }
+      if (this.rightChild) {
+        this.rightChild.createRooms(worldData);
+      }
+      if (this.leftChild && this.rightChild) {
+        this.createHall(this.leftChild.getRoom(), this.rightChild.getRoom())
+      }
+    } else {
+      this.roomSize = [
+        seedrandomRange(6, this.width - 2),
+        seedrandomRange(6, this.height - 2),
+      ];
+      this.roomPos = [
+        seedrandomRange(1, this.width - this.roomSize[0] - 1),
+        seedrandomRange(1, this.height - this.roomSize[1] - 1),
+      ];
+    }
+
+    if (this.roomSize && this.roomPos && worldData) {
+      this.room = {
+        width: this.roomSize[0],
+        height: this.roomSize[1],
+        x: this.x + this.roomPos[0],
+        y: this.y + this.roomPos[1],
+      }
+      worldData = createRoom(
+        worldData,
+        this.roomSize[0],
+        this.roomSize[1],
+        this.x + this.roomPos[0],
+        this.y + this.roomPos[1],
+      );
+    } else {
+      // something is missing, what is it?
+      console.log(`this.roomsize ${this.roomSize}, this.roomPos ${this.roomPos}`)
+    }
+    // need to return something here
+    return worldData;
+  }
+
+  this.getRoom = () => {
+    if (this.room !== {}) {
+      return this.room;
+    } else {
+      let lRoom;
+      let rRoom;
+      if  (this.leftChild) {
+        lRoom = this.leftChild.getRoom();
+      }
+      if  (this.rightChild) {
+        rRoom = this.rightChild.getRoom();
+      }
+      if (lRoom === undefined && rRoom === undefined) {
+        return undefined;
+      } else if (rRoom === undefined) {
+        return lRoom;
+      } else if (lRoom === undefined) {
+        return rRoom;
+      } else if (getSeed() > .5) {
+        return lRoom
+      } else {
+        return rRoom
       }
     }
   }
