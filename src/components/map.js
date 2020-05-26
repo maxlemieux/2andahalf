@@ -6,18 +6,18 @@ import MapRow from './mapRow';
 const { getRandomEmptyFloor } = require('../util/tileUtil');
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 30;
-const MAP_HEIGHT = 30;
+const MAP_WIDTH = 20;
+const MAP_HEIGHT = 20;
 
 /** Size for leaf splits on BSP */
-const maxLeafSize = 10;
+const maxLeafSize = 8;
 
 /** Object constructor for Leaf. 
 */
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 10;
+  this.minLeafSize = 8;
   this.x = _x;
   this.y = _y;
   this.halls = [];
