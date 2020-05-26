@@ -78,6 +78,12 @@ function Leaf(_x, _y, _width, _height) {
     }
 
     if (this.roomSize && this.roomPos && worldData) {
+      this.room = {
+        width: this.roomSize[0],
+        height: this.roomSize[1],
+        x: this.x + this.roomPos[0],
+        y: this.y + this.roomPos[1],
+      }
       worldData = createRoom(
         worldData,
         this.roomSize[0],
@@ -91,6 +97,32 @@ function Leaf(_x, _y, _width, _height) {
     }
     // need to return something here
     return worldData;
+  }
+
+  this.getRoom = () => {
+    if (this.room !== {}) {
+      return this.room;
+    } else {
+      let lRoom;
+      let rRoom;
+      if  (this.leftChild) {
+        const lRoom = this.leftChild.getRoom();
+      }
+      if  (this.rightChild) {
+        const rRoom = this.rightChild.getRoom();
+      }
+      if (lRoom === undefined && rRoom === undefined) {
+        return undefined;
+      } else if (rRoom === undefined) {
+        return lRoom;
+      } else if (lRoom === undefined) {
+        return rRoom;
+      } else if (getSeed() > .5) {
+        return lRoom
+      } else {
+        return rRoom
+      }
+    }
   }
 }
 
