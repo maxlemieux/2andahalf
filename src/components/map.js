@@ -5,9 +5,11 @@ import initializeMap from '../util/mapUtil';
 import MapRow from "./mapRow";
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 32;
-const MAP_HEIGHT = 32;
+const MAP_WIDTH = 16;
+const MAP_HEIGHT = 16;
 
+/** Size for leaf splits on BSP */
+const maxLeafSize = 8;
 
 
 /** Object constructor for Leaf. 
@@ -16,7 +18,7 @@ const MAP_HEIGHT = 32;
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 8;
+  this.minLeafSize = 6;
   this.x = _x;
   this.y = _y;
   this.halls = [];
@@ -295,10 +297,10 @@ function Leaf(_x, _y, _width, _height) {
     } else {
       let lRoom;
       let rRoom;
-      if  (this.leftChild) {
+      if (this.leftChild) {
         lRoom = this.leftChild.getRoom();
       }
-      if  (this.rightChild) {
+      if (this.rightChild) {
         rRoom = this.rightChild.getRoom();
       }
       if (lRoom === undefined && rRoom === undefined) {
@@ -336,7 +338,6 @@ function Map(props) {
 
     let mapData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
 
-    const maxLeafSize = 20;
     const leafArr = [];
     const rootLeaf = new Leaf(0, 0, mapData[0].length, mapData.length);
     leafArr.push(rootLeaf);
