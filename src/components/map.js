@@ -124,6 +124,67 @@ function Leaf(_x, _y, _width, _height) {
       }
     }
   }
+
+  this.createHall = (leftRoom,rightRoom) => {
+    const halls = [];
+    const point1 = [
+      seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
+      seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
+    ]
+    const point2 = [
+      seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
+      seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
+    ]
+    const w = point2[0] - point1[0];
+    const h = point2[1] - point1[1];
+    if (w < 0) {
+      if (h < 0) {
+        if (getSeed() < 0.5) {
+          halls.push([point2[0], point1[1], Math.abs(w), 1])
+          halls.push([point2[0], point2[1], 1, Math.abs(h)])
+        } else {
+          halls.push([point2[0], point2[1], Math.abs(w), 1])
+          halls.push([point1[0], point2[1], 1, Math.abs(h)])
+        }
+      } else if (h > 0) {
+        if (getSeed() < 0.5) {
+          halls.push([point2[0], point1[1], Math.abs(w), 1])
+          halls.push([point2[0], point1[1], 1, Math.abs(h)])
+        } else {
+          halls.push([point2[0], point2[1], Math.abs(w), 1])
+          halls.push([point1[0], point1[1], 1, Math.abs(h)])
+        }
+      } else if (h === 0) {
+        halls.push([point2[0], point2[1], Math.abs(w), 1])
+      }
+    } else if (w > 0) {
+      if (h < 0) {
+        if (getSeed() < 0.5) {
+          halls.push([point1[0], point2[1], Math.abs(w), 1])
+          halls.push([point1[0], point2[1], 1, Math.abs(h)])
+        } else {
+          halls.push([point1[0], point1[1], Math.abs(w), 1])
+          halls.push([point2[0], point2[1], 1, Math.abs(h)])
+        }
+      } else if (h > 0) {
+        if (getSeed() < 0.5) {
+          halls.push([point1[0], point1[1], Math.abs(w), 1])
+          halls.push([point2[0], point1[1], 1, Math.abs(h)])
+        } else {
+          halls.push([point1[0], point2[1], Math.abs(w), 1])
+          halls.push([point1[0], point1[1], 1, Math.abs(h)])
+        }
+      } else if (h === 0) {
+        halls.push([point1[0], point1[1], Math.abs(w), 1])
+      }
+    } else if (w === 0) {
+      if (h < 0) {
+        halls.push([point2[0], point2[1], 1, Math.abs(h)])
+      } else if (h > 0) {
+        halls.push([point1[0], point1[1], 1, Math.abs(h)])
+      }
+    }
+  }
 }
 
 /**
