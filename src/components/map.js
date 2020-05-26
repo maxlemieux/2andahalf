@@ -5,8 +5,8 @@ import initializeMap from '../util/mapUtil';
 import MapRow from "./mapRow";
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 16;
-const MAP_HEIGHT = 16;
+const MAP_WIDTH = 24;
+const MAP_HEIGHT = 24;
 
 /** Size for leaf splits on BSP */
 const maxLeafSize = 8;
@@ -17,7 +17,7 @@ const maxLeafSize = 8;
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 6;
+  this.minLeafSize = 8;
   this.x = _x;
   this.y = _y;
   this.halls = [];
@@ -54,12 +54,12 @@ function Leaf(_x, _y, _width, _height) {
     let worldData = _worldData;
     const halls = [];
     const point1 = {
-      x: seedrandomRange(leftRoom.x + 1, leftRoom.x + leftRoom.width - 2),
-      y: seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
+      x: seedrandomRange(leftRoom.x, leftRoom.x + leftRoom.width),
+      y: seedrandomRange(leftRoom.top, leftRoom.bottom),
     }
     const point2 = {
-      x: seedrandomRange(rightRoom.x + 1, rightRoom.x + rightRoom.width - 2),
-      y: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
+      x: seedrandomRange(rightRoom.x, rightRoom.x + rightRoom.width),
+      y: seedrandomRange(rightRoom.top, rightRoom.bottom),
     }
 
     const w = point2.x - point1.x;
@@ -220,27 +220,51 @@ function Leaf(_x, _y, _width, _height) {
       })
     };
 
-    console.log('halls')
-    console.log(halls)
+    // console.log('halls')
+    // console.log(halls)
 
-    for (let i = 0; i < halls.length; i += 1) {
-      console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
-      // worldData = createRoom(
-      //   worldData,
-      //   halls[i].width,
-      //   halls[i].height,
-      //   halls[i].x,
-      //   halls[i].y
-      // );
-    }
+    // for (let i = 0; i < halls.length; i += 1) {
+    //   console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
+    //   console.log(halls[i])
+    //   if (halls[i] && worldData) {
+    //     worldData = createRoom(
+    //       worldData,
+    //       halls[i].width,
+    //       halls[i].height,
+    //       halls[i].x,
+    //       halls[i].y
+    //     );
+    //   }
+    // }
     if (halls[0] && worldData) {
-      console.log(halls[0])
+      // console.log(halls[0])
+      worldData = createRoom(
+        worldData,
+        halls[0].width,
+        halls[0].height,
+        halls[0].x,
+        halls[0].y
+      );
+    }
+    if (halls[1] && worldData) {
+      // console.log(halls[1])
+      worldData = createRoom(
+        worldData,
+        halls[1].width,
+        halls[1].height,
+        halls[1].x,
+        halls[1].y
+      );
+    }
+    if (halls[2] && worldData) {
+      console.log('halls[2]')
+      console.log(halls[2])
       // worldData = createRoom(
       //   worldData,
-      //   halls[0].width,
-      //   halls[0].height,
-      //   halls[0].x,
-      //   halls[0].y
+      //   halls[2].width,
+      //   halls[2].height,
+      //   halls[2].x,
+      //   halls[2].y
       // );
     }
     return worldData;
@@ -255,10 +279,10 @@ function Leaf(_x, _y, _width, _height) {
       this.rightChild.createRooms(worldData);
     }
     if (this.leftChild && this.rightChild) {
-      console.log('this.leftChild.getRoom')
-      console.log(this.leftChild.getRoom())
-      console.log('this.rightChild.getRoom')
-      console.log(this.rightChild.getRoom())
+      // console.log('this.leftChild.getRoom')
+      // console.log(this.leftChild.getRoom())
+      // console.log('this.rightChild.getRoom')
+      // console.log(this.rightChild.getRoom())
       worldData = this.createHall(
         worldData,
         this.leftChild.getRoom(),
@@ -359,9 +383,7 @@ function Map(props) {
               leafArr.push(leaf.leftChild);
               leafArr.push(leaf.rightChild);
               didSplit = true;
-            } else {
-              console.log('We did not split')
-            }
+            } 
           }
         }
       }
