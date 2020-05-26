@@ -223,24 +223,26 @@ function Leaf(_x, _y, _width, _height) {
     console.log('halls')
     console.log(halls)
 
-    // for (let i = 0; i < halls.length; i += 1) {
-    //   console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
+    for (let i = 0; i < halls.length; i += 1) {
+      console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
       // worldData = createRoom(
       //   worldData,
       //   halls[i].width,
       //   halls[i].height,
       //   halls[i].x,
-      //   halls[i].y,
+      //   halls[i].y
       // );
-    // }
-    // worldData = createRoom(
-    //   worldData,
-    //   halls[0].width,
-    //   halls[0].height,
-    //   halls[0].x,
-    //   halls[0].y,
-    // );
-
+    }
+    if (halls[0] && worldData) {
+      console.log(halls[0])
+      // worldData = createRoom(
+      //   worldData,
+      //   halls[0].width,
+      //   halls[0].height,
+      //   halls[0].x,
+      //   halls[0].y
+      // );
+    }
     return worldData;
   }
 
@@ -253,6 +255,10 @@ function Leaf(_x, _y, _width, _height) {
       this.rightChild.createRooms(worldData);
     }
     if (this.leftChild && this.rightChild) {
+      console.log('this.leftChild.getRoom')
+      console.log(this.leftChild.getRoom())
+      console.log('this.rightChild.getRoom')
+      console.log(this.rightChild.getRoom())
       worldData = this.createHall(
         worldData,
         this.leftChild.getRoom(),
@@ -276,7 +282,7 @@ function Leaf(_x, _y, _width, _height) {
         height: this.roomSize.y,
         x: this.x + this.roomPos.x,
         y: this.y + this.roomPos.y,
-        top: this.x + this.roomPos.x + this.roomSize.x,
+        top: this.y + this.roomPos.y,
         bottom: this.y + this.roomPos.y + this.roomSize.y,
       }
       worldData = createRoom(
