@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 import { getSeed, seedrandomRange } from '../util/util';
 import createRoom from '../util/roomUtil';
 import initializeMap from '../util/mapUtil';
-import MapRow from "./mapRow";
+import MapRow from './mapRow';
+const { getRandomEmptyFloor } = require('../util/tileUtil');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 24;
@@ -270,13 +271,13 @@ function Leaf(_x, _y, _width, _height) {
     if (halls[3] && worldData) {
       console.log('halls[3]')
       console.log(halls[3])
-    //   worldData = createRoom(
-    //     worldData,
-    //     halls[3].width,
-    //     halls[3].height,
-    //     halls[3].x,
-    //     halls[3].y
-    //   );
+      // worldData = createRoom(
+      //   worldData,
+      //   halls[3].width,
+      //   halls[3].height,
+      //   halls[3].x,
+      //   halls[3].y
+      // );
     }
     return worldData;
   }
@@ -399,7 +400,9 @@ function Map(props) {
         }
       }
     }
-    return rootLeaf.createRooms(mapData);
+    const createdRooms = rootLeaf.createRooms(mapData);
+    console.log(getRandomEmptyFloor(createdRooms));
+    return createdRooms;
   };
 
   let worldData = buildMap();

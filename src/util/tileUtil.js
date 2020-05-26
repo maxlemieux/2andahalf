@@ -85,7 +85,7 @@ const createFloor = (x, y, worldData) => {
 // };
 
 /** Get a pair of random floor coordinates */
-const placeRandom = (worldData) => {
+const getRandomEmptyFloor = (worldData) => {
   // find an empty floor tile
   let foundFloor = false;
   let tryX;
@@ -149,7 +149,7 @@ export {
   createFloor,
   getNearbyTiles,
   isoToTwoD,
-  placeRandom,
+  getRandomEmptyFloor,
   // spawn,
   tileToCartesian,
   twoDToIso,

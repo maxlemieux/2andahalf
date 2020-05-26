@@ -20,12 +20,9 @@ function Player(props) {
 
   return (
     <div className="player" style={style}>
-      <div className="playerSprite">
-      </div>
       <div className="playerName">
         Adventurer
       </div>
-
     </div>
   );
 }

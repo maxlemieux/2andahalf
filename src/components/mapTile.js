@@ -1,4 +1,5 @@
 import React from "react";
+import Player from "./player";
 
 const { tileToCartesian, twoDToIso } = require('../util/tileUtil');
 
@@ -29,6 +30,7 @@ function MapTile(props) {
          data-y={props.tile.y}
          style={style}>
       <small>x{props.tile.x} y{props.tile.y}</small>
+      {props.hasPlayer === true && <Player />}
     </div>
   );
 }
