@@ -1,6 +1,7 @@
 const SeedRandom = require('seedrandom');
 
 let seedKey = 1270;
+
 const getSeed = () => {
   const seed = new SeedRandom(seedKey);
   const thisSeed = seed(seedKey);
@@ -13,7 +14,12 @@ const seedrandomRange = (start, end) => {
   for (let i = start; i <= end; i += 1) {
     randomArray.push(i);
   }
-  return randomArray[Math.floor(getSeed() * randomArray.length)];
+  const randomVal = randomArray[Math.floor(getSeed() * randomArray.length)];
+  // console.log(randomVal);
+  // if (randomVal === undefined) {
+  //   console.log(randomArray)
+  // }
+  return randomVal;
 };
 
 module.exports = {
