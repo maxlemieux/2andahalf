@@ -57,11 +57,6 @@ function Leaf(_x, _y, _width, _height) {
   }
 
   this.createHall = (leftRoom, rightRoom, _worldData) => {
-    console.log('left and right room')
-    console.log(`L T ${leftRoom.top}`)
-    console.log(`L B ${leftRoom.bottom}`)
-    console.log(`R T ${rightRoom.top}`)
-    console.log(`R B ${rightRoom.bottom}`)
     let worldData = _worldData;
     const halls = [];
     const point1 = {
@@ -72,29 +67,22 @@ function Leaf(_x, _y, _width, _height) {
       x: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
       y: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
     }
-    console.log(`point1`)
-    console.log(point1)
-    console.log(`point2`)
-    console.log(point2)
+
     const w = point2.x - point1.x;
     const h = point2.y - point1.y;
-    if (isNaN(w)) {
-      console.log(`oh no, w === NaN, maybe it is because point1.x ${point1.x} or point1.y ${point1.y}`)
-      console.log(`oh no, w === NaN, maybe it is because point2.x ${point2.x} or point2.y ${point2.y}`)
-    }
-    console.log(`w: ${w}, h: ${h}`)
+
     if (w < 0 && h < 0 
         && getSeed() < 0.5) {
       halls.push({
         x: point2.x,
         y: point1.y,
         width: Math.abs(w),
-        height: 1
+        height: 4,
       });
       halls.push({
         x: point2.x,
         y: point2.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h)
       });
     };
@@ -104,12 +92,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point2.x,
         y: point2.y,
         width: Math.abs(w),
-        height: 1
+        height: 4,
       })
       halls.push({
         x: point1.x,
         y: point2.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
@@ -119,12 +107,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point2.x,
         y: point1.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
       halls.push({
         x: point2.x,
         y: point1.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
@@ -134,12 +122,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point2.x,
         y: point2.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
       halls.push({
         x: point1.x,
         y: point1.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
@@ -149,7 +137,7 @@ function Leaf(_x, _y, _width, _height) {
         x: point2.x,
         y: point2.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
     };
     
@@ -158,12 +146,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point1.x,
         y: point2.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
       halls.push({
         x: point1.x,
         y: point2.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     }
@@ -172,12 +160,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point1.x,
         y: point1.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
       halls.push({
         x: point2.x,
         y: point2.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     }
@@ -187,12 +175,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point1.x,
         y: point1.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
       halls.push({
         x: point2.x,
         y: point1.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
@@ -201,12 +189,12 @@ function Leaf(_x, _y, _width, _height) {
         x: point1.x,
         y: point2.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
       halls.push({
         x: point1.x,
         y: point1.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
@@ -216,7 +204,7 @@ function Leaf(_x, _y, _width, _height) {
         x: point1.x,
         y: point1.y,
         width: Math.abs(w),
-        height: 1,
+        height: 4,
       })
     };
 
@@ -224,7 +212,7 @@ function Leaf(_x, _y, _width, _height) {
       halls.push({
         x: point2.x,
         y: point2.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
@@ -233,22 +221,25 @@ function Leaf(_x, _y, _width, _height) {
       halls.push({
         x: point1.x,
         y: point1.y,
-        width: 1,
+        width: 4,
         height: Math.abs(h),
       })
     };
 
     console.log('halls')
     console.log(halls)
-    // halls.forEach(hall, () => {
-    //   worldData = createRoom(
-    //     worldData,
-    //     this.roomSize.x,
-    //     this.roomSize.y,
-    //     this.x + this.roomPos.x,
-    //     this.y + this.roomPos.y,
-    //   );
-    // })
+
+    for (let i = 0; i < halls.length; i += 1) {
+      console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
+      // worldData = createRoom(
+      //   worldData,
+      //   halls[i].width,
+      //   halls[i].height,
+      //   halls[i].x,
+      //   halls[i].y,
+      // );
+    }
+    return worldData;
   }
 
   this.createRooms = (_worldData) => {
@@ -261,9 +252,7 @@ function Leaf(_x, _y, _width, _height) {
         this.rightChild.createRooms(worldData);
       }
       if (this.leftChild && this.rightChild) {
-        console.log('this should be a room...')
-        console.log(this.leftChild.getRoom())
-        this.createHall(this.leftChild.getRoom(), this.rightChild.getRoom())
+        worldData = this.createHall(this.leftChild.getRoom(), this.rightChild.getRoom(), worldData);
       }
     } else {
       this.roomSize = {
@@ -277,7 +266,6 @@ function Leaf(_x, _y, _width, _height) {
     }
 
     if (this.roomSize && this.roomPos && worldData) {
-      console.log('adding room object')
       this.room = {
         width: this.roomSize.x,
         height: this.roomSize.y,
@@ -300,8 +288,6 @@ function Leaf(_x, _y, _width, _height) {
 
   this.getRoom = () => {
     if (this.room) {
-      // console.log('we have a room')
-      // console.log(this.room)
       return this.room;
     } else {
       let lRoom;
@@ -371,10 +357,7 @@ function Map(props) {
       }
     }
 
-    // console.log('mapData')
-    // console.log(mapData)
     const newStuff = rootLeaf.createRooms(mapData);
-    console.log(newStuff);
     return newStuff;
   };
 
