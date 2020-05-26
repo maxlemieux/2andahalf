@@ -11,7 +11,6 @@ const MAP_HEIGHT = 16;
 /** Size for leaf splits on BSP */
 const maxLeafSize = 8;
 
-
 /** Object constructor for Leaf. 
  * This could probably also be an ES6 class object. 
 */
@@ -27,8 +26,6 @@ function Leaf(_x, _y, _width, _height) {
     if (this.leftChild !== undefined|| this.rightChild !== undefined) {
       // already split, abort!
       return false;
-    } else {
-      // console.log(`leftChild: ${this.leftChild}`)
     }
     this.splitH = (getSeed() > 0.5);
     if (this.width > this.height && this.width / this.height >= 1.25) {
@@ -36,18 +33,13 @@ function Leaf(_x, _y, _width, _height) {
     } else if (this.height > this.width && this.height / this.width >= 1.25) {
       this.splitH = true;
     }
-    // console.log(`splitH: ${this.splitH}`)
-    
-    // console.log(`Checking leaf size for potential split: height ${this.height} width ${this.width} and minLeafSize ${this.minLeafSize}`)
     this.max = (this.splitH ? this.height : this.width) - this.minLeafSize;
     if (this.max <= this.minLeafSize) {
       // area is too small to split any more, abort!
-      // console.log(`area is too small to split any more, abort!`)
       return false;
     }
 
     this.splitLoc = seedrandomRange(this.minLeafSize, this.max);
-    // console.log(`New split location ${this.splitLoc}`)
     if (this.splitH) {
       this.leftChild = new Leaf(this.x, this.y, this.width, this.splitLoc);
       this.rightChild = new Leaf(this.x, this.y + this.splitLoc, this.width, this.height - this.splitLoc);
@@ -58,15 +50,15 @@ function Leaf(_x, _y, _width, _height) {
     return true;
   }
 
-  this.createHall = (leftRoom, rightRoom, _worldData) => {
+  this.createHall = (_worldData, leftRoom, rightRoom) => {
     let worldData = _worldData;
     const halls = [];
     const point1 = {
-      x: seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
+      x: seedrandomRange(leftRoom.x + 1, leftRoom.x + leftRoom.width - 2),
       y: seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
     }
     const point2 = {
-      x: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
+      x: seedrandomRange(rightRoom.x + 1, rightRoom.x + rightRoom.width - 2),
       y: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
     }
 
@@ -231,8 +223,8 @@ function Leaf(_x, _y, _width, _height) {
     console.log('halls')
     console.log(halls)
 
-    for (let i = 0; i < halls.length; i += 1) {
-      console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
+    // for (let i = 0; i < halls.length; i += 1) {
+    //   console.log(`Attempting to create hall with width ${halls[i].width}, height ${halls[i].height}, x ${halls[i].x}, y ${halls[i].y}`)
       // worldData = createRoom(
       //   worldData,
       //   halls[i].width,
@@ -240,7 +232,15 @@ function Leaf(_x, _y, _width, _height) {
       //   halls[i].x,
       //   halls[i].y,
       // );
-    }
+    // }
+    // worldData = createRoom(
+    //   worldData,
+    //   halls[0].width,
+    //   halls[0].height,
+    //   halls[0].x,
+    //   halls[0].y,
+    // );
+
     return worldData;
   }
 
@@ -254,9 +254,9 @@ function Leaf(_x, _y, _width, _height) {
     }
     if (this.leftChild && this.rightChild) {
       worldData = this.createHall(
+        worldData,
         this.leftChild.getRoom(),
         this.rightChild.getRoom(),
-        worldData
       );
     }
     if (!this.leftChild && !this.rightChild) {
