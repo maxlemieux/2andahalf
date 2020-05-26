@@ -303,8 +303,6 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           }
         }
       }
-    } else {
-      // console.log(`room doesn't fit, trying again`);
     }
   }
   return worldData;
