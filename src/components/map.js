@@ -19,7 +19,6 @@ function Leaf(_x, _y, _width, _height) {
   this.minLeafSize = 8;
   this.x = _x;
   this.y = _y;
-  this.room = {};
   this.halls = [];
 
   this.split = () => {
@@ -57,74 +56,188 @@ function Leaf(_x, _y, _width, _height) {
     return true;
   }
 
-  this.createHall = (leftRoom,rightRoom, _worldData) => {
+  this.createHall = (leftRoom, rightRoom, _worldData) => {
     let worldData = _worldData;
+    console.log(leftRoom)
+    console.log(rightRoom)
     const halls = [];
-    const point1 = [
-      seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
-      seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
-    ]
-    const point2 = [
-      seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
-      seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
-    ]
-    const w = point2[0] - point1[0];
-    const h = point2[1] - point1[1];
-    if (w < 0) {
-      if (h < 0) {
-        if (getSeed() < 0.5) {
-          halls.push([point2[0], point1[1], Math.abs(w), 1])
-          halls.push([point2[0], point2[1], 1, Math.abs(h)])
-        } else {
-          halls.push([point2[0], point2[1], Math.abs(w), 1])
-          halls.push([point1[0], point2[1], 1, Math.abs(h)])
-        }
-      } else if (h > 0) {
-        if (getSeed() < 0.5) {
-          halls.push([point2[0], point1[1], Math.abs(w), 1])
-          halls.push([point2[0], point1[1], 1, Math.abs(h)])
-        } else {
-          halls.push([point2[0], point2[1], Math.abs(w), 1])
-          halls.push([point1[0], point1[1], 1, Math.abs(h)])
-        }
-      } else if (h === 0) {
-        halls.push([point2[0], point2[1], Math.abs(w), 1])
-      }
-    } else if (w > 0) {
-      if (h < 0) {
-        if (getSeed() < 0.5) {
-          halls.push([point1[0], point2[1], Math.abs(w), 1])
-          halls.push([point1[0], point2[1], 1, Math.abs(h)])
-        } else {
-          halls.push([point1[0], point1[1], Math.abs(w), 1])
-          halls.push([point2[0], point2[1], 1, Math.abs(h)])
-        }
-      } else if (h > 0) {
-        if (getSeed() < 0.5) {
-          halls.push([point1[0], point1[1], Math.abs(w), 1])
-          halls.push([point2[0], point1[1], 1, Math.abs(h)])
-        } else {
-          halls.push([point1[0], point2[1], Math.abs(w), 1])
-          halls.push([point1[0], point1[1], 1, Math.abs(h)])
-        }
-      } else if (h === 0) {
-        halls.push([point1[0], point1[1], Math.abs(w), 1])
-      }
-    } else if (w === 0) {
-      if (h < 0) {
-        halls.push([point2[0], point2[1], 1, Math.abs(h)])
-      } else if (h > 0) {
-        halls.push([point1[0], point1[1], 1, Math.abs(h)])
-      }
+    const point1 = {
+      x: seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
+      y: seedrandomRange(leftRoom.top + 1, leftRoom.bottom - 2),
     }
+    const point2 = {
+      x: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
+      y: seedrandomRange(rightRoom.top + 1, rightRoom.bottom - 2),
+    }
+    const w = point2.x - point1.x;
+    const h = point2.y - point1.y;
+    console.log(`w: ${w}, h: ${h}`)
+    if (w < 0 && h < 0 
+        && getSeed() < 0.5) {
+      halls.push({
+        x: point2.x,
+        y: point1.y,
+        width: Math.abs(w),
+        height: 1
+      });
+      halls.push({
+        x: point2.x,
+        y: point2.y,
+        width: 1,
+        height: Math.abs(h)
+      });
+    };
+
+    if (w < 0 && h < 0 
+        && getSeed() > 0.5) {
+      halls.push({
+        x: point2.x,
+        y: point2.y,
+        width: Math.abs(w),
+        height: 1
+      })
+      halls.push({
+        x: point1.x,
+        y: point2.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+
+    if (w < 0 && h > 0 && getSeed() < 0.5) {
+      halls.push({
+        x: point2.x,
+        y: point1.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+      halls.push({
+        x: point2.x,
+        y: point1.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+
+    if (w < 0 && h > 0 && getSeed() > 0.5) {
+      halls.push({
+        x: point2.x,
+        y: point2.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+      halls.push({
+        x: point1.x,
+        y: point1.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+
+    if (w < 0 && h === 0) {
+      halls.push({
+        x: point2.x,
+        y: point2.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+    };
+    
+    if (w > 0 && h < 0 && getSeed() < 0.5) {
+      halls.push({
+        x: point1.x,
+        y: point2.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+      halls.push({
+        x: point1.x,
+        y: point2.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    }
+    if (w > 0 && h < 0 && getSeed() > 0.5) {
+      halls.push({
+        x: point1.x,
+        y: point1.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+      halls.push({
+        x: point2.x,
+        y: point2.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    }
+    
+    if (w > 0 && h > 0 && getSeed() < 0.5) {
+      halls.push({
+        x: point1.x,
+        y: point1.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+      halls.push({
+        x: point2.x,
+        y: point1.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+
+    if (w > 0 && h > 0 && getSeed() > 0.5) {
+      halls.push({
+        x: point1.x,
+        y: point2.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+      halls.push({
+        x: point1.x,
+        y: point1.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+    
+    if (w > 0 && h === 0) {
+      halls.push({
+        x: point1.x,
+        y: point1.y,
+        width: Math.abs(w),
+        height: 1,
+      })
+    };
+
+    if (w === 0 && h < 0) {
+      halls.push({
+        x: point2.x,
+        y: point2.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+
+    if (w === 0 && h > 0) {
+      halls.push({
+        x: point1.x,
+        y: point1.y,
+        width: 1,
+        height: Math.abs(h),
+      })
+    };
+
+    console.log('halls')
     console.log(halls)
     // halls.forEach(hall, () => {
     //   worldData = createRoom(
     //     worldData,
-    //     this.roomSize[0],
-    //     this.roomSize[1],
-    //     this.x + this.roomPos[0],
-    //     this.y + this.roomPos[1],
+    //     this.roomSize.x,
+    //     this.roomSize.y,
+    //     this.x + this.roomPos.x,
+    //     this.y + this.roomPos.y,
     //   );
     // })
   }
@@ -139,43 +252,47 @@ function Leaf(_x, _y, _width, _height) {
         this.rightChild.createRooms(worldData);
       }
       if (this.leftChild && this.rightChild) {
+        console.log('this should be a room...')
+        console.log(this.leftChild.getRoom())
         this.createHall(this.leftChild.getRoom(), this.rightChild.getRoom())
       }
     } else {
-      this.roomSize = [
-        seedrandomRange(6, this.width - 2),
-        seedrandomRange(6, this.height - 2),
-      ];
-      this.roomPos = [
-        seedrandomRange(1, this.width - this.roomSize[0] - 1),
-        seedrandomRange(1, this.height - this.roomSize[1] - 1),
-      ];
+      this.roomSize = {
+        x: seedrandomRange(6, this.width - 2),
+        y: seedrandomRange(6, this.height - 2),
+      };
+      this.roomPos = {
+        x: seedrandomRange(1, this.width - this.roomSize.x - 1),
+        y: seedrandomRange(1, this.height - this.roomSize.y - 1),
+      };
     }
 
     if (this.roomSize && this.roomPos && worldData) {
+      console.log('adding room object')
       this.room = {
-        width: this.roomSize[0],
-        height: this.roomSize[1],
-        x: this.x + this.roomPos[0],
-        y: this.y + this.roomPos[1],
+        width: this.roomSize.x,
+        height: this.roomSize.y,
+        x: this.x + this.roomPos.x,
+        y: this.y + this.roomPos.y,
+        top: this.x + this.roomPos.x + this.roomSize.x,
+        bottom: this.y + this.roomPos.y + this.roomSize.y,
       }
       worldData = createRoom(
         worldData,
-        this.roomSize[0],
-        this.roomSize[1],
-        this.x + this.roomPos[0],
-        this.y + this.roomPos[1],
+        this.roomSize.x,
+        this.roomSize.y,
+        this.x + this.roomPos.x,
+        this.y + this.roomPos.y,
       );
-    } else {
-      // something is missing, what is it?
-      console.log(`this.roomsize ${this.roomSize}, this.roomPos ${this.roomPos}`)
-    }
-    // need to return something here
+    } 
+    
     return worldData;
   }
 
   this.getRoom = () => {
-    if (this.room !== {}) {
+    if (this.room) {
+      // console.log('we have a room')
+      // console.log(this.room)
       return this.room;
     } else {
       let lRoom;
