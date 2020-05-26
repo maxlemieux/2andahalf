@@ -267,6 +267,17 @@ function Leaf(_x, _y, _width, _height) {
         halls[2].y
       );
     }
+    if (halls[3] && worldData) {
+      console.log('halls[3]')
+      console.log(halls[3])
+    //   worldData = createRoom(
+    //     worldData,
+    //     halls[3].width,
+    //     halls[3].height,
+    //     halls[3].x,
+    //     halls[3].y
+    //   );
+    }
     return worldData;
   }
 
