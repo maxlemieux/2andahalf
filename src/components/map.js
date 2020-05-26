@@ -356,9 +356,7 @@ function Map(props) {
         }
       }
     }
-
-    const newStuff = rootLeaf.createRooms(mapData);
-    return newStuff;
+    return rootLeaf.createRooms(mapData);
   };
 
   let worldData = buildMap();
