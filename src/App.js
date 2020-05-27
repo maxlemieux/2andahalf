@@ -8,9 +8,15 @@ import Map from './components/map';
 class App extends Component {
   // const playerCharacter = newPlayer(5, 5);
   state = {
-    logChatMessages: [],
-    logCombatMessages: [],
+    log: {
+      chat: [],
+      combat: [],
+    },
   };
+
+  logMessage = (logName, message) => {
+    this.setState(logName = this.state[logName].push(message));
+  }
 
   render = () => {
     return (
@@ -21,12 +27,12 @@ class App extends Component {
             {/* <div className="item">2andahalf</div> */}
         </header>
   
-        <Map />
+        <Map logFunc={this.logMessage} />
         {/* <Player player={playerCharacter} /> */}
   
         <footer className="App-footer">
-          <Log name='chat' messages='this.state.logChatMessages' />
-          <Log name='combat' messages='this.state.logCombatMessages' />
+          <Log name='chat' messages={this.state.log.chat} />
+          <Log name='combat' messages={this.state.log.combat} />
         </footer>
       </div>
     );

@@ -367,13 +367,13 @@ function Map(props) {
     backgroundColor: 'gray',
   };
 
-  const buildMap = () => {
+  const buildMap = (_MAP_WIDTH, _MAP_HEIGHT) => {
     /** BSP dungeon generation
      * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
      * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
     console.log('Beginning map build');
 
-    let mapData = initializeMap(MAP_WIDTH, MAP_HEIGHT);
+    let mapData = initializeMap(_MAP_WIDTH, _MAP_HEIGHT);
 
     const leafArr = [];
     const rootLeaf = new Leaf(0, 0, mapData[0].length, mapData.length);
@@ -402,7 +402,7 @@ function Map(props) {
     return createdRooms;
   };
 
-  let worldData = buildMap();
+  let worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
   return (
     <div style={style} className="App-map">
