@@ -1,11 +1,12 @@
 import React from "react";
+const playerSprite = require('../util/spriteUtil');
 
 function Player(props) {
-  const sprite = props.player.sprite.default;
-  console.log(sprite.playerSprite);
-  const spriteOffsetX = sprite.playerSprite.spriteOffset[0];
-  const spriteOffsetY = sprite.playerSprite.spriteOffset[1];
-  const backgroundImage = sprite.playerSprite.backgroundImage;
+  const sprite = playerSprite.default.playerSprite;
+  console.log(sprite);
+  const spriteOffsetX = sprite.offset[0];
+  const spriteOffsetY = sprite.offset[1];
+  const backgroundImage = sprite.image;
   const style = {
     left: props.player.xIso + 'px',
     top: props.player.yIso + 'px',
@@ -19,6 +20,7 @@ function Player(props) {
 
   return (
     <div className="player" style={style}>
+      {/* <img src="/img/smiley.png" /> */}
       <div className="playerName">
         <h1>{props.player.name}</h1>
       </div>
