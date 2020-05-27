@@ -15,8 +15,8 @@ const tileToCartesian = (axis, tileNumber) => {
 
 const isoToTwoD = (x, y) => {
   const twoD = {};
-  twoD.x = (2 * y + x) / 2;
-  twoD.y = (2 * y - x) / 2;
+  twoD.xCart = (2 * y + x) / 2;
+  twoD.yCart = (2 * y - x) / 2;
   return twoD;
 };
 

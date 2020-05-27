@@ -4,7 +4,7 @@ import createRoom from '../util/roomUtil';
 import initializeMap from '../util/mapUtil';
 import MapRow from './mapRow';
 import Minimap from './minimap';
-const { getRandomEmptyFloor, twoDToIso } = require('../util/tileUtil');
+const { getRandomEmptyFloor, isoToTwoD } = require('../util/tileUtil');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 20;
@@ -406,10 +406,9 @@ function Map(props) {
   let worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
   const movePlayer = (e) => {
-    console.log(`map x: ${e.nativeEvent.offsetX}, y: ${e.nativeEvent.offsetY}`)
-    const { xIso, yIso } = twoDToIso(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
-    console.log(`iso map tile x: ${xIso/64}, y: ${yIso/32}`)
-
+    const { x, y } = e.target.dataset;
+    console.log(`iso map tile x: ${x}, y: ${y}`)
+    console.log(`this tile type is ${worldData[y][x].tileType}`)
   }
 
   return (
