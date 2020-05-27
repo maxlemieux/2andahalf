@@ -10,13 +10,11 @@ function Player(props) {
     left: props.xIso + 'px',
     top: props.yIso + 'px',
     position: 'absolute',
-    margin: '0 auto',
     width: '64px',
     height: '32px',
     // paddingTop: 96 + 'px',
     // marginTop: 96 + 'px',
-    zIndex: 2,
-    backgroundColor: 'white',
+    zIndex: 1,
     background: `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`,
   };
 

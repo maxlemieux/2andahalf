@@ -270,13 +270,13 @@ function Leaf(_x, _y, _width, _height) {
     if (halls[3] && worldData) {
       console.log('halls[3]')
       console.log(halls[3])
-      // worldData = createRoom(
-      //   worldData,
-      //   halls[3].width,
-      //   halls[3].height,
-      //   halls[3].x,
-      //   halls[3].y
-      // );
+      worldData = createRoom(
+        worldData,
+        halls[3].width,
+        halls[3].height,
+        halls[3].x,
+        halls[3].y
+      );
     }
     return worldData;
   }
@@ -290,10 +290,6 @@ function Leaf(_x, _y, _width, _height) {
       this.rightChild.createRooms(worldData);
     }
     if (this.leftChild && this.rightChild) {
-      // console.log('this.leftChild.getRoom')
-      // console.log(this.leftChild.getRoom())
-      // console.log('this.rightChild.getRoom')
-      // console.log(this.rightChild.getRoom())
       worldData = this.createHall(
         worldData,
         this.leftChild.getRoom(),

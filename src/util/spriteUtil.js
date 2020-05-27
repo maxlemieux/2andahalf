@@ -1,7 +1,7 @@
 const spriteInfo = {
   playerSprite: {
-    background: '/img/isometric_hero/clothes.png',
-    spriteOffset: [32, 96],
+    background: '/img/smiley.png',
+    spriteOffset: [0, 0],
   },
   dungeonSprite: '/img/environment/iso_dungeon_walls_by_pfunked.png',
   dungeonTiles: {
