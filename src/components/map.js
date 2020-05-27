@@ -4,7 +4,7 @@ import createRoom from '../util/roomUtil';
 import initializeMap from '../util/mapUtil';
 import MapRow from './mapRow';
 import Minimap from './minimap';
-const { getRandomEmptyFloor } = require('../util/tileUtil');
+const { getRandomEmptyFloor, twoDToIso } = require('../util/tileUtil');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 20;
@@ -405,8 +405,15 @@ function Map(props) {
 
   let worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
+  const movePlayer = (e) => {
+    console.log(`map x: ${e.nativeEvent.offsetX}, y: ${e.nativeEvent.offsetY}`)
+    const { xIso, yIso } = twoDToIso(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
+    console.log(`iso map tile x: ${xIso/64}, y: ${yIso/32}`)
+
+  }
+
   return (
-    <div style={style} className="App-map">
+    <div style={style} className="App-map" onClick={movePlayer}>
       <Minimap worldData={worldData} />
 
       {worldData.map(function(row, i){

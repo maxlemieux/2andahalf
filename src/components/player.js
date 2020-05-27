@@ -9,20 +9,24 @@ function Player(props) {
   const backgroundImage = sprite.image;
   const style = {
     left: props.player.xIso + 'px',
-    top: props.player.yIso + 'px',
+    top: props.player.yIso + 160 + 'px',
     position: 'absolute',
     width: '64px',
-    height: '32px',
+    height: '64px',
     zIndex: 1,
-    color: 'white',
+    // color: 'white',
     background: `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`,
   };
+  const styleName = {
+    color: 'white',
+    marginTop: '-50px',
+  }
 
   return (
     <div className="player" style={style}>
       {/* <img src="/img/smiley.png" /> */}
-      <div className="playerName">
-        <h1>{props.player.name}</h1>
+      <div className="playerName" style={styleName}>
+        <p>{props.player.name}</p>
       </div>
     </div>
   );
