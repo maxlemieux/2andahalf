@@ -26,19 +26,22 @@ function MapTile(props) {
   };
   
   const playerObj = {
+    name: 'Foo',
     xIso,
     yIso,
     sprite: playerSprite,
   }
 
   return (
+    <>
     <div className="map-tile App-map-tile"
          data-x={props.tile.x}
          data-y={props.tile.y}
          style={style}>
-      <small>x{props.tile.x} y{props.tile.y}</small>
-      {props.tile.hasPlayer === true && <Player player={playerObj} />}
+      {/* <small>x{props.tile.x} y{props.tile.y}</small> */}
     </div>
+    {props.tile.hasPlayer === true && <Player player={playerObj} />}
+    </>
   );
 }
 

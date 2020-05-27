@@ -7,21 +7,20 @@ function Player(props) {
   const spriteOffsetY = sprite.playerSprite.spriteOffset[1];
   const backgroundImage = sprite.playerSprite.backgroundImage;
   const style = {
-    left: props.xIso + 'px',
-    top: props.yIso + 'px',
+    left: props.player.xIso + 'px',
+    top: props.player.yIso + 'px',
     position: 'absolute',
     width: '64px',
     height: '32px',
-    // paddingTop: 96 + 'px',
-    // marginTop: 96 + 'px',
     zIndex: 1,
+    color: 'white',
     background: `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`,
   };
 
   return (
     <div className="player" style={style}>
       <div className="playerName">
-        <h1>Adventurer</h1>
+        <h1>{props.player.name}</h1>
       </div>
     </div>
   );
