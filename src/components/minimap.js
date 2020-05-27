@@ -6,18 +6,15 @@ function Minimap(props) {
     right: '0px',
     top: '40px',
     position: 'absolute',
-    width: 192,
-    height: 192,
+    width: 128,
+    height: 128,
     background: 'white',
     zIndex: 5,
   };
   return (
-    <div className="minimap App-minimap"
-         style={style}>
-      {props.worldData.map(function(row, k) {
-        return (
-          <MinimapRow row={row} key={k} />
-        )
+    <div className="minimap App-minimap" style={style}>
+      {props.worldData.map(function(row, i) {
+        return <MinimapRow row={row} key={i} />
       })}
     </div>
   );

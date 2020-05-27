@@ -408,6 +408,7 @@ function Map(props) {
   return (
     <div style={style} className="App-map">
       <Minimap worldData={worldData} />
+
       {worldData.map(function(row, i){
         return (
           <MapRow row={row} key={i}/>
