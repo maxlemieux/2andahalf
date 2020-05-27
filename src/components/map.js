@@ -3,6 +3,7 @@ import { getSeed, seedrandomRange } from '../util/util';
 import createRoom from '../util/roomUtil';
 import initializeMap from '../util/mapUtil';
 import MapRow from './mapRow';
+import Minimap from './minimap';
 const { getRandomEmptyFloor } = require('../util/tileUtil');
 
 /** Map size in 64x32 tiles */
@@ -406,6 +407,7 @@ function Map(props) {
   
   return (
     <div style={style} className="App-map">
+      <Minimap worldData={worldData} />
       {worldData.map(function(row, i){
         return (
           <MapRow row={row} key={i}/>

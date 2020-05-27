@@ -9,8 +9,8 @@ class App extends Component {
   // const playerCharacter = newPlayer(5, 5);
   state = {
     log: {
-      chat: [],
-      combat: [],
+      chat: ['TIMESTAMP: Logged in'],
+      combat: ['1','2','3'],
     },
   };
 
