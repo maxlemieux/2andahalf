@@ -1,12 +1,10 @@
 import React from 'react';
+import LogMessage from './logMessage';
 
-const Log = () => {
+const Log = (props) => {
   return (
-    <div className='App-log' data-logtype='combat'>
-    <div className='App-LogMessage'>
-      Foo bar baz
-      </div>
-
+    <div className='App-log' data-name={props.name}>
+      {props.messages.map((message, k) => <LogMessage message={message} key={k} />)}
     </div>
   )
 }

@@ -14,9 +14,11 @@ class App extends Component {
     },
   };
 
-  logMessage = (logName, message) => {
-    this.setState(logName = this.state[logName].push(message));
-  }
+  // logMessage = (logName, message) => {
+  //   this.setState((state, props) => {
+  //     return { log: { chat: ['foo','bar','baz'], combat: ['1','2','3']}}
+  //   })
+  // };
 
   render = () => {
     return (
@@ -27,7 +29,9 @@ class App extends Component {
             {/* <div className="item">2andahalf</div> */}
         </header>
   
-        <Map logFunc={this.logMessage} />
+        <Map />
+
+        {/* <Map logFunc={this.logMessage} /> */}
         {/* <Player player={playerCharacter} /> */}
   
         <footer className="App-footer">

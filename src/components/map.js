@@ -372,7 +372,7 @@ function Map(props) {
      * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
      * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
     console.log('Beginning map build');
-
+    // props.logFunc('chat', 'Beginning map build');
     let mapData = initializeMap(_MAP_WIDTH, _MAP_HEIGHT);
 
     const leafArr = [];
