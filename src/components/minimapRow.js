@@ -3,13 +3,14 @@ import MinimapTile from './minimapTile';
 
 function MinimapRow(props) {
   const style = {
-    right: '0px',
-    top: '0px',
-    position: 'relative',
+    // right: '0px',
+    // top: '0px',
+    // position: 'relative',
     width: 128,
     height: 8,
-    background: 'black',
+    background: 'pink',
     zIndex: 5,
+    display: 'flex',
   };
   return (
     <div className="minimapRow App-minimapRow"
