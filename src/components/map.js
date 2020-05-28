@@ -1,6 +1,7 @@
 import React from 'react';
 import { buildMap }  from '../utils/mapUtil';
-import MapRow from './mapRow';
+// import MapRow from './mapRow';
+import MapTile from './mapTile';
 import Minimap from './minimap';
 import { movePlayer } from '../utils/playerUtil';
 
@@ -28,7 +29,10 @@ function Map(props) {
 
       {worldData.map(function(row, i){
         return (
-          <MapRow row={row} key={i}/>
+          // <MapRow row={row} key={i}/>
+          <div className="map-row">
+            {row.map((tile, j) => <MapTile tile={tile} key={j} />)}
+          </div>
         )
       })}
     </div>

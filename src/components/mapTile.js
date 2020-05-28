@@ -1,5 +1,6 @@
-import React from "react";
-import Player from "./player";
+import React from 'react';
+import Player from './player';
+import NPC from './npc';
 
 const { tileToCartesian, twoDToIso } = require('../utils/tileUtil');
 
@@ -44,6 +45,7 @@ function MapTile(props) {
       {/* <small>x{props.tile.x} y{props.tile.y}</small> */}
     </div>
     {props.tile.hasPlayer === true && <Player player={playerObj} />}
+    {props.tile.hasEnemy === true && <NPC npc='orc' />}
     </>
   );
 }

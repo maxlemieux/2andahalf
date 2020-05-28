@@ -19,7 +19,7 @@ const movePlayer = (event, worldData) => {
   // let movedWorld = worldData;
   // movedWorld[y][x].hasPlayer = true;
   // worldData = movedWorld;
-  console.log(worldData[y][x].hasPlayer)
+  // console.log(worldData[y][x].hasPlayer)
 };
 
 
