@@ -26,12 +26,11 @@ const initializeMap = (mapWidth, mapHeight) => {
   return worldData;
 };
 
+/** BSP dungeon generation
+ * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
+ * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
 const buildMap = (_MAP_WIDTH, _MAP_HEIGHT) => {
-  /** BSP dungeon generation
-   * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
-   * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
-  console.log('Beginning map build');
-  // props.logFunc('chat', 'Beginning map build');
+  // console.log('Beginning map build');
   const mapData = initializeMap(_MAP_WIDTH, _MAP_HEIGHT);
 
   /** Size for leaf splits on BSP */
@@ -60,7 +59,7 @@ const buildMap = (_MAP_WIDTH, _MAP_HEIGHT) => {
   const createdRooms = rootLeaf.createRooms(mapData);
   const randomSpawn = getRandomEmptyFloor(createdRooms);
   createdRooms[randomSpawn.y][randomSpawn.x].hasPlayer = true;
-  console.log(`Attempting to spawn player at x ${randomSpawn.x}, y ${randomSpawn.y}`)
+  // console.log(`Attempting to spawn player at x ${randomSpawn.x}, y ${randomSpawn.y}`)
   return createdRooms;
 };
 

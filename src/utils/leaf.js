@@ -70,7 +70,7 @@ function Leaf(_x, _y, _width, _height) {
         width: 4,
         height: Math.abs(h),
       });
-    };
+    }
     if (w < 0 && h < 0
         && getSeed() > 0.5) {
       halls.push({
@@ -85,7 +85,7 @@ function Leaf(_x, _y, _width, _height) {
         width: 4,
         height: Math.abs(h),
       });
-    };
+    }
 
     if (w < 0 && h > 0 && getSeed() < 0.5) {
       halls.push({
@@ -191,7 +191,7 @@ function Leaf(_x, _y, _width, _height) {
         width: Math.abs(w),
         height: 4,
       });
-    };
+    }
 
     if (w === 0 && h < 0) {
       halls.push({
@@ -200,7 +200,7 @@ function Leaf(_x, _y, _width, _height) {
         width: 4,
         height: Math.abs(h),
       });
-    };
+    }
 
     if (w === 0 && h > 0) {
       halls.push({

@@ -13,12 +13,12 @@ class App extends Component {
       combat: ['1','2','3'],
     },
   };
-
   // logMessage = (logName, message) => {
   //   this.setState((state, props) => {
   //     return { log: { chat: ['foo','bar','baz'], combat: ['1','2','3']}}
   //   })
   // };
+
 
   render = () => {
     return (
