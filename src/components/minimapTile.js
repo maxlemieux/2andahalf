@@ -10,11 +10,16 @@ function MinimapTile(props) {
     zIndex: 5,
   };
   const getTileColor = () => {
+    if (props.tile.hasPlayer) {
+      return 'purple';
+    }
     if (props.tile.tileType === 'empty') {
       return 'black';
-    } else if (props.tile.tileType === 'wall') {
+    }
+    if (props.tile.tileType === 'wall') {
       return 'white';
-    } else if (props.tile.tileType === 'ground') {
+    }
+    if (props.tile.tileType === 'ground') {
       return 'grey';
     }
     return 'pink';
