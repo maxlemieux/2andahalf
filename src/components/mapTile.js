@@ -4,24 +4,29 @@ import Player from "./player";
 const { tileToCartesian, twoDToIso } = require('../utils/tileUtil');
 
 function MapTile(props) {
+  const backgroundImage = props.tile.sprite.backgroundImage;
   const spriteOffsetX = props.tile.sprite.spriteOffset[0];
   const spriteOffsetY = props.tile.sprite.spriteOffset[1];
-  const backgroundImage = props.tile.sprite.backgroundImage;
+  const background = `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`;
+
+  const zIndex = props.tile.z;
 
   const cartX = tileToCartesian('x', props.tile.x);
   const cartY = tileToCartesian('y', props.tile.y);
   const { xIso, yIso } = twoDToIso(cartX, cartY);
+  const left = `${xIso}px`;
+  const top = `${yIso}px`;
 
   const style = {
-    left: xIso + 'px',
-    top: yIso + 'px',
+    left,
+    top,
     position: 'absolute',
     width: 64,
     height: 32,
     paddingTop: '96px',
     marginTop: '96px',
-    zIndex: props.tile.z,
-    background: `url("${backgroundImage}") -${spriteOffsetX}px -${spriteOffsetY}px`,
+    zIndex,
+    background,
   };
   
   const playerObj = {

@@ -11,6 +11,7 @@ function Minimap(props) {
     background: 'white',
     zIndex: 5,
   };
+  
   return (
     <div className="minimap App-minimap" style={style}>
       {props.worldData.map(function(row, i) {

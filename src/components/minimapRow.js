@@ -12,6 +12,7 @@ function MinimapRow(props) {
     zIndex: 5,
     display: 'flex',
   };
+  
   return (
     <div className="minimapRow App-minimapRow"
          style={style}>
