@@ -1,5 +1,5 @@
 import React from "react";
-const playerSprite = require('../util/spriteUtil');
+const playerSprite = require('../utils/spriteUtil');
 
 function Player(props) {
   const sprite = playerSprite.default.playerSprite;

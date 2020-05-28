@@ -1,10 +1,10 @@
 import React from 'react';
-import { getSeed, seedrandomRange } from '../util/util';
-import createRoom from '../util/roomUtil';
-import initializeMap from '../util/mapUtil';
+import { getSeed, seedrandomRange } from '../utils/util';
+import createRoom from '../utils/roomUtil';
+import initializeMap from '../utils/mapUtil';
 import MapRow from './mapRow';
 import Minimap from './minimap';
-const { getRandomEmptyFloor, isoToTwoD } = require('../util/tileUtil');
+const { getRandomEmptyFloor, isoToTwoD } = require('../utils/tileUtil');
 
 /** Map size in 64x32 tiles */
 const MAP_WIDTH = 20;
@@ -405,10 +405,14 @@ function Map(props) {
 
   let worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
-  const movePlayer = (e) => {
-    const { x, y } = e.target.dataset;
+  const movePlayer = (event) => {
+    const { x, y } = event.target.dataset;
     console.log(`iso map tile x: ${x}, y: ${y}`)
     console.log(`this tile type is ${worldData[y][x].tileType}`)
+    // let movedWorld = worldData;
+    // movedWorld[y][x].hasPlayer = true;
+    // worldData = movedWorld;
+    console.log(worldData[y][x].hasPlayer)
   }
 
   return (
