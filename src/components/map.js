@@ -6,8 +6,8 @@ import Minimap from './minimap';
 // import { movePlayer } from '../utils/playerUtil';
 
 /** Map size in 64x32 tiles */
-const MAP_WIDTH = 20;
-const MAP_HEIGHT = 20;
+const MAP_WIDTH = 32;
+const MAP_HEIGHT = 32;
 
 /**
  * Class-based component to display the main game map.

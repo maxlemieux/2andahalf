@@ -6,7 +6,7 @@ import createRoom from './roomUtil';
 function Leaf(_x, _y, _width, _height) {
   this.width = _width;
   this.height = _height;
-  this.minLeafSize = 8;
+  this.minLeafSize = 10;
   this.x = _x;
   this.y = _y;
   this.halls = [];

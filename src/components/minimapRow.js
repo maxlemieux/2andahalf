@@ -7,7 +7,7 @@ function MinimapRow(props) {
     // top: '0px',
     // position: 'relative',
     width: 128,
-    height: 8,
+    height: 4,
     background: 'pink',
     zIndex: 5,
     display: 'flex',
