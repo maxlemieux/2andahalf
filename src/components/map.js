@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { buildMap }  from '../utils/mapUtil';
 // import MapRow from './mapRow';
 import MapTile from './mapTile';
@@ -10,10 +10,10 @@ const MAP_WIDTH = 20;
 const MAP_HEIGHT = 20;
 
 /**
- * Functional component to display the main game map.
+ * Class-based component to display the main game map.
  */
-function Map(props) {
-  const style = {
+class Map extends Component {
+  style = {
     top: '0px',
     left: '0px',
     width: '100%',
@@ -21,22 +21,23 @@ function Map(props) {
     backgroundColor: 'gray',
   };
 
-  let worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
+  worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
-  return (
-    <div style={style} className="App-map" onClick={movePlayer}>
-      <Minimap worldData={worldData} />
-
-      {worldData.map(function(row, i){
-        return (
-          // <MapRow row={row} key={i}/>
-          <div className="map-row">
-            {row.map((tile, j) => <MapTile tile={tile} key={j} />)}
-          </div>
-        )
-      })}
-    </div>
-  );
+  render = () => {
+    return (
+      <div style={this.style} className="App-map" onClick={movePlayer}>
+        <Minimap worldData={this.worldData} />
+  
+        {this.worldData.map(function(row, i){
+          return (
+            <div className="map-row">
+              {row.map((tile, j) => <MapTile tile={tile} key={j} />)}
+            </div>
+          )
+        })}
+      </div>
+    );
+  }
 };
 
 export default Map;
