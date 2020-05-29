@@ -13,19 +13,21 @@ const MAP_HEIGHT = 20;
  * Class-based component to display the main game map.
  */
 class Map extends Component {
-  style = {
-    top: '0px',
-    left: '0px',
-    width: '100%',
-    minHeight: '75vh',
-    backgroundColor: 'gray',
-  };
+  state = {
+    style: {
+      top: '0px',
+      left: '0px',
+      width: '100%',
+      minHeight: '75vh',
+      backgroundColor: 'gray',
+    },  
+  }
 
   worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
   
   render = () => {
     return (
-      <div style={this.style} className="App-map" onClick={movePlayer}>
+      <div style={this.state.style} className="App-map" onClick={movePlayer}>
         <Minimap worldData={this.worldData} />
   
         {this.worldData.map(function(row, i){
