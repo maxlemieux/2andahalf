@@ -228,42 +228,42 @@ function Leaf(_x, _y, _width, _height) {
     //     );
     //   }
     // }
-    if (halls[0] && worldData) {
-      worldData = createRoom(
-        worldData,
-        halls[0].width,
-        halls[0].height,
-        halls[0].x,
-        halls[0].y,
-      );
-    }
-    if (halls[1] && worldData) {
-      worldData = createRoom(
-        worldData,
-        halls[1].width,
-        halls[1].height,
-        halls[1].x,
-        halls[1].y,
-      );
-    }
-    if (halls[2] && worldData) {
-      worldData = createRoom(
-        worldData,
-        halls[2].width,
-        halls[2].height,
-        halls[2].x,
-        halls[2].y,
-      );
-    }
-    if (halls[3] && worldData) {
-      worldData = createRoom(
-        worldData,
-        halls[3].width,
-        halls[3].height,
-        halls[3].x,
-        halls[3].y,
-      );
-    }
+    // if (halls[0] && worldData) {
+    //   worldData = createRoom(
+    //     worldData,
+    //     halls[0].width,
+    //     halls[0].height,
+    //     halls[0].x,
+    //     halls[0].y,
+    //   );
+    // }
+    // if (halls[1] && worldData) {
+    //   worldData = createRoom(
+    //     worldData,
+    //     halls[1].width,
+    //     halls[1].height,
+    //     halls[1].x,
+    //     halls[1].y,
+    //   );
+    // }
+    // if (halls[2] && worldData) {
+    //   worldData = createRoom(
+    //     worldData,
+    //     halls[2].width,
+    //     halls[2].height,
+    //     halls[2].x,
+    //     halls[2].y,
+    //   );
+    // }
+    // if (halls[3] && worldData) {
+    //   worldData = createRoom(
+    //     worldData,
+    //     halls[3].width,
+    //     halls[3].height,
+    //     halls[3].x,
+    //     halls[3].y,
+    //   );
+    // }
     return worldData;
   };
 
