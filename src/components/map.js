@@ -46,7 +46,8 @@ class Map extends Component {
             <div className="map-row">
               {row.map((tile, j) => {
                 return (<MapTile tile={tile} key={j} />)
-                  // hasPlayer={this.state.player.x === j && this.state.player.y === i} />
+                // return (<MapTile tile={tile} key={j}
+                // hasPlayer={this.state.player.x === j && this.state.player.y === i} />)
               })}
             </div>
           )

@@ -257,7 +257,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
             worldData = createWall(x, y, 's', worldData);
           }
           if (seCorner
-              && oldTile('n')) {
+              && oldTile('n')
+              && nearbyTile('w') === 'ground') {
             worldData = createWall(x, y, 'swo', worldData);
           }
           if (seCorner
