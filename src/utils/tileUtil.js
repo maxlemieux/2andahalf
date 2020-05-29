@@ -25,8 +25,8 @@ const twoDToIso = (x, y) => {
   iso.x = x - y;
   iso.y = (x + y) / 2;
   return {
-    xIso: iso.x,
-    yIso: iso.y,
+    xIso: Math.floor(iso.x),
+    yIso: Math.floor(iso.y),
   };
 };
 

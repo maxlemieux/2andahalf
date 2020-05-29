@@ -1,28 +1,6 @@
 const { twoDToIso, tileToCartesian } = require('./tileUtil');
 const playerSprite = require('./spriteUtil');
 
-// const movePlayer = (playerObj, xIso, yIso) => {
-//   const { cartX, cartY } = isoToTwoD(xIso, yIso);
-//   const newLocation = {
-//     cartX,
-//     cartY,
-//     xIso,
-//     yIso,
-//   };
-//   Object.assign(playerObj.props, newLocation);
-// };
-
-const movePlayer = (event, worldData) => {
-  const { x, y } = event.target.dataset;
-  console.log(`iso map tile x: ${x}, y: ${y}`);
-  // console.log(`this tile type is ${worldData[y][x].tileType}`)
-  // let movedWorld = worldData;
-  // movedWorld[y][x].hasPlayer = true;
-  // worldData = movedWorld;
-  // console.log(worldData[y][x].hasPlayer)
-};
-
-
 /** Load a player character */
 function newPlayer(x, y) {
   /** Get isometric coordinates for this tile */

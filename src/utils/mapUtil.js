@@ -1,5 +1,6 @@
 import Leaf from './leaf';
-import { getRandomEmptyFloor } from './tileUtil';
+// import { getRandomEmptyFloor } from './tileUtil';
+// import Player from '../components/player';
 
 const initializeMap = (mapWidth, mapHeight) => {
   const worldData = [];
@@ -29,7 +30,7 @@ const initializeMap = (mapWidth, mapHeight) => {
 /** BSP dungeon generation
  * http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
  * https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268 */
-const buildMap = (_MAP_WIDTH, _MAP_HEIGHT) => {
+const buildMap = (_MAP_WIDTH, _MAP_HEIGHT, _player) => {
   // console.log('Beginning map build');
   const mapData = initializeMap(_MAP_WIDTH, _MAP_HEIGHT);
 
@@ -57,8 +58,9 @@ const buildMap = (_MAP_WIDTH, _MAP_HEIGHT) => {
     }
   }
   const createdRooms = rootLeaf.createRooms(mapData);
-  const randomSpawn = getRandomEmptyFloor(createdRooms);
-  createdRooms[randomSpawn.y][randomSpawn.x].hasPlayer = true;
+  // const randomSpawn = getRandomEmptyFloor(createdRooms);
+  // createdRooms[randomSpawn.y][randomSpawn.x].hasPlayer = true;
+  createdRooms[_player.y][_player.x].hasPlayer = true;
   // console.log(`Attempting to spawn player at x ${randomSpawn.x}, y ${randomSpawn.y}`)
   return createdRooms;
 };

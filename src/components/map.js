@@ -27,14 +27,16 @@ class Map extends Component {
     }
   }
 
-  movePlayer = (event, worldData) => {
+  movePlayer = (event) => {
     const { x, y } = event.target.dataset;
     console.log(`iso map tile x: ${x}, y: ${y}`);
     const newLocation = { x, y };
     this.setState({ player: newLocation });
+    console.log(this.state.player);
   }
 
-  worldData = buildMap(MAP_WIDTH, MAP_HEIGHT);
+  worldData = buildMap(MAP_WIDTH, MAP_HEIGHT, this.state.player);
+  // worldData[this.state.player.y][this.state.player.x].hasPlayer = true;
   
   render = () => {
     return (

@@ -13,6 +13,7 @@ function MapTile(props) {
   const zIndex = props.tile.z;
 
   const cartX = tileToCartesian('x', props.tile.x);
+  // console.log(cartX)
   const cartY = tileToCartesian('y', props.tile.y);
   const { xIso, yIso } = twoDToIso(cartX, cartY);
   const left = `${xIso}px`;
