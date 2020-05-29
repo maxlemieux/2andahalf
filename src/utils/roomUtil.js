@@ -170,7 +170,8 @@ const createRoom = (_worldData, widthTiles, heightTiles, _tX, _tY) => {
           if (westCenter
               && oldTile('s')
               && (nearbyTile('w') === 's'
-              || nearbyTile('w') === 'sw')) {
+              || nearbyTile('w') === 'sw'
+              || nearbyTile('w') === 'nwo')) {
             worldData = createWall(x, y, 'neo', worldData);
           }
           if (westCenter
